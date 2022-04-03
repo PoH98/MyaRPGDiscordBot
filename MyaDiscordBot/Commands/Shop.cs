@@ -10,15 +10,15 @@ namespace MyaDiscordBot.Commands
 {
     public class Shop : ICommand
     {
-        public string Name => throw new NotImplementedException();
+        public string Name => "shop";
 
-        public string Description => throw new NotImplementedException();
+        public string Description => "Shop purchase";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => throw new NotImplementedException();
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
         public Task Handler(SocketSlashCommand command)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

@@ -10,11 +10,11 @@ namespace MyaDiscordBot.Commands
 {
     public class Heal : ICommand
     {
-        public string Name => throw new NotImplementedException();
+        public string Name => "heal";
 
-        public string Description => throw new NotImplementedException();
+        public string Description => "Add back 10 HP to your current HP but not more than max HP";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => throw new NotImplementedException();
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
         public Task Handler(SocketSlashCommand command)
         {
