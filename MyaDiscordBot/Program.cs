@@ -26,17 +26,19 @@ foreach (var command in commands)
 	method.Invoke(builder, new object[1] { builder });
 }
 //Load all configs
-var settings = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText("appsettings.json"));
+var settings = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText("config\\appsettings.json"));
 builder.RegisterInstance<IConfiguration>(settings);
-var items = JsonConvert.DeserializeObject<Items>(File.ReadAllText("items.json"));
+var items = JsonConvert.DeserializeObject<Items>(File.ReadAllText("config\\items.json"));
 builder.RegisterInstance<Items>(items);
-var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("enemy.json"));
+var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("config\\enemy.json"));
 builder.RegisterInstance<Enemies>(enemy);
-var map = JsonConvert.DeserializeObject<Maps>(File.ReadAllText("map.json"));
+var map = JsonConvert.DeserializeObject<Maps>(File.ReadAllText("config\\map.json"));
 builder.RegisterInstance<Maps>(map);
 //Load all Services
 builder.RegisterType<PlayerService>().As<IPlayerService>();
 builder.RegisterType<MapService>().As<IMapService>();
+builder.RegisterType<SpawnerService>().As<ISpawnerService>();
+builder.RegisterType<BattleService>().As<IBattleService>();
 //todo: add all json into DI
 
 

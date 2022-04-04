@@ -11,7 +11,7 @@ namespace MyaDiscordBot.Models
         /// <summary>
         /// 玩家ID, 也是Discord ID
         /// </summary>
-        public ulong Id { get; set; }
+        public string Id { get; set; }
         /// <summary>
         /// 防止玩家去其他ser係唔正確的地圖上刷怪
         /// </summary>

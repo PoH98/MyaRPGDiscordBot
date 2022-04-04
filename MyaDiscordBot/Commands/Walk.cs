@@ -11,10 +11,12 @@ namespace MyaDiscordBot.Commands
 {
     public class Walk : ICommand
     {
-        private IPlayerService _playerService;
-        public Walk(IPlayerService playerService)
+        private readonly IPlayerService _playerService;
+        private readonly IBattleService _battleService;
+        public Walk(IPlayerService playerService, IBattleService battleService)
         {
             _playerService = playerService;
+            _battleService = battleService;
         }
         public string Name => "walk";
 
@@ -28,8 +30,22 @@ namespace MyaDiscordBot.Commands
         public async Task Handler(SocketSlashCommand command)
         {
             var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            
-            await command.RespondAsync("March to " + command.Data.Options.First().Value);
+            var enemy = _playerService.Walk(player, (long)command.Data.Options.First().Value);
+            if(enemy != null)
+            {
+                var br = _battleService.Battle(enemy, player);
+                if (br.IsVictory)
+                {
+                    player.Coin += 2;
+                    player.Exp += 1;
+                }
+                await command.RespondAsync("Player Coordinate now " + player.Coordinate.X + "," + player.Coordinate.Y + " and met enemy " + enemy.Name + " and Dealt " + br.DamageDealt + "dmg, Received " + br.DamageReceived + "dmg");
+            }
+            else
+            {
+                await command.RespondAsync("Player Coordinate now " + player.Coordinate.X + "," + player.Coordinate.Y + " and no enemy met, suppose went random event");
+            }
+            _playerService.SavePlayer(player);
         }
     }
 }

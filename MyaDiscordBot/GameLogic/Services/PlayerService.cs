@@ -1,19 +1,15 @@
 ﻿using LiteDB;
 using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
     public interface IPlayerService
     {
         Player LoadPlayer(ulong id, ulong serverId);
-
-        Enemy Walk(Player player, int direction);
-        Task SavePlayer(Player player);
+        Enemy Walk(Player player, long direction);
+        void SavePlayer(Player player);
     }
     public class PlayerService : IPlayerService
     {
@@ -22,13 +18,30 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             _mapService = mapService;
         }
-        public Player LoadPlayer(ulong id, ulong serverId)
+        private string GetID(ulong id, ulong serverId)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array  
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(id + "|" + serverId));
+
+                // Convert byte array to a string   
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+        public Player LoadPlayer(ulong userid, ulong serverId)
         {
             using (var db = new LiteDatabase(@"data.db"))
             {
                 // Get a collection (or create, if doesn't exist)
                 var col = db.GetCollection<Player>("player");
-                if(!col.Exists((data) => data.Id == id && serverId == data.ServerId))
+                var id = GetID(userid, serverId);
+                if (!col.Exists((data) => data.Id == id && serverId == data.ServerId))
                 {
                     col.Insert(new Player
                     {
@@ -53,23 +66,38 @@ namespace MyaDiscordBot.GameLogic.Services
             }
         }
 
-        public Task SavePlayer(Player player)
+        public void SavePlayer(Player player)
         {
-            throw new NotImplementedException();
+            using (var db = new LiteDatabase(@"data.db"))
+            {
+                var col = db.GetCollection<Player>("player");
+                col.Update(player);
+            }
         }
 
-        public Enemy Walk(Player player, int direction)
+        public Enemy Walk(Player player, long direction)
         {
             player.NextCommand = DateTime.Now.AddMinutes(15);
+            var map = _mapService.GetCurrentMap(player.ServerId);
+            if (_mapService.CurrentStage(player.ServerId) != player.CurrentStage)
+            {
+                //reset player position
+                player.Coordinate = map.SpawnCoordinate;
+                player.CurrentStage = _mapService.CurrentStage(player.ServerId);
+                if(player.CurrentStage == 1)
+                {
+                    //all done, reset all and give myacoin
+                }
+            }
             switch (direction)
             {
                 case 1:
                     //foward
-                    player.Coordinate.Y++;
+                    player.Coordinate.Y--;
                     break;
                 case 2:
                     //backward
-                    player.Coordinate.Y--;
+                    player.Coordinate.Y++;
                     break;
                 case 3:
                     //left
@@ -79,23 +107,46 @@ namespace MyaDiscordBot.GameLogic.Services
                     player.Coordinate.X++;
                     break;
             }
-            var map = _mapService.GetCurrentMap(player.ServerId);
-            var mapPoint = map.MapData[player.Coordinate.X][player.Coordinate.Y];
+            //out of map
+            if (player.Coordinate.Y > map.MapData.Count - 1 || player.Coordinate.Y < 0 || player.Coordinate.X < 0 || player.Coordinate.X > map.MapData[player.Coordinate.Y].Count)
+            {
+                //not walkable, revert move
+                switch (direction)
+                {
+                    case 1:
+                        //foward
+                        player.Coordinate.Y++;
+                        break;
+                    case 2:
+                        //backward
+                        player.Coordinate.Y--;
+                        break;
+                    case 3:
+                        //left
+                        player.Coordinate.X++;
+                        break;
+                    case 4:
+                        player.Coordinate.X--;
+                        break;
+                }
+            }
+            var mapPoint = map.MapData[player.Coordinate.Y][player.Coordinate.X];
             if (mapPoint != MapItem.Land)
             {
                 //check allowed to walk on water, more to come
-                if ((!player.Bag.Any(x => x.Ability == Ability.WalkOnWater && x.IsEquiped) && mapPoint == MapItem.Water))
+                if ((!player.Bag.Any(x => x.Ability == Ability.WalkOnWater && x.IsEquiped) && mapPoint == MapItem.Water) ||
+                    mapPoint == MapItem.Lava || mapPoint == MapItem.Wall)
                 {
                     //not walkable, revert move
                     switch (direction)
                     {
                         case 1:
                             //foward
-                            player.Coordinate.Y--;
+                            player.Coordinate.Y++;
                             break;
                         case 2:
                             //backward
-                            player.Coordinate.Y++;
+                            player.Coordinate.Y--;
                             break;
                         case 3:
                             //left
@@ -107,7 +158,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                 }
             }
-            return null;
+            return _mapService.SpawnEnemy(player.Coordinate, map);
         }
     }
 }

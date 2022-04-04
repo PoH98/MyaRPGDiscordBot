@@ -48,6 +48,7 @@ namespace MyaDiscordBot.Commands
         {
             var guild = _client.GetGuild(783913792668041216);
             var test = _client.GetGuild(904398494662529044);
+            await _client.SetGameAsync("米亞RPG大冒險", type: ActivityType.Playing);
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
             foreach (var command in commands)
             {
@@ -86,7 +87,7 @@ namespace MyaDiscordBot.Commands
             }
             catch(Exception ex)
             {
-                await arg.RespondAsync(ex.Message);
+                await arg.RespondAsync(ex.ToString());
             }
 
         }

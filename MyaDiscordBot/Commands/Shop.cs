@@ -1,10 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -16,9 +11,10 @@ namespace MyaDiscordBot.Commands
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
-        public Task Handler(SocketSlashCommand command)
+        public async Task Handler(SocketSlashCommand command)
         {
-            return Task.CompletedTask;
+
+            await command.RespondAsync("小貓精靈受到你的召喚，已經出現係你面前！≧◉ᴥ◉≦\n商品列表：");
         }
     }
 }
