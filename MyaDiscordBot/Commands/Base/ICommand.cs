@@ -7,7 +7,7 @@ namespace MyaDiscordBot.Commands
     {
         string Name { get; }
         string Description { get; }
-        Task Handler(SocketSlashCommand command);
+        Task Handler(SocketSlashCommand command, DiscordSocketClient client);
         IEnumerable<SlashCommandOptionBuilder> Option { get; }
     }
 }

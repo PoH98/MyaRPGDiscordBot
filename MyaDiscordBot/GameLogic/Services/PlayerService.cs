@@ -36,7 +36,11 @@ namespace MyaDiscordBot.GameLogic.Services
         }
         public Player LoadPlayer(ulong userid, ulong serverId)
         {
-            using (var db = new LiteDatabase(@"data.db"))
+            if (!Directory.Exists("save"))
+            {
+                Directory.CreateDirectory("save");
+            }
+            using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
             {
                 // Get a collection (or create, if doesn't exist)
                 var col = db.GetCollection<Player>("player");
@@ -51,7 +55,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         Atk = 5,
                         Def = 5,
                         Bag = new List<ItemEquip>(),
-                        CurrentHP = 20, 
+                        CurrentHP = 20,
                         Exp = 0,
                         Lv = 1,
                         Title = new List<string>(),
@@ -68,7 +72,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public void SavePlayer(Player player)
         {
-            using (var db = new LiteDatabase(@"data.db"))
+            using (var db = new LiteDatabase("Filename=save\\" + player.ServerId + ".db;connection=shared"))
             {
                 var col = db.GetCollection<Player>("player");
                 col.Update(player);
@@ -84,7 +88,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 //reset player position
                 player.Coordinate = map.SpawnCoordinate;
                 player.CurrentStage = _mapService.CurrentStage(player.ServerId);
-                if(player.CurrentStage == 1)
+                if (player.CurrentStage == 1)
                 {
                     //all done, reset all and give myacoin
                 }
@@ -158,7 +162,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                 }
             }
-            return _mapService.SpawnEnemy(player.Coordinate, map);
+            return _mapService.SpawnEnemy(player.Coordinate, map, player.CurrentStage);
         }
     }
 }

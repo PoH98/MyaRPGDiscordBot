@@ -4,23 +4,20 @@ using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
 {
-    public class Walk : ICommand
+    public class Search : ICommand
     {
         private readonly IPlayerService _playerService;
         private readonly IBattleService _battleService;
-        public Walk(IPlayerService playerService, IBattleService battleService)
+        public Search(IPlayerService playerService, IBattleService battleService)
         {
             _playerService = playerService;
             _battleService = battleService;
         }
-        public string Name => "walk";
+        public string Name => "search";
 
-        public string Description => "Walk around at this floor";
+        public string Description => "Search around in your current location";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
-        {
-            new SlashCommandOptionBuilder().WithName("direction").WithDescription("Walk Direction").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Front", 1).AddChoice("Back", 2).AddChoice("Left", 3).AddChoice("Right", 4)
-        };
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
@@ -30,7 +27,7 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你正在休息！無法進行任何探索或者戰鬥！", ephemeral: true);
                 return;
             }
-            var enemy = _playerService.Walk(player, (long)command.Data.Options.First().Value);
+            var enemy = _playerService.Walk(player, 5);//stay
             if (enemy != null)
             {
                 var br = _battleService.Battle(enemy, player);

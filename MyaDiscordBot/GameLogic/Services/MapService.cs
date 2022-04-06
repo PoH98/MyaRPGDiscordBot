@@ -14,7 +14,7 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         Map GetCurrentMap(ulong serverId);
         void NextStage(int serverId);
-        Enemy SpawnEnemy(Coordinate coordinate, Map map);
+        Enemy SpawnEnemy(Coordinate coordinate, Map map, int stage);
         Stream GetMap(Coordinate coordinate, Map currentMap);
         int CurrentStage(ulong serverId);
     }
@@ -24,7 +24,7 @@ namespace MyaDiscordBot.GameLogic.Services
         private readonly ISpawnerService spawnerService;
         public MapService(Maps maps, ISpawnerService spawnerService)
         {
-            this.maps= maps;
+            this.maps = maps;
             this.spawnerService = spawnerService;
         }
 
@@ -34,7 +34,7 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 Directory.CreateDirectory("save");
             }
-            if (!File.Exists(System.IO.Path.Combine("save",serverId + ".json")))
+            if (!File.Exists(System.IO.Path.Combine("save", serverId + ".json")))
             {
                 File.WriteAllText(System.IO.Path.Combine("save", serverId + ".json"), JsonConvert.SerializeObject(new Save
                 {
@@ -98,28 +98,28 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             var save = JsonConvert.DeserializeObject<Save>(File.ReadAllText(serverId + ".json"));
             save.CurrentStage++;
-            if(save.CurrentStage >= maps.Count)
+            if (save.CurrentStage >= maps.Count)
             {
                 save.CurrentStage = 1;
             }
             File.WriteAllText(serverId + ".json", JsonConvert.SerializeObject(save));
         }
 
-        public Enemy SpawnEnemy(Coordinate coordinate, Map map)
+        public Enemy SpawnEnemy(Coordinate coordinate, Map map, int stage)
         {
             Enemy result = null;
             var tiles = GetTiles(coordinate, map);
-            if(tiles.Count() == 1)
+            if (tiles.Count() == 1)
             {
                 if (tiles.First().Tile == MapItem.Wall)
                 {
                     throw new ArgumentException("Hacker found! How the fuck you get into between walls");
                 }
-                result = spawnerService.Spawn(tiles.First().Tile);
+                result = spawnerService.Spawn(stage, tiles.First().Tile);
             }
             else
             {
-                result = spawnerService.Spawn(tiles.Select(x => x.Tile).ToArray());
+                result = spawnerService.Spawn(stage, tiles.Select(x => x.Tile).ToArray());
             }
             return result;
         }
@@ -131,28 +131,28 @@ namespace MyaDiscordBot.GameLogic.Services
             //[x][ ][ ]
             //[ ][0][ ]
             //[ ][ ][ ]
-            if(coordinate.Y - 1 >= 0 &&  coordinate.X - 1 > 0)
+            if (coordinate.Y - 1 >= 0 && coordinate.X - 1 > 0)
             {
                 nineX.Add(map.MapData[coordinate.Y - 1][coordinate.X - 1]);
             }
             //[ ][x][ ]
             //[ ][0][ ]
             //[ ][ ][ ]
-            if(coordinate.Y - 1 >= 0)
+            if (coordinate.Y - 1 >= 0)
             {
                 nineX.Add(map.MapData[coordinate.Y - 1][coordinate.X]);
             }
             //[ ][ ][x]
             //[ ][0][ ]
             //[ ][ ][ ]
-            if(coordinate.Y - 1 >= 0 && map.MapData[coordinate.Y].Count > coordinate.X)
+            if (coordinate.Y - 1 >= 0 && map.MapData[coordinate.Y].Count > coordinate.X)
             {
                 nineX.Add(map.MapData[coordinate.Y - 1][coordinate.X + 1]);
             }
             //[ ][ ][ ]
             //[x][0][ ]
             //[ ][ ][ ]
-            if(coordinate.X - 1 >= 0)
+            if (coordinate.X - 1 >= 0)
             {
                 nineX.Add(map.MapData[coordinate.Y][coordinate.X - 1]);
             }
@@ -166,14 +166,14 @@ namespace MyaDiscordBot.GameLogic.Services
             //[ ][ ][ ]
             //[ ][0][ ]
             //[x][ ][ ]
-            if(map.MapData.Count > coordinate.Y + 1 && coordinate.X - 1 >= 0)
+            if (map.MapData.Count > coordinate.Y + 1 && coordinate.X - 1 >= 0)
             {
                 nineX.Add(map.MapData[coordinate.Y + 1][coordinate.X - 1]);
             }
             //[ ][ ][ ]
             //[ ][0][ ]
             //[ ][x][ ]
-            if(map.MapData.Count > coordinate.Y + 1)
+            if (map.MapData.Count > coordinate.Y + 1)
             {
                 nineX.Add(map.MapData[coordinate.Y + 1][coordinate.X]);
             }

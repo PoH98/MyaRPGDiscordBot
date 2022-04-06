@@ -1,15 +1,10 @@
 ﻿using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
     public interface ISpawnerService
     {
-        Enemy Spawn(params MapItem[] tile);
+        Enemy Spawn(int stage, params MapItem[] tile);
     }
     public class SpawnerService : ISpawnerService
     {
@@ -18,16 +13,16 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             _enemy = enemies;
         }
-        public Enemy Spawn(params MapItem[] tile)
+        public Enemy Spawn(int stage, params MapItem[] tile)
         {
-            if(tile.Length == 0)
+            if (tile.Length == 0)
             {
                 return null;
             }
             Random rnd = new Random();
-            var selectedGene = tile.Length > 1? tile[rnd.Next(tile.Length-1)]:tile[0];
+            var selectedGene = tile.Length > 1 ? tile[rnd.Next(tile.Length - 1)] : tile[0];
             var probability = rnd.NextDouble();
-            if(probability < 0.3)
+            if (probability < 0.3)
             {
                 //no spawn
                 return null;
@@ -36,12 +31,12 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 case MapItem.Wall:
                     var enemies = _enemy.Where(x => x.Element == Element.Earth).ToList();
-                    if(enemies.Count == 0)
+                    if (enemies.Count == 0)
                     {
                         return null;
                     }
                     var enemySelected = rnd.Next(enemies.Count() - 1);
-                    return enemies[enemySelected];
+                    return (Enemy)enemies[enemySelected].Clone();
                 case MapItem.Water:
                     enemies = _enemy.Where(x => x.Element == Element.Water).ToList();
                     if (enemies.Count == 0)
@@ -49,7 +44,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         return null;
                     }
                     enemySelected = rnd.Next(enemies.Count() - 1);
-                    return enemies[enemySelected];
+                    return (Enemy)enemies[enemySelected].Clone();
                 case MapItem.Lava:
                     enemies = _enemy.Where(x => x.Element == Element.Fire).ToList();
                     if (enemies.Count == 0)
@@ -57,7 +52,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         return null;
                     }
                     enemySelected = rnd.Next(enemies.Count() - 1);
-                    return enemies[enemySelected];
+                    return (Enemy)enemies[enemySelected].Clone();
                 case MapItem.Land:
                     enemies = _enemy.Where(x => x.Element == Element.Wind).ToList();
                     if (enemies.Count == 0)
@@ -65,7 +60,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         return null;
                     }
                     enemySelected = rnd.Next(enemies.Count() - 1);
-                    return enemies[enemySelected];
+                    return (Enemy)enemies[enemySelected].Clone();
             }
             return null;
         }

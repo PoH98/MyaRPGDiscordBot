@@ -1,11 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -25,12 +20,12 @@ namespace MyaDiscordBot.Commands
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
-        public async Task Handler(SocketSlashCommand command)
+        public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             using (var stream = _mapService.GetMap(player.Coordinate, _mapService.GetCurrentMap((command.Channel as SocketGuildChannel).Guild.Id)))
             {
-                await command.RespondWithFileAsync(stream, "map.jpg", "黃色圈 = 你\n紫色方塊 = 玩家重生點");
+                await command.RespondWithFileAsync(stream, "map.jpg", "黃色圈 = 你\n紫色方塊 = 玩家重生點", ephemeral: true);
             }
         }
     }

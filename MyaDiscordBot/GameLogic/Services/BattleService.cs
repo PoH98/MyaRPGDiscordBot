@@ -1,9 +1,4 @@
 ﻿using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -19,7 +14,7 @@ namespace MyaDiscordBot.GameLogic.Services
             do
             {
                 var atk = player.Atk - enemy.Def;
-                if(atk < 0)
+                if (atk < 0)
                 {
                     atk = 0;
                 }
@@ -32,7 +27,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         atk = 0;
                     }
-                    player.HP -= atk;
+                    player.CurrentHP -= atk;
                     result.DamageReceived += atk;
                 }
                 /* awaiting items function to be done, suppose use itemService to calculate how many Items should be used and add calculation on equipment
@@ -57,10 +52,15 @@ namespace MyaDiscordBot.GameLogic.Services
 
                 }*/
             }
-            while (player.HP > 0 && enemy.HP > 0);
-            if(player.HP > 0 && enemy.HP <= 0)
+            while (player.CurrentHP > 0 && enemy.HP > 0);
+            if (player.CurrentHP > 0 && enemy.HP <= 0)
             {
                 result.IsVictory = true;
+            }
+            else
+            {
+                double wait = player.HP * 3.5;
+                player.NextCommand = DateTime.Now.AddMinutes(wait);
             }
             return result;
         }

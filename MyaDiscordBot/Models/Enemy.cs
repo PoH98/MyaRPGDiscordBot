@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace MyaDiscordBot.Models
 {
@@ -11,7 +7,7 @@ namespace MyaDiscordBot.Models
 
     }
 
-    public class Enemy
+    public class Enemy : ICloneable
     {
         public string Name { get; set; }
         public int HP { get; set; }
@@ -19,5 +15,12 @@ namespace MyaDiscordBot.Models
         public int Def { get; set; }
         public Element Element { get; set; }
         public decimal ItemDropRate { get; set; }
+        public int Stage { get; set; } = 1;
+
+        public object Clone()
+        {
+            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+            return JsonConvert.DeserializeObject<Enemy>(JsonConvert.SerializeObject(this), deserializeSettings);
+        }
     }
 }

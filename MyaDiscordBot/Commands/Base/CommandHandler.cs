@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent;
 
 namespace MyaDiscordBot.Commands
 {
@@ -8,6 +9,7 @@ namespace MyaDiscordBot.Commands
     {
         private readonly DiscordSocketClient _client;
         private IEnumerable<ICommand> commands;
+        private IEnumerable<IButtonHandler> buttons;
         public CommandHandler(DiscordSocketClient client)
         {
             _client = client;
@@ -19,7 +21,33 @@ namespace MyaDiscordBot.Commands
             _client.SlashCommandExecuted += client_SlashCommandExecuted;
             _client.Ready += client_Ready;
             _client.JoinedGuild += _client_JoinedGuild;
+            _client.ButtonExecuted += _client_ButtonExecuted;
             return Task.CompletedTask;
+        }
+
+        private async Task _client_ButtonExecuted(SocketMessageComponent arg)
+        {
+            foreach (var command in buttons)
+            {
+                if (arg.Data.Value != null)
+                {
+                    if (command.CheckUsage(arg.Data.Value))
+                    {
+                        await command.Handle(arg, _client);
+                        //already handled, no need do any more thing
+                        return;
+                    }
+                }
+                else if (arg.Data.CustomId != null)
+                {
+                    if (command.CheckUsage(arg.Data.CustomId))
+                    {
+                        await command.Handle(arg, _client);
+                        //already handled, no need do any more thing
+                        return;
+                    }
+                }
+            }
         }
 
         private async Task _client_JoinedGuild(SocketGuild arg)
@@ -48,8 +76,9 @@ namespace MyaDiscordBot.Commands
         {
             var guild = _client.GetGuild(783913792668041216);
             var test = _client.GetGuild(904398494662529044);
-            await _client.SetGameAsync("米亞RPG大冒險", type: ActivityType.Playing);
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
+            buttons = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(IButtonHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as IButtonHandler);
+            await _client.SetGameAsync("米亞RPG大冒險", type: ActivityType.Playing);
             foreach (var command in commands)
             {
                 try
@@ -61,16 +90,16 @@ namespace MyaDiscordBot.Commands
                     {
                         cmd.AddOptions(o);
                     }
-                    if(guild != null)
+                    if (guild != null)
                     {
                         await guild.CreateApplicationCommandAsync(cmd.Build());
                     }
-                    if(test != null)
+                    if (test != null)
                     {
                         await test.CreateApplicationCommandAsync(cmd.Build());
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
@@ -83,11 +112,11 @@ namespace MyaDiscordBot.Commands
             var command = commands.First(x => x.Name == arg.CommandName);
             try
             {
-                await command.Handler(arg);
+                await command.Handler(arg, _client);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                await arg.RespondAsync(ex.ToString());
+                await arg.RespondAsync(string.Join('\n', ex.ToString().Split("\n").Take(5)));
             }
 
         }

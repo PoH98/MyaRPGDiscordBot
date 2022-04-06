@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace MyaDiscordBot.Models
 {
-    public class Items:List<Item>
+    public class Items : List<Item>
     {
 
     }
 
-    public class Item
+    public class Item : ICloneable
     {
+        [JsonIgnore]
+        public Guid Id { get; set; }
         //道具/裝備名
         public string Name { get; set; }
         //稀有排名，打怪或者購買裝備的時候會根據依個判定
@@ -33,12 +31,23 @@ namespace MyaDiscordBot.Models
         public int HP { get; set; }
         //特別技能
         public Ability Ability { get; set; }
+
+        public object Clone()
+        {
+            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+            return JsonConvert.DeserializeObject<Item>(JsonConvert.SerializeObject(this), deserializeSettings);
+        }
     }
 
-    public class ItemEquip:Item
+    public class ItemEquip : Item
     {
-        public ItemEquip(Item item)
+        public ItemEquip()
         {
+
+        }
+        public ItemEquip(Item i)
+        {
+            var item = (Item)i.Clone();
             Name = item.Name;
             Rank = item.Rank;
             Price = item.Price;
