@@ -9,8 +9,7 @@ namespace MyaDiscordBot.Models
 
     public class Item : ICloneable
     {
-        [JsonIgnore]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         //道具/裝備名
         public string Name { get; set; }
         //稀有排名，打怪或者購買裝備的時候會根據依個判定

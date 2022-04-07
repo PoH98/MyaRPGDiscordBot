@@ -26,7 +26,15 @@ namespace MyaDiscordBot.Commands
             var builder = new ComponentBuilder();
             foreach (var i in items)
             {
-                builder.WithButton(i.Name + " - " + i.Price + "金幣", "shop-" + i.Id.ToString());
+                //Already have this thing
+                if(player.Bag.Any(x => x.Name == i.Name) && i.UseTimes == -1)
+                {
+                    builder.WithButton(i.Name + " - " + i.Price + "金幣 (你已擁有此道具)", "shop-" + i.Id.ToString(), disabled: true);
+                }
+                else
+                {
+                    builder.WithButton(i.Name + " - " + i.Price + "金幣", "shop-" + i.Id.ToString());
+                }
             }
             await command.RespondAsync("小貓精靈受到你的召喚，已經出現係你面前！≧◉ᴥ◉≦\n商品列表：", components: builder.Build(), ephemeral: true);
         }

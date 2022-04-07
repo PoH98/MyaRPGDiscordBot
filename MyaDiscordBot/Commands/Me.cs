@@ -22,7 +22,7 @@ namespace MyaDiscordBot.Commands
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             StringBuilder sb = new StringBuilder("我的資料：\n當前血量：" + player.CurrentHP + "/" + player.HP + "\n傷害：" + player.Atk + "\n防禦：" + player.Def + "\n金幣：" + player.Coin + "\n等級：" + player.Lv + "\n經驗值：" + player.Exp + "\n背包：\n");
-            foreach (var item in player.Bag)
+            foreach (var item in player.Bag.OrderByDescending(x => x.Rank).Take(20))
             {
                 //infinite use
                 if (item.ItemLeft == -1)

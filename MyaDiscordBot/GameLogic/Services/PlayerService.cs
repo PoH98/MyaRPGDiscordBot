@@ -81,7 +81,6 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Enemy Walk(Player player, long direction)
         {
-            player.NextCommand = DateTime.Now.AddMinutes(15);
             var map = _mapService.GetCurrentMap(player.ServerId);
             if (_mapService.CurrentStage(player.ServerId) != player.CurrentStage)
             {

@@ -26,7 +26,6 @@ namespace MyaDiscordBot.ButtonEvent
         {
             try
             {
-                _ = message.DeleteOriginalResponseAsync();
                 var data = items.Where(x => x.Id.ToString() == message.Data.CustomId.Replace("shop-", ""));
                 if (data.Count() < 1)
                 {
@@ -41,7 +40,14 @@ namespace MyaDiscordBot.ButtonEvent
                     return;
                 }
                 player.Coin -= selected.Price;
-                player.Bag.Add(new ItemEquip(selected));
+                if(player.Bag.Any(x => x.Name == selected.Name))
+                {
+                    player.Bag.Where(x => x.Name == selected.Name).First().ItemLeft++;
+                }
+                else
+                {
+                    player.Bag.Add(new ItemEquip(selected));
+                }
                 await message.RespondAsync("購買成功！", ephemeral: true);
                 playerService.SavePlayer(player);
             }

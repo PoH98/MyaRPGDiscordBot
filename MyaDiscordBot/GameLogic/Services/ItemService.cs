@@ -1,10 +1,12 @@
 ﻿using MyaDiscordBot.Models;
+using Newtonsoft.Json;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
     public interface IItemService
     {
         IEnumerable<Item> GetShopItem(Player player);
+        Task SaveData();
     }
     public class ItemService : IItemService
     {
@@ -21,6 +23,11 @@ namespace MyaDiscordBot.GameLogic.Services
                 return items.Where(x => x.Price > 0 && x.Rank >= player.Bag.Max(x => x.Rank) && x.Rank <= player.Bag.Max(x => x.Rank) + 1);
             }
             return items.Where(x => x.Price > 0 && x.Rank == 1);
+        }
+
+        public Task SaveData()
+        {
+           return File.WriteAllTextAsync("config\\items.json", JsonConvert.SerializeObject(items));
         }
     }
 }

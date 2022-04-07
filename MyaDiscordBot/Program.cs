@@ -22,13 +22,13 @@ var commands = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetType
 var buttons = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(IButtonHandler).IsAssignableFrom(p) && !p.IsInterface);
 foreach (var command in commands)
 {
-    MethodInfo method = typeof(Autofac.RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
+    MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
     method = method.MakeGenericMethod(command);
     method.Invoke(builder, new object[1] { builder });
 }
 foreach (var button in buttons)
 {
-    MethodInfo method = typeof(Autofac.RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
+    MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
     method = method.MakeGenericMethod(button);
     method.Invoke(builder, new object[1] { builder });
 }
@@ -36,10 +36,6 @@ foreach (var button in buttons)
 var settings = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText("config\\appsettings.json"));
 builder.RegisterInstance<IConfiguration>(settings);
 var items = JsonConvert.DeserializeObject<Items>(File.ReadAllText("config\\items.json"));
-foreach (var item in items)
-{
-    item.Id = Guid.NewGuid();
-}
 builder.RegisterInstance<Items>(items);
 var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("config\\enemy.json"));
 builder.RegisterInstance<Enemies>(enemy);

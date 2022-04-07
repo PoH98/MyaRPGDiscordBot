@@ -2,6 +2,7 @@
 using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.ButtonEvent;
+using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.Commands
 {
@@ -74,36 +75,34 @@ namespace MyaDiscordBot.Commands
 
         private async Task client_Ready()
         {
-            var guild = _client.GetGuild(783913792668041216);
-            var test = _client.GetGuild(904398494662529044);
+            if (!Directory.Exists("save"))
+            {
+                Directory.CreateDirectory("save");
+            }
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
             buttons = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(IButtonHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as IButtonHandler);
-            await _client.SetGameAsync("米亞RPG大冒險", type: ActivityType.Playing);
-            foreach (var command in commands)
+            await _client.SetGameAsync("頂米亞與甘米大冒險", type: ActivityType.Playing);
+            foreach(var db in Directory.GetFiles("save", "*.json"))
             {
-                try
+                var guild = _client.GetGuild(ulong.Parse(Regex.Match(db, @"\d+").Value));
+                foreach (var command in commands)
                 {
-                    var cmd = new SlashCommandBuilder();
-                    cmd.Name = command.Name;
-                    cmd.Description = command.Description;
-                    foreach (var o in command.Option)
+                    try
                     {
-                        cmd.AddOptions(o);
+                        var cmd = new SlashCommandBuilder();
+                        cmd.Name = command.Name;
+                        cmd.Description = command.Description;
+                        foreach (var o in command.Option)
+                        {
+                            cmd.AddOptions(o);
+                        }
+                        _ = guild.CreateApplicationCommandAsync(cmd.Build());
                     }
-                    if (guild != null)
+                    catch (Exception ex)
                     {
-                        await guild.CreateApplicationCommandAsync(cmd.Build());
-                    }
-                    if (test != null)
-                    {
-                        await test.CreateApplicationCommandAsync(cmd.Build());
+                        Console.WriteLine(ex.Message);
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
             }
         }
 

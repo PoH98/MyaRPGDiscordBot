@@ -22,7 +22,7 @@ namespace MyaDiscordBot.Commands
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            if (player.NextCommand > DateTime.Now)
+            if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
                 await command.RespondAsync("你正在休息！無法進行任何探索或者戰鬥！", ephemeral: true);
                 return;
@@ -35,11 +35,11 @@ namespace MyaDiscordBot.Commands
                 {
                     player.Coin += 2;
                     player.Exp += 1;
-                    await command.RespondAsync("Player Coordinate now " + player.Coordinate.X + "," + player.Coordinate.Y + " and met enemy " + enemy.Name + " and Dealt " + br.DamageDealt + "dmg, Received " + br.DamageReceived + "dmg");
+                    await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
                 }
                 else
                 {
-                    await command.RespondWithFileAsync("Assets\\wasted.png", "你已死亡，請等待醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>");
+                    await command.RespondWithFileAsync("Assets\\wasted.png","wasted.png", "你已死亡，請等待醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
                 }
             }
             else
