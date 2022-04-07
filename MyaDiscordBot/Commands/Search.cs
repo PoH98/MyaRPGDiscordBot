@@ -35,7 +35,23 @@ namespace MyaDiscordBot.Commands
                 {
                     player.Coin += 2;
                     player.Exp += 1;
-                    await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                    var item = _battleService.GetReward(enemy);
+                    if (item == null)
+                    {
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                    }
+                    else
+                    {
+                        if (_playerService.AddItem(player, item))
+                        {
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值再額外獲得" + item.Name + "*1！", ephemeral: true);
+                        }
+                        else
+                        {
+                            //add failed, ignore and nothing happens
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                        }
+                    }
                 }
                 else
                 {

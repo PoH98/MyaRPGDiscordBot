@@ -5,9 +5,15 @@ namespace MyaDiscordBot.GameLogic.Services
     public interface IBattleService
     {
         BattleResult Battle(Enemy enemy, Player player);
+        Item GetReward(Enemy enemy);
     }
     public class BattleService : IBattleService
     {
+        private readonly Items items;
+        public BattleService(Items items)
+        {
+            this.items = items;
+        }
         public BattleResult Battle(Enemy enemy, Player player)
         {
             var result = new BattleResult();
@@ -30,7 +36,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     player.CurrentHP -= atk;
                     result.DamageReceived += atk;
                 }
-                /* awaiting items function to be done, suppose use itemService to calculate how many Items should be used and add calculation on equipment
+                //awaiting items function to be done, suppose use itemService to calculate how many Items should be used and add calculation on equipment
                 var items = player.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
                 if (items.Count() > 0)
                 {
@@ -49,8 +55,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             result.ItemsUsed.Add(item, 1);
                         }
                     }
-
-                }*/
+                }
             }
             while (player.CurrentHP > 0 && enemy.HP > 0);
             if (player.CurrentHP > 0 && enemy.HP <= 0)
@@ -63,6 +68,22 @@ namespace MyaDiscordBot.GameLogic.Services
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
             }
             return result;
+        }
+
+        public Item GetReward(Enemy enemy)
+        {
+            Random rnd = new Random();
+            var i = rnd.NextDouble();
+            if(i >= .5)
+            {
+                var reward = items.Where(x => enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element);
+                if (reward.Any())
+                {
+                    var select = rnd.Next(reward.Count());
+                    return reward.ToArray()[select];
+                }
+            }
+            return null;
         }
     }
 }

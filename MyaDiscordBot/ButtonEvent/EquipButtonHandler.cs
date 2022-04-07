@@ -1,10 +1,5 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -29,15 +24,39 @@ namespace MyaDiscordBot.ButtonEvent
             var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             if (message.Data.CustomId.StartsWith("unequip-"))
             {
-                var item = player.Bag.Where(x => x.Name == message.Data.CustomId.Replace("unequip-", "")).First();
+                var item = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("unequip-", "").ToLower()).First();
                 item.IsEquiped = false;
+                if(item.UseTimes == -1)
+                {
+                    player.HP -= item.HP;
+                    player.Atk -= item.Atk;
+                    player.Def -= item.Def;
+                }
                 await message.RespondAsync("已經解除裝備" + item.Name + "！", ephemeral: true);
             }
             else
             {
-                var item = player.Bag.Where(x => x.Name == message.Data.CustomId.Replace("equip-", "")).First();
+                var item = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("equip-", "").ToLower()).First();
                 item.IsEquiped = true;
+                if (item.UseTimes == -1)
+                {
+                    player.HP += item.HP;
+                    player.Atk += item.Atk;
+                    player.Def += item.Def;
+                }
                 await message.RespondAsync("已經成功裝備" + item.Name + "！", ephemeral: true);
+            }
+            if(player.Def > player.HighestDef)
+            {
+                player.HighestDef = player.Def;
+            }
+            if(player.Atk > player.HighestAtk)
+            {
+                player.HighestAtk = player.Atk;
+            }
+            if (player.HP > player.HighestHP)
+            {
+                player.HighestHP = player.HP;
             }
             playerService.SavePlayer(player);
         }

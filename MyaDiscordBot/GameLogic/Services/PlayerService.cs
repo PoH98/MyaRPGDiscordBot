@@ -10,6 +10,7 @@ namespace MyaDiscordBot.GameLogic.Services
         Player LoadPlayer(ulong id, ulong serverId);
         Enemy Walk(Player player, long direction);
         void SavePlayer(Player player);
+        bool AddItem(Player player, Item item);
     }
     public class PlayerService : IPlayerService
     {
@@ -63,7 +64,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         Coordinate = _mapService.GetCurrentMap(serverId).SpawnCoordinate,
                         HighestHP = 20,
                         HighestDef = 5,
-                        HighestDmg = 5
+                        HighestAtk = 5
                     });
                 }
                 return col.FindOne((data) => data.Id == id && serverId == data.ServerId);
@@ -162,6 +163,24 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
             }
             return _mapService.SpawnEnemy(player.Coordinate, map, player.CurrentStage);
+        }
+
+        public bool AddItem(Player player, Item item)
+        {
+            //no duplicate add for equipment
+            if(item.UseTimes == -1 && player.Bag.Any(x => x.Name == item.Name))
+            {
+                return false;
+            }
+            if (player.Bag.Any(x => x.Name == item.Name))
+            {
+                player.Bag.Where(x => x.Name == item.Name).First().ItemLeft++;
+            }
+            else
+            {
+                player.Bag.Add(new ItemEquip(item));
+            }
+            return true;
         }
     }
 }

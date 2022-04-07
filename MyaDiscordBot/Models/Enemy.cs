@@ -16,7 +16,7 @@ namespace MyaDiscordBot.Models
         public Element Element { get; set; }
         public decimal ItemDropRate { get; set; }
         public int Stage { get; set; } = 1;
-
+        public int[] DropRank { get; set; } = new int[2]{ 1,2 };
         public object Clone()
         {
             var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };

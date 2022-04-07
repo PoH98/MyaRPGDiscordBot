@@ -77,7 +77,7 @@
         /// <summary>
         /// 角色最高傷害記錄
         /// </summary>
-        public int HighestDmg { get; set; }
+        public int HighestAtk { get; set; }
         /// <summary>
         /// 角色最高防禦記錄
         /// </summary>

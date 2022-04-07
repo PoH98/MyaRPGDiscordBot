@@ -40,15 +40,15 @@ namespace MyaDiscordBot.ButtonEvent
                     return;
                 }
                 player.Coin -= selected.Price;
-                if(player.Bag.Any(x => x.Name == selected.Name))
+                if(playerService.AddItem(player, selected))
                 {
-                    player.Bag.Where(x => x.Name == selected.Name).First().ItemLeft++;
+                    await message.RespondAsync("購買成功！", ephemeral: true);
                 }
                 else
                 {
-                    player.Bag.Add(new ItemEquip(selected));
+                    player.Coin += selected.Price;
+                    await message.RespondAsync("你已經存在依個裝備！小貓唔允許你再購買多一次！", ephemeral: true);
                 }
-                await message.RespondAsync("購買成功！", ephemeral: true);
                 playerService.SavePlayer(player);
             }
             catch (Exception ex)
