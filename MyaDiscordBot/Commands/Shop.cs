@@ -29,14 +29,14 @@ namespace MyaDiscordBot.Commands
                 //Already have this thing
                 if(player.Bag.Any(x => x.Name == i.Name) && i.UseTimes == -1)
                 {
-                    builder.WithButton(i.Name + " - " + i.Price + "金幣 (你已擁有此道具)", "shop-" + i.Id.ToString(), disabled: true);
+                    builder.WithButton(i.Name + " - " + i.Price + "$ (你已擁有此道具)", "shop-" + i.Id.ToString(), disabled: true);
                 }
                 else
                 {
-                    builder.WithButton(i.Name + " - " + i.Price + "金幣", "shop-" + i.Id.ToString());
+                    builder.WithButton(i.Name + " - " + i.Price + "$", "shop-" + i.Id.ToString());
                 }
             }
-            await command.RespondAsync("小貓精靈受到你的召喚，已經出現係你面前！≧◉ᴥ◉≦\n商品列表：", components: builder.Build(), ephemeral: true);
+            await command.RespondAsync("你搖一搖院友卡，小貓精靈就馬上受到你的召喚，已經出現係你面前！≧◉ᴥ◉≦\n商品列表：", components: builder.Build(), ephemeral: true);
         }
     }
 }

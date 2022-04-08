@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot
 {
@@ -17,5 +18,6 @@ namespace MyaDiscordBot
             }
         }
         public IContainer Container { get; set; }
+        public Dictionary<ulong, Enemy> Boss { get; set; } = new Dictionary<ulong, Enemy>();
     }
 }

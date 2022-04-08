@@ -67,7 +67,27 @@ namespace MyaDiscordBot.GameLogic.Services
                         HighestAtk = 5
                     });
                 }
-                return col.FindOne((data) => data.Id == id && serverId == data.ServerId);
+                var player = col.FindOne((data) => data.Id == id && serverId == data.ServerId);
+                if (_mapService.CurrentStage(player.ServerId) != player.CurrentStage)
+                {
+                    var map = _mapService.GetCurrentMap(player.ServerId);
+                    //reset player position
+                    player.Coordinate = map.SpawnCoordinate;
+                    player.CurrentStage = _mapService.CurrentStage(player.ServerId);
+                    if (player.CurrentStage == 1)
+                    {
+                        //all done, reset all and give myacoin
+                        var myaCoin = player.Exp / 20;
+                        player.MyaCoin = myaCoin;
+                        player.Atk = 5;
+                        player.Def = 5;
+                        player.HP = 20;
+                        player.CurrentHP = 20;
+                        player.Bag = new List<ItemEquip>();
+                        player.Exp = 0;
+                    }
+                }
+                return player;
             }
         }
 
@@ -83,16 +103,6 @@ namespace MyaDiscordBot.GameLogic.Services
         public Enemy Walk(Player player, long direction)
         {
             var map = _mapService.GetCurrentMap(player.ServerId);
-            if (_mapService.CurrentStage(player.ServerId) != player.CurrentStage)
-            {
-                //reset player position
-                player.Coordinate = map.SpawnCoordinate;
-                player.CurrentStage = _mapService.CurrentStage(player.ServerId);
-                if (player.CurrentStage == 1)
-                {
-                    //all done, reset all and give myacoin
-                }
-            }
             switch (direction)
             {
                 case 1:
@@ -161,6 +171,16 @@ namespace MyaDiscordBot.GameLogic.Services
                             break;
                     }
                 }
+            }
+            if (Data.Instance.Boss.ContainsKey(player.ServerId))
+            {
+                //Have boss hence no more spawn
+                return null;
+            }
+            if (_mapService.GetEnemyLeft(player.ServerId) < 1)
+            {
+                //enemy end, spawn boss
+                return _mapService.SpawnBoss(player.CurrentStage);
             }
             return _mapService.SpawnEnemy(player.Coordinate, map, player.CurrentStage);
         }

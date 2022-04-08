@@ -8,10 +8,12 @@ namespace MyaDiscordBot.Commands
     {
         private readonly IPlayerService _playerService;
         private readonly IBattleService _battleService;
-        public Walk(IPlayerService playerService, IBattleService battleService)
+        private readonly IMapService _mapService;
+        public Walk(IPlayerService playerService, IBattleService battleService, IMapService mapService)
         {
             _playerService = playerService;
             _battleService = battleService;
+            _mapService = mapService;
         }
         public string Name => "walk";
 
@@ -33,6 +35,12 @@ namespace MyaDiscordBot.Commands
             var enemy = _playerService.Walk(player, (long)command.Data.Options.First().Value);
             if (enemy != null)
             {
+                if (enemy.IsBoss)
+                {
+                    Data.Instance.Boss.Add((command.Channel as SocketGuildChannel).Guild.Id, enemy);
+                    await command.RespondAsync("Boss已經生成！請各位玩家準備消滅" + enemy.Name + "！！");
+                    return;
+                }
                 var br = _battleService.Battle(enemy, player);
                 if (br.IsVictory)
                 {
@@ -41,24 +49,25 @@ namespace MyaDiscordBot.Commands
                     var item = _battleService.GetReward(enemy);
                     if(item == null)
                     {
-                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$同1經驗值！", ephemeral: true);
                     }
                     else
                     {
                         if(_playerService.AddItem(player, item))
                         {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$同1經驗值再額外獲得" + item.Name + "*1！", ephemeral: true);
                         }
                         else
                         {
                             //add failed, ignore and nothing happens
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$同1經驗值！", ephemeral: true);
                         }
                     }
+                    await _mapService.KilledEnemy(player.ServerId);
                 }
                 else
                 {
-                    await command.RespondWithFileAsync("Assets\\wasted.png", "wasted.png", "你已死亡，請等待醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
+                    await command.RespondWithFileAsync("Assets\\wasted.png", "wasted.png", "你已死亡，請等待米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
                 }
             }
             else

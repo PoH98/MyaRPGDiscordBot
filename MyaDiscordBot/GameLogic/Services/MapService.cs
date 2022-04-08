@@ -13,10 +13,13 @@ namespace MyaDiscordBot.GameLogic.Services
     public interface IMapService
     {
         Map GetCurrentMap(ulong serverId);
-        void NextStage(int serverId);
+        Task NextStage(ulong serverId);
         Enemy SpawnEnemy(Coordinate coordinate, Map map, int stage);
+        Enemy SpawnBoss(int stage);
         Stream GetMap(Coordinate coordinate, Map currentMap);
         int CurrentStage(ulong serverId);
+        int GetEnemyLeft(ulong serverId);
+        Task KilledEnemy(ulong serverId);
     }
     internal class MapService : IMapService
     {
@@ -30,26 +33,19 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public int CurrentStage(ulong serverId)
         {
-            if (!Directory.Exists("save"))
-            {
-                Directory.CreateDirectory("save");
-            }
-            if (!File.Exists(System.IO.Path.Combine("save", serverId + ".json")))
-            {
-                File.WriteAllText(System.IO.Path.Combine("save", serverId + ".json"), JsonConvert.SerializeObject(new Save
-                {
-                    CurrentStage = 1,
-                    CurrentBoss = null,
-                    EnemyLeft = 15000
-                }));
-            }
-            var save = JsonConvert.DeserializeObject<Save>(File.ReadAllText(System.IO.Path.Combine("save", serverId + ".json")));
+            var save = GetSettings(serverId);
             return save.CurrentStage;
         }
 
         public Map GetCurrentMap(ulong serverId)
         {
             return maps[CurrentStage(serverId) - 1];
+        }
+
+        public int GetEnemyLeft(ulong serverId)
+        {
+            var save = GetSettings(serverId);
+            return save.EnemyLeft;
         }
 
         public Stream GetMap(Coordinate coordinate, Map currentMap)
@@ -94,15 +90,23 @@ namespace MyaDiscordBot.GameLogic.Services
             return stream;
         }
 
-        public void NextStage(int serverId)
+        public Task KilledEnemy(ulong serverId)
         {
-            var save = JsonConvert.DeserializeObject<Save>(File.ReadAllText(serverId + ".json"));
+            var save = GetSettings(serverId);
+            save.EnemyLeft--;
+            return SaveSettings(save, serverId);
+        }
+
+        public Task NextStage(ulong serverId)
+        {
+            var save = GetSettings(serverId);
             save.CurrentStage++;
+            save.EnemyLeft = 15000;
             if (save.CurrentStage >= maps.Count)
             {
                 save.CurrentStage = 1;
             }
-            File.WriteAllText(serverId + ".json", JsonConvert.SerializeObject(save));
+            return SaveSettings(save, serverId);
         }
 
         public Enemy SpawnEnemy(Coordinate coordinate, Map map, int stage)
@@ -122,6 +126,29 @@ namespace MyaDiscordBot.GameLogic.Services
                 result = spawnerService.Spawn(stage, tiles.Select(x => x.Tile).ToArray());
             }
             return result;
+        }
+
+        private Save GetSettings(ulong serverId)
+        {
+            if (!Directory.Exists("save"))
+            {
+                Directory.CreateDirectory("save");
+            }
+            if (!File.Exists(System.IO.Path.Combine("save", serverId + ".json")))
+            {
+                File.WriteAllText(System.IO.Path.Combine("save", serverId + ".json"), JsonConvert.SerializeObject(new Save
+                {
+                    CurrentStage = 1,
+                    CurrentBoss = null,
+                    EnemyLeft = 15000
+                }));
+            }
+            return JsonConvert.DeserializeObject<Save>(File.ReadAllText(System.IO.Path.Combine("save", serverId + ".json")));
+        }
+
+        private Task SaveSettings(Save setting, ulong serverId)
+        {
+            return File.WriteAllTextAsync(System.IO.Path.Combine("save", serverId + ".json"), JsonConvert.SerializeObject(setting));
         }
 
         private IEnumerable<GroupedTiles> GetTiles(Coordinate coordinate, Map map)
@@ -186,6 +213,11 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             //group all tiles and calculate counts
             return nineX.GroupBy(x => x).Select(group => new GroupedTiles { Tile = group.Key, Count = group.Count() }).OrderBy(x => x.Count);
+        }
+
+        public Enemy SpawnBoss(int stage)
+        {
+            return spawnerService.SpawnBoss(stage);
         }
     }
 }

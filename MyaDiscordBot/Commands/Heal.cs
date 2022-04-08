@@ -29,7 +29,7 @@ namespace MyaDiscordBot.Commands
                 player.CurrentHP = player.HP;
             }
             player.NextCommand = DateTime.Now.AddMinutes(wait);
-            await command.RespondAsync("你在原地建設左帳篷開始休息，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
+            await command.RespondAsync("你在原地與米亞一起建設左帳篷開始休息，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
             playerService.SavePlayer(player);
         }
     }
