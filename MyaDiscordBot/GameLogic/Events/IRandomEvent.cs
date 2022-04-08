@@ -1,9 +1,10 @@
-﻿using MyaDiscordBot.Models;
+﻿using Discord.WebSocket;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
 {
     public interface IRandomEvent
     {
-        void Response(Player player);
+        Task Response(SocketSlashCommand command, Player player);
     }
 }
