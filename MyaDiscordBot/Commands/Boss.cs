@@ -44,7 +44,20 @@ namespace MyaDiscordBot.Commands
                 if (result.IsVictory)
                 {
                     Data.Instance.Boss.Remove((command.Channel as SocketGuildChannel).Guild.Id);
-                    await command.RespondAsync("**"+command.User.Username+"**對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！院友們自動被傳送到下一層！");
+                    await command.RespondAsync(command.User.Mention + "對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！院友們自動被傳送到下一層！");
+                    if (player.CurrentHP < 0)
+                    {
+                        player.CurrentHP = 0;
+                    }
+                    player.CurrentHP += player.HP;
+                    int wait = player.HP * 3;
+                    if (player.CurrentHP > player.HP)
+                    {
+                        int extra = player.CurrentHP - player.HP;
+                        wait -= extra * 3;
+                        player.CurrentHP = player.HP;
+                    }
+                    player.NextCommand = DateTime.Now.AddMinutes(wait);
                     await mapService.NextStage((command.Channel as SocketGuildChannel).Guild.Id);
                 }
                 else
@@ -62,14 +75,14 @@ namespace MyaDiscordBot.Commands
                         player.CurrentHP = player.HP;
                     }
                     player.NextCommand = DateTime.Now.AddMinutes(wait);
-                    await command.RespondAsync(command.User.Username + "對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$! 不過由於Boss實在太強大，你已經陣亡而且被米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>");
+                    await command.RespondAsync(command.User.Mention + "對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$! 不過由於Boss實在太強大，你已經陣亡而且被米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>");
                 }
                 player.BossDamage += result.DamageDealt;
                 playerService.SavePlayer(player);
             }
             else
             {
-                await command.RespondAsync("當前地圖剩" + mapService.GetEnemyLeft((command.Channel as SocketGuildChannel).Guild.Id) + "個敵人後先會生成Boss!");
+                await command.RespondAsync("當前地圖剩" + mapService.GetEnemyLeft((command.Channel as SocketGuildChannel).Guild.Id) + "個敵人後先會生成Boss!", ephemeral: true);
             }
         }
     }
