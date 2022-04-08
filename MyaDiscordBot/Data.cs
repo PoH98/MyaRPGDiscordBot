@@ -19,5 +19,6 @@ namespace MyaDiscordBot
         }
         public IContainer Container { get; set; }
         public Dictionary<ulong, Enemy> Boss { get; set; } = new Dictionary<ulong, Enemy>();
+        public int LastRnd { get; set; }
     }
 }

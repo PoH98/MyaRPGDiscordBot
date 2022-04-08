@@ -10,11 +10,11 @@ namespace MyaDiscordBot.Commands
 {
     public class AddJoke : ICommand
     {
-        public string Name => throw new NotImplementedException();
+        public string Name => "addjoke";
 
-        public string Description => throw new NotImplementedException();
+        public string Description => "Tell Mya more new jokes!";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1] { new SlashCommandOptionBuilder().WithType(ApplicationCommandOptionType.String).WithName("Joke Content").WithRequired(true) };
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1] { new SlashCommandOptionBuilder().WithType(ApplicationCommandOptionType.String).WithName("joke").WithDescription("The joke content").WithRequired(true) };
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {

@@ -20,7 +20,14 @@ namespace MyaDiscordBot.Commands
             }
             var jokes = await File.ReadAllLinesAsync("joke.txt");
             Random rnd = new Random();
-            await command.RespondAsync(jokes[rnd.Next(jokes.Length - 1)] + "\nFunny~");
+            var index = rnd.Next(jokes.Length);
+            while (Data.Instance.LastRnd == index && jokes.Length > 1)
+            {
+                //no
+                index = rnd.Next(jokes.Length);
+            }
+            Data.Instance.LastRnd = index;
+            await command.RespondAsync(jokes[index] + "\nFunny~");
         }
     }
 }
