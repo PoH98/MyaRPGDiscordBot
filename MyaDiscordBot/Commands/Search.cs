@@ -31,6 +31,11 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你正在休息！無法進行任何探索或者戰鬥！", ephemeral: true);
                 return;
             }
+            if (player.CurrentHP < 5)
+            {
+                await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！");
+                return;
+            }
             var enemy = _playerService.Walk(player, 5);//stay
             if (enemy != null)
             {

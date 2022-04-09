@@ -29,7 +29,14 @@ namespace MyaDiscordBot.Commands
                 player.CurrentHP = player.HP;
             }
             player.NextCommand = DateTime.Now.AddMinutes(wait);
-            await command.RespondAsync("你在原地與米亞一起建設左帳篷開始休息，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
+            if(player.CurrentHP > 4)
+            {
+                await command.RespondAsync("你在原地與米亞一起建設左帳篷開始休息，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
+            }
+            else
+            {
+                await command.RespondAsync("你在原地與米亞一起建設左米亞妙妙屋並且開始激情對話(?，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
+            }
             playerService.SavePlayer(player);
         }
     }

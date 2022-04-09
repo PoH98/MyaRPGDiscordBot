@@ -18,6 +18,11 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("米亞搖搖頭表示佢未睇過任何搞笑野，需要大家收集！可以使用```/addjoke```功能添加新joke哦！");
                 return;
             }
+            if(DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            {
+                await command.RespondAsync("zzZZZ (米亞已經訓著，無法回復你哦！)", ephemeral: true);
+                return;
+            }
             var jokes = await File.ReadAllLinesAsync("joke.txt");
             Random rnd = new Random();
             var index = rnd.Next(jokes.Length);

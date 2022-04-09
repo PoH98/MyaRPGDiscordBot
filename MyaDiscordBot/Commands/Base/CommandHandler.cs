@@ -24,7 +24,39 @@ namespace MyaDiscordBot.Commands
             _client.Ready += client_Ready;
             _client.JoinedGuild += _client_JoinedGuild;
             _client.ButtonExecuted += _client_ButtonExecuted;
+            _client.MessageReceived += _client_MessageReceived;
             return Task.CompletedTask;
+        }
+
+        private async Task _client_MessageReceived(SocketMessage arg)
+        {
+            var message = arg as SocketUserMessage;
+            if (message == null) return;
+            if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))
+            {
+                if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("DD") || message.Content.Contains("去死"))
+                {
+                    var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("veryangry")).Last();
+                    var fuck = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("fuck")).Last();
+                    await message.AddReactionAsync(angry);
+                    await message.AddReactionAsync(fuck);
+                }
+                else if (message.Content.Contains("屎"))
+                {
+                    var sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
+                    await message.AddReactionAsync(sssmya);
+                }
+                else if ((message.Content.Contains("愛") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && (!message.Content.Contains("甘米")))
+                {
+                    var kiramya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("kiramya")).Last();
+                    await message.AddReactionAsync(kiramya);
+                }
+                else
+                {
+                    var what = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("what")).Last();
+                    await message.AddReactionAsync(what);
+                }
+            }
         }
 
         private async Task _client_ButtonExecuted(SocketMessageComponent arg)
