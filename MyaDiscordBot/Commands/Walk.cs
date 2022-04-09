@@ -9,11 +9,13 @@ namespace MyaDiscordBot.Commands
         private readonly IPlayerService _playerService;
         private readonly IBattleService _battleService;
         private readonly IMapService _mapService;
-        public Walk(IPlayerService playerService, IBattleService battleService, IMapService mapService)
+        private readonly IEventService _eventService;
+        public Walk(IPlayerService playerService, IBattleService battleService, IMapService mapService, IEventService eventService)
         {
             _playerService = playerService;
             _battleService = battleService;
             _mapService = mapService;
+            _eventService = eventService;
         }
         public string Name => "walk";
 
@@ -72,7 +74,8 @@ namespace MyaDiscordBot.Commands
             }
             else
             {
-                await command.RespondAsync("Player Coordinate now " + player.Coordinate.X + "," + player.Coordinate.Y + " and no enemy met, suppose went random event");
+                var @event = _eventService.GetRandomEvent();
+                await @event.Response(command, player);
             }
             _playerService.SavePlayer(player);
         }

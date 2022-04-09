@@ -12,7 +12,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            throw new NotImplementedException();
+            return command.RespondAsync("「咕咕咕~」，突然有一pat雀屎跌咗落米亞個頭度，米亞為發洩完隻生吞咗咕咕鳥Σ( ° △ °|||)︴", ephemeral: true);
         }
     }
 }

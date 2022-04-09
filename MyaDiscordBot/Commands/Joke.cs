@@ -7,7 +7,7 @@ namespace MyaDiscordBot.Commands
     {
         public string Name => "joke";
 
-        public string Description => "Tell Mya to say a joke";
+        public string Description => "Ask Mya to say a joke";
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 

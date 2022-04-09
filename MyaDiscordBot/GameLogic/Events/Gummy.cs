@@ -12,7 +12,8 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            throw new NotImplementedException();
+            player.CurrentHP = player.HP;
+            return command.RespondAsync("偶遇類似甘米的女神經過, 瞬間覺得自己身體恢復嗮, 精神奕奕！", ephemeral: true);
         }
     }
 }

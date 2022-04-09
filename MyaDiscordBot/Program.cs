@@ -5,6 +5,7 @@ using Discord.WebSocket;
 using MyaDiscordBot;
 using MyaDiscordBot.ButtonEvent;
 using MyaDiscordBot.Commands;
+using MyaDiscordBot.GameLogic.Events;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using Newtonsoft.Json;
@@ -20,6 +21,7 @@ var builder = new ContainerBuilder();
 //Load all commands
 var commands = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsInterface);
 var buttons = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(IButtonHandler).IsAssignableFrom(p) && !p.IsInterface);
+var rndEvents = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(IRandomEvent).IsAssignableFrom(p) && !p.IsInterface);
 foreach (var command in commands)
 {
     MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
@@ -30,6 +32,12 @@ foreach (var button in buttons)
 {
     MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
     method = method.MakeGenericMethod(button);
+    method.Invoke(builder, new object[1] { builder });
+}
+foreach (var e in rndEvents)
+{
+    MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
+    method = method.MakeGenericMethod(e);
     method.Invoke(builder, new object[1] { builder });
 }
 //Load all configs
@@ -47,6 +55,7 @@ builder.RegisterType<MapService>().As<IMapService>();
 builder.RegisterType<SpawnerService>().As<ISpawnerService>();
 builder.RegisterType<BattleService>().As<IBattleService>();
 builder.RegisterType<ItemService>().As<IItemService>();
+builder.RegisterType<EventService>().As<IEventService>();
 //todo: add all json into DI
 
 
