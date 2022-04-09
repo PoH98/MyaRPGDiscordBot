@@ -19,20 +19,39 @@ namespace MyaDiscordBot.GameLogic.Services
             var result = new BattleResult();
             do
             {
-                var atk = player.Atk - enemy.Def;
+                var atk = player.Atk;
                 if (atk < 0)
                 {
                     atk = 0;
                 }
+                var elementWin = ElementDmg(player, enemy);
+                if (elementWin > 0 || elementWin == -2)
+                {
+                    atk = (int)Math.Round(atk * 1.2);
+                }
+                else if(elementWin == -1)
+                {
+                    atk = (int)Math.Round(atk / 1.2);
+                }
+                atk -= enemy.Def;
                 enemy.HP -= atk;
                 result.DamageDealt += player.Atk - enemy.Def;
                 if (enemy.HP > 0)
                 {
-                    atk = enemy.Atk - player.Def;
+                    atk = enemy.Atk;
+                    if (elementWin == -1 || elementWin == -2)
+                    {
+                        atk = (int)Math.Round(atk * 1.2);
+                    }
+                    else if (elementWin > 0)
+                    {
+                        atk = (int)Math.Round(atk / 1.2);
+                    }
                     if (atk < 0)
                     {
                         atk = 0;
                     }
+                    atk -= player.Def;
                     player.CurrentHP -= atk;
                     result.DamageReceived += atk;
                 }
@@ -84,6 +103,95 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
             }
             return null;
+        }
+        /// <summary>
+        /// > 0 means player win, 0 means no extra dmg and nothing happens, < 0 means player lose, but for light & dark will return -2
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="enemy"></param>
+        /// <returns></returns>
+        private int ElementDmg(Player player, Enemy enemy)
+        {
+            switch (enemy.Element)
+            {
+                case Element.Fire:
+                    if(player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Water).Count() > 0)
+                    {
+                        //player win
+                        return 1;
+                    }
+                    else if(player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Wind).Count() > 0)
+                    {
+                        //player GG
+                        return -1;
+                    }
+                    return 0;
+                case Element.Wind:
+                    if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Fire).Count() > 0)
+                    {
+                        //player win
+                        return 1;
+                    }
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Earth).Count() > 0)
+                    {
+                        //player GG
+                        return -1;
+                    }
+                    return 0;
+                case Element.Water:
+                    if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Earth).Count() > 0)
+                    {
+                        //player win
+                        return 1;
+                    }
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Fire).Count() > 0)
+                    {
+                        //player GG
+                        return -1;
+                    }
+                    return 0;
+                case Element.Earth:
+                    if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Wind).Count() > 0)
+                    {
+                        //player win
+                        return 1;
+                    }
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Water).Count() > 0)
+                    {
+                        //player GG
+                        return -1;
+                    }
+                    return 0;
+                case Element.Dark:
+                    if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Light).Count() > 0)
+                    {
+                        //player win, but special case
+                        return -2;
+                    }
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Dark).Count() > 0)
+                    {
+                        //player GG
+                        return 0;
+                    }
+                    return -1;
+                case Element.Light:
+                    if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Dark).Count() > 0)
+                    {
+                        //player win, but special case
+                        return -2;
+                    }
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Light).Count() > 0)
+                    {
+                        //player GG
+                        return 0;
+                    }
+                    return -1;
+                    //god Element
+                default:
+                    //player must GG
+                    return -1;
+
+            }
         }
     }
 }
