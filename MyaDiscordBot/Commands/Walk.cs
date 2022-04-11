@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.Commands
 {
@@ -23,7 +24,7 @@ namespace MyaDiscordBot.Commands
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
         {
-            new SlashCommandOptionBuilder().WithName("direction").WithDescription("Walk Direction").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Front", 1).AddChoice("Back", 2).AddChoice("Left", 3).AddChoice("Right", 4)
+            new SlashCommandOptionBuilder().WithName("direction").WithDescription("Walk Direction").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Front", 8).AddChoice("Back", 2).AddChoice("Left", 4).AddChoice("Right", 6)
         };
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
@@ -36,10 +37,16 @@ namespace MyaDiscordBot.Commands
             }
             if(player.CurrentHP < 5)
             {
-                await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！");
+                await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！", ephemeral: true);
                 return;
             }
+            var loc = new Coordinate() { X = player.Coordinate.X, Y = player.Coordinate.Y };
+            var hitWall = false;
             var enemy = _playerService.Walk(player, (long)command.Data.Options.First().Value);
+            if(player.Coordinate.X == loc.X && player.Coordinate.Y == loc.Y)
+            {
+                hitWall = true;
+            }
             if (enemy != null)
             {
                 if (enemy.IsBoss)
@@ -53,21 +60,48 @@ namespace MyaDiscordBot.Commands
                 {
                     player.Coin += 2;
                     player.Exp += 1;
+                    player.KilledEnemies++;
+                    player.TotalKilledEnemies++;
                     var item = _battleService.GetReward(enemy);
                     if(item == null)
                     {
-                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$同1經驗值！", ephemeral: true);
+                        if (hitWall)
+                        {
+                            await command.RespondAsync("你對著個不能行走的區域原地踏步左一陣後，遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
+                        }
+                        else
+                        {
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
+                        }
+
                     }
                     else
                     {
                         if(_playerService.AddItem(player, item))
                         {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$同1經驗值再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            if (hitWall)
+                            {
+                                await command.RespondAsync("你對著個不能行走的區域原地踏步左一陣後，遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            }
+                            else
+                            {
+                                await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            }
+                                
                         }
                         else
                         {
-                            //add failed, ignore and nothing happens
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$同1經驗值！", ephemeral: true);
+                            if (hitWall)
+                            {
+                                //add failed, ignore and nothing happens
+                                await command.RespondAsync("你對著個不能行走的區域原地踏步左一陣後，遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
+                            }
+                            else
+                            {
+                                //add failed, ignore and nothing happens
+                                await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
+                            }
+
                         }
                     }
                     await _mapService.KilledEnemy(player.ServerId);
@@ -80,7 +114,7 @@ namespace MyaDiscordBot.Commands
             else
             {
                 var @event = _eventService.GetRandomEvent();
-                await @event.Response(command, player);
+                await @event.Response(command, player, hitWall);
             }
             _playerService.SavePlayer(player);
         }

@@ -20,6 +20,11 @@ namespace MyaDiscordBot.Commands
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
+            {
+                await command.RespondAsync("你已經正在休息！唔可以雙重休息哦！", ephemeral: true);
+                return;
+            }
             player.CurrentHP += 10;
             int wait = 30;
             if (player.CurrentHP > player.HP)

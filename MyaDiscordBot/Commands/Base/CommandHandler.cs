@@ -34,7 +34,7 @@ namespace MyaDiscordBot.Commands
             if (message == null) return;
             if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))
             {
-                if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("DD") || message.Content.Contains("去死"))
+                if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("是DD") || message.Content.Contains("去死"))
                 {
                     var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("veryangry")).Last();
                     var fuck = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("fuck")).Last();

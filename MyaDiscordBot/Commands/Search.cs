@@ -33,7 +33,7 @@ namespace MyaDiscordBot.Commands
             }
             if (player.CurrentHP < 5)
             {
-                await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！");
+                await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！", ephemeral: true);
                 return;
             }
             var enemy = _playerService.Walk(player, 5);//stay
@@ -50,21 +50,23 @@ namespace MyaDiscordBot.Commands
                 {
                     player.Coin += 2;
                     player.Exp += 1;
+                    player.KilledEnemies++;
+                    player.TotalKilledEnemies++;
                     var item = _battleService.GetReward(enemy);
                     if (item == null)
                     {
-                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣！", ephemeral: true);
                     }
                     else
                     {
                         if (_playerService.AddItem(player, item))
                         {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣再額外獲得" + item.Name + "*1！", ephemeral: true);
                         }
                         else
                         {
                             //add failed, ignore and nothing happens
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣同1經驗值！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣！", ephemeral: true);
                         }
                     }
                     await _mapService.KilledEnemy(player.ServerId);
@@ -77,7 +79,7 @@ namespace MyaDiscordBot.Commands
             else
             {
                 var @event = _eventService.GetRandomEvent();
-                await @event.Response(command, player);
+                await @event.Response(command, player, false);
             }
             _playerService.SavePlayer(player);
         }

@@ -105,7 +105,7 @@ namespace MyaDiscordBot.GameLogic.Services
             var map = _mapService.GetCurrentMap(player.ServerId);
             switch (direction)
             {
-                case 1:
+                case 8:
                     //foward
                     player.Coordinate.Y--;
                     break;
@@ -113,11 +113,11 @@ namespace MyaDiscordBot.GameLogic.Services
                     //backward
                     player.Coordinate.Y++;
                     break;
-                case 3:
+                case 4:
                     //left
                     player.Coordinate.X--;
                     break;
-                case 4:
+                case 6:
                     player.Coordinate.X++;
                     break;
             }
@@ -127,7 +127,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 //not walkable, revert move
                 switch (direction)
                 {
-                    case 1:
+                    case 8:
                         //foward
                         player.Coordinate.Y++;
                         break;
@@ -135,40 +135,43 @@ namespace MyaDiscordBot.GameLogic.Services
                         //backward
                         player.Coordinate.Y--;
                         break;
-                    case 3:
+                    case 4:
                         //left
                         player.Coordinate.X++;
                         break;
-                    case 4:
+                    case 6:
                         player.Coordinate.X--;
                         break;
                 }
             }
-            var mapPoint = map.MapData[player.Coordinate.Y][player.Coordinate.X];
-            if (mapPoint != MapItem.Land)
+            else
             {
-                //check allowed to walk on water, more to come
-                if ((!player.Bag.Any(x => x.Ability == Ability.WalkOnWater && x.IsEquiped) && mapPoint == MapItem.Water) ||
-                    mapPoint == MapItem.Lava || mapPoint == MapItem.Wall)
+                var mapPoint = map.MapData[player.Coordinate.Y][player.Coordinate.X];
+                if (mapPoint != MapItem.Land)
                 {
-                    //not walkable, revert move
-                    switch (direction)
+                    //check allowed to walk on water, more to come
+                    if ((!player.Bag.Any(x => x.Ability == Ability.WalkOnWater && x.IsEquiped) && mapPoint == MapItem.Water) ||
+                        mapPoint == MapItem.Lava || mapPoint == MapItem.Wall)
                     {
-                        case 1:
-                            //foward
-                            player.Coordinate.Y++;
-                            break;
-                        case 2:
-                            //backward
-                            player.Coordinate.Y--;
-                            break;
-                        case 3:
-                            //left
-                            player.Coordinate.X++;
-                            break;
-                        case 4:
-                            player.Coordinate.X--;
-                            break;
+                        //not walkable, revert move
+                        switch (direction)
+                        {
+                            case 8:
+                                //foward
+                                player.Coordinate.Y++;
+                                break;
+                            case 2:
+                                //backward
+                                player.Coordinate.Y--;
+                                break;
+                            case 4:
+                                //left
+                                player.Coordinate.X++;
+                                break;
+                            case 6:
+                                player.Coordinate.X--;
+                                break;
+                        }
                     }
                 }
             }

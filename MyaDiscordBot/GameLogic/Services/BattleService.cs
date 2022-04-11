@@ -92,8 +92,8 @@ namespace MyaDiscordBot.GameLogic.Services
         public Item GetReward(Enemy enemy)
         {
             Random rnd = new Random();
-            var i = rnd.NextDouble();
-            if(i >= .5)
+            decimal i = (decimal)rnd.NextDouble();
+            if(i <= enemy.ItemDropRate)
             {
                 var reward = items.Where(x => enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element);
                 if (reward.Any())

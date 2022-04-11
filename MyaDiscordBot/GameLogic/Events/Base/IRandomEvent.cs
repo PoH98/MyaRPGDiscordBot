@@ -5,6 +5,6 @@ namespace MyaDiscordBot.GameLogic.Events
 {
     public interface IRandomEvent
     {
-        Task Response(SocketSlashCommand command, Player player);
+        Task Response(SocketSlashCommand command, Player player, bool isWall);
     }
 }

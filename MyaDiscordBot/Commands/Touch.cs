@@ -13,6 +13,10 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
+            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            {
+                return command.RespondAsync("zzZZZ (米亞已經訓著，無法回復你哦！)", ephemeral: true);
+            }
             return command.RespondAsync(command.User.Mention + "啊~唔好掂我呀！米亞大叫一聲之後整個樓層的玩家都聽到嗮");
         }
     }

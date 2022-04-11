@@ -21,7 +21,7 @@ namespace MyaDiscordBot.Commands
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            StringBuilder sb = new StringBuilder("我的資料：\n當前血量：" + player.CurrentHP + "/" + player.HP + "\n傷害：" + player.Atk + "\n防禦：" + player.Def + "\n院友卡餘額：" + player.Coin + "$\n經驗值：" + player.Exp + "\n背包：\n");
+            StringBuilder sb = new StringBuilder("我的資料：\n當前血量：" + player.CurrentHP + "/" + player.HP + "\n傷害：" + player.Atk + "\n防禦：" + player.Def + "\n院友卡餘額：" + player.Coin + "$\n經驗值：" + player.Exp + "\n當前Loop總共已經擊殺怪獸數量：" + player.KilledEnemies + "\n總共所有loop已經擊殺怪物數量：" + player.TotalKilledEnemies + "\n背包：\n");
             foreach (var item in player.Bag.OrderByDescending(x => x.Rank).Take(20))
             {
                 //infinite use
