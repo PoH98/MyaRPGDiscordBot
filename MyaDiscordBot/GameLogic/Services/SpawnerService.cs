@@ -21,7 +21,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 return null;
             }
             Random rnd = new Random();
-            var selectedGene = tile.Length > 1 ? tile[rnd.Next(tile.Length - 1)] : tile[0];
+            var selectedGene = tile.Length > 1 ? tile[rnd.Next(tile.Length)] : tile[0];
             var probability = rnd.NextDouble();
             if (probability < 0.3)
             {
@@ -36,7 +36,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         return null;
                     }
-                    var enemySelected = rnd.Next(enemies.Count() - 1);
+                    var enemySelected = rnd.Next(enemies.Count());
                     return (Enemy)enemies[enemySelected].Clone();
                 case MapItem.Water:
                     enemies = _enemy.Where(x => x.Element == Element.Water && x.Stage == stage && !x.IsBoss).ToList();
@@ -44,7 +44,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         return null;
                     }
-                    enemySelected = rnd.Next(enemies.Count() - 1);
+                    enemySelected = rnd.Next(enemies.Count());
                     return (Enemy)enemies[enemySelected].Clone();
                 case MapItem.Lava:
                     enemies = _enemy.Where(x => x.Element == Element.Fire && x.Stage == stage && !x.IsBoss).ToList();
@@ -52,7 +52,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         return null;
                     }
-                    enemySelected = rnd.Next(enemies.Count() - 1);
+                    enemySelected = rnd.Next(enemies.Count());
                     return (Enemy)enemies[enemySelected].Clone();
                 case MapItem.Land:
                     enemies = _enemy.Where(x => x.Element == Element.Wind && x.Stage == stage && !x.IsBoss).ToList();
@@ -60,7 +60,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         return null;
                     }
-                    enemySelected = rnd.Next(enemies.Count() - 1);
+                    enemySelected = rnd.Next(enemies.Count());
                     return (Enemy)enemies[enemySelected].Clone();
             }
             return null;
@@ -70,7 +70,7 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             Random rnd = new Random();
             var bosses = _enemy.Where(x => x.IsBoss && x.Stage == stage).ToArray();
-            if(bosses.Length < 1)
+            if (bosses.Length < 1)
             {
 #if DEBUG
                 //no boss, lets create one default boss
@@ -80,7 +80,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     Def = 0,
                     HP = 1 * stage,
                     Element = Element.God,
-                    IsBoss= true,
+                    IsBoss = true,
                     Stage = stage,
                     Name = "虛無之鬼"
                 };
@@ -97,7 +97,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 };
 #endif
             }
-            return (Enemy)bosses[rnd.Next(bosses.Count() - 1)].Clone();
+            return (Enemy)bosses[rnd.Next(bosses.Count())].Clone();
         }
     }
 }

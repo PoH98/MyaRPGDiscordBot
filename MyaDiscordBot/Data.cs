@@ -57,7 +57,7 @@ namespace MyaDiscordBot
             timer.Interval = _interval;
             timer.Elapsed += Tick;
             timer.Start();
-            if(_expiration == null)
+            if (_expiration == null)
             {
                 _expiration = new TimeSpan(0, 5, 0);
             }

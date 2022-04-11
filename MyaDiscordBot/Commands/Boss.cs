@@ -1,11 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -28,7 +23,7 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            if(Data.Instance.Boss.ContainsKey((command.Channel as SocketGuildChannel).Guild.Id))
+            if (Data.Instance.Boss.ContainsKey((command.Channel as SocketGuildChannel).Guild.Id))
             {
                 //fight
                 var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
@@ -62,7 +57,7 @@ namespace MyaDiscordBot.Commands
                 }
                 else
                 {
-                    if(player.CurrentHP < 0)
+                    if (player.CurrentHP < 0)
                     {
                         player.CurrentHP = 0;
                     }

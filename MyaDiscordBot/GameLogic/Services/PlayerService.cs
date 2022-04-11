@@ -84,6 +84,8 @@ namespace MyaDiscordBot.GameLogic.Services
                         player.HP = 20;
                         player.CurrentHP = 20;
                         player.Bag = new List<ItemEquip>();
+                        player.KilledEnemies = 0;
+                        player.NextCommand = DateTime.MinValue;
                         player.Exp = 0;
                     }
                 }
@@ -191,7 +193,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public bool AddItem(Player player, Item item)
         {
             //no duplicate add for equipment
-            if(item.UseTimes == -1 && player.Bag.Any(x => x.Name == item.Name))
+            if (item.UseTimes == -1 && player.Bag.Any(x => x.Name == item.Name))
             {
                 return false;
             }

@@ -30,6 +30,8 @@ namespace MyaDiscordBot.Models
         public int HP { get; set; }
         //特別技能
         public Ability Ability { get; set; }
+        //如果係跌落裝備，咁跌落幾率
+        public double DropRate { get; set; } = 0.5;
 
         public object Clone()
         {
@@ -47,6 +49,7 @@ namespace MyaDiscordBot.Models
         public ItemEquip(Item i)
         {
             var item = (Item)i.Clone();
+            Id = item.Id;
             Name = item.Name;
             Rank = item.Rank;
             Price = item.Price;
@@ -77,8 +80,13 @@ namespace MyaDiscordBot.Models
 
     public enum ItemType
     {
-        Equipment = 0,
-        Item = 1
+        Item,
+        Weapon,
+        Amor,
+        Ring,
+        Necklece,
+        Shoes,
+        Shield
     }
 
     public enum Ability

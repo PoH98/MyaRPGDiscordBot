@@ -5,7 +5,7 @@ namespace MyaDiscordBot.GameLogic.Services
     public interface IBattleService
     {
         BattleResult Battle(Enemy enemy, Player player);
-        Item GetReward(Enemy enemy);
+        Item GetReward(Enemy enemy, Player player);
     }
     public class BattleService : IBattleService
     {
@@ -20,16 +20,16 @@ namespace MyaDiscordBot.GameLogic.Services
             do
             {
                 var atk = player.Atk;
-                if (atk < 0)
+                if (atk < 1)
                 {
-                    atk = 0;
+                    atk = 1;
                 }
                 var elementWin = ElementDmg(player, enemy);
                 if (elementWin > 0 || elementWin == -2)
                 {
                     atk = (int)Math.Round(atk * 1.2);
                 }
-                else if(elementWin == -1)
+                else if (elementWin == -1)
                 {
                     atk = (int)Math.Round(atk / 1.2);
                 }
@@ -60,12 +60,12 @@ namespace MyaDiscordBot.GameLogic.Services
                 if (items.Count() > 0)
                 {
                     //use items
-                    if(player.HP <= enemy.Atk && items.Any(x => x.HP > 0))
+                    if ((player.HP <= enemy.Atk || player.HP < 5) && items.Any(x => x.HP > 0))
                     {
                         var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                         item.ItemLeft--;
                         player.HP += item.HP;
-                        if(result.ItemsUsed.Any(x => x.Key == item))
+                        if (result.ItemsUsed.Any(x => x.Key == item))
                         {
                             result.ItemsUsed[item]++;
                         }
@@ -89,17 +89,24 @@ namespace MyaDiscordBot.GameLogic.Services
             return result;
         }
 
-        public Item GetReward(Enemy enemy)
+        public Item GetReward(Enemy enemy, Player player)
         {
             Random rnd = new Random();
             decimal i = (decimal)rnd.NextDouble();
-            if(i <= enemy.ItemDropRate)
+            if (i <= enemy.ItemDropRate)
             {
-                var reward = items.Where(x => enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element);
+                var reward = items.Where(x => enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id)).ToList();
                 if (reward.Any())
                 {
-                    var select = rnd.Next(reward.Count());
-                    return reward.ToArray()[select];
+                    double cumulSum = 0;
+                    int cnt = reward.Count();
+                    for (int slot = 0; slot < cnt; slot++)
+                    {
+                        cumulSum += items[slot].DropRate;
+                        items[slot].DropRate = cumulSum;
+                    }
+                    double divSpot = rnd.NextDouble() * cumulSum;
+                    return items.FirstOrDefault(i => i.DropRate >= divSpot);
                 }
             }
             return null;
@@ -115,12 +122,12 @@ namespace MyaDiscordBot.GameLogic.Services
             switch (enemy.Element)
             {
                 case Element.Fire:
-                    if(player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Water).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Water).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if(player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Wind).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Atk > 0 && x.Element == Element.Wind).Count() > 0)
                     {
                         //player GG
                         return -1;
@@ -186,7 +193,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         return 0;
                     }
                     return -1;
-                    //god Element
+                //god Element
                 default:
                     //player must GG
                     return -1;

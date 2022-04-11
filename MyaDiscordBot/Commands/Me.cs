@@ -21,7 +21,7 @@ namespace MyaDiscordBot.Commands
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            StringBuilder sb = new StringBuilder("我的資料：\n當前血量：" + player.CurrentHP + "/" + player.HP + "\n傷害：" + player.Atk + "\n防禦：" + player.Def + "\n院友卡餘額：" + player.Coin + "$\n經驗值：" + player.Exp + "\n當前Loop總共已經擊殺怪獸數量：" + player.KilledEnemies + "\n總共所有loop已經擊殺怪物數量：" + player.TotalKilledEnemies + "\n背包：\n");
+            StringBuilder sb = new StringBuilder("我的資料：\n當前血量：" + player.CurrentHP + "/" + player.HP + "\n傷害：" + player.Atk + "\n防禦：" + player.Def + "\n院友卡餘額：" + player.Coin + "$\n經驗值：" + player.Exp + "\n當前啦loop總共已經擊殺怪獸數量：" + player.KilledEnemies + "\n總共所有loop已經擊殺怪物數量：" + player.TotalKilledEnemies + "\n背包：\n");
             foreach (var item in player.Bag.OrderByDescending(x => x.Rank).Take(20))
             {
                 //infinite use
@@ -34,7 +34,7 @@ namespace MyaDiscordBot.Commands
                     sb.AppendLine(item.Name + "\t" + (item.IsEquiped ? "已裝備" : "未裝備") + "\t剩" + item.ItemLeft);
                 }
             }
-            if(DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
+            if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
                 sb.AppendLine("**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**");
             }

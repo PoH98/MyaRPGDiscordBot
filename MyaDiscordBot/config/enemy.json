@@ -62,5 +62,271 @@
     "def": 0, //怪的防禦
     "element": 2, //怪的屬性
     "itemDropRate": 1 //跌裝備幾率，0.3代表30%, 1.0代表100%
+  },
+  {
+    "name": "大樹守衛Lite版",
+    "hp": 2000,
+    "atk": 100,
+    "def": 0,
+    "element": 6,
+    "itemDropRate": 0.0,
+    "stage": 1,
+    "dropRank": [],
+    "isBoss": true
+  },
+  {
+    "name": "大樹守衛Pixel版",
+    "hp": 2000,
+    "atk": 80,
+    "def": 10,
+    "element": 6,
+    "itemDropRate": 0.0,
+    "stage": 1,
+    "dropRank": [],
+    "isBoss": true
+  },
+  {
+    "name": "飛天忍者",
+    "hp": 15,
+    "atk": 8,
+    "def": 3,
+    "element": 3,
+    "itemDropRate": 0.3,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "火爆忍者",
+    "hp": 15,
+    "atk": 8,
+    "def": 3,
+    "element": 2,
+    "itemDropRate": 0.3,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "石頭忍者",
+    "hp": 15,
+    "atk": 8,
+    "def": 3,
+    "element": 4,
+    "itemDropRate": 0.3,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "放水忍者",
+    "hp": 15,
+    "atk": 8,
+    "def": 3,
+    "element": 5,
+    "itemDropRate": 0.3,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "黃金飛天忍者",
+    "hp": 15,
+    "atk": 10,
+    "def": 1,
+    "element": 3,
+    "itemDropRate": 0.6,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "黃金火爆忍者",
+    "hp": 15,
+    "atk": 10,
+    "def": 1,
+    "element": 2,
+    "itemDropRate": 0.6,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "黃金石頭忍者",
+    "hp": 15,
+    "atk": 10,
+    "def": 1,
+    "element": 4,
+    "itemDropRate": 0.6,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "黃金放水忍者",
+    "hp": 15,
+    "atk": 10,
+    "def": 1,
+    "element": 5,
+    "itemDropRate": 0.6,
+    "stage": 2,
+    "dropRank": [ 2, 3 ]
+  },
+  {
+    "name": "RGB飛天忍者",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 3,
+    "itemDropRate": 0.4,
+    "stage": 2,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "RGB火爆忍者",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 2,
+    "itemDropRate": 0.4,
+    "stage": 2,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "RGB石頭忍者",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 4,
+    "itemDropRate": 0.4,
+    "stage": 2,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "RGB放水忍者",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 5,
+    "itemDropRate": 0.4,
+    "stage": 2,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "噴屎唔忍將軍 - RGB KTL",
+    "hp": 3000,
+    "atk": 150,
+    "def": 10,
+    "element": 6,
+    "itemDropRate": 0.0,
+    "stage": 2,
+    "dropRank": [],
+    "isBoss": true
+  },
+  {
+    "name": "忍屎將軍 - RGB MX Low",
+    "hp": 3000,
+    "atk": 120,
+    "def": 25,
+    "element": 6,
+    "itemDropRate": 0.0,
+    "stage": 2,
+    "dropRank": [],
+    "isBoss": true
+  },
+  {
+    "name": "無限∞吹風機",
+    "hp": 25,
+    "atk": 12,
+    "def": 5,
+    "element": 3,
+    "itemDropRate": 0.4,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "無限∞打火機",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 2,
+    "itemDropRate": 0.4,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "無限∞鑽地機",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 4,
+    "itemDropRate": 0.4,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "無限∞噴水機",
+    "hp": 20,
+    "atk": 15,
+    "def": 0,
+    "element": 5,
+    "itemDropRate": 0.4,
+    "stage": 3,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "解除限制吹風機",
+    "hp": 25,
+    "atk": 12,
+    "def": 8,
+    "element": 3,
+    "itemDropRate": 0.8,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "解除限制打火機",
+    "hp": 20,
+    "atk": 15,
+    "def": 8,
+    "element": 2,
+    "itemDropRate": 0.8,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "解除限制鑽地機",
+    "hp": 20,
+    "atk": 15,
+    "def": 8,
+    "element": 4,
+    "itemDropRate": 0.8,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "解除限制噴水機",
+    "hp": 20,
+    "atk": 15,
+    "def": 8,
+    "element": 5,
+    "itemDropRate": 0.8,
+    "stage": 3,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "Thomas 複製人軍隊將軍 - Number C 59",
+    "hp": 4000,
+    "atk": 150,
+    "def": 10,
+    "element": 6,
+    "itemDropRate": 0.0,
+    "stage": 3,
+    "dropRank": [],
+    "isBoss": true
+  },
+  {
+    "name": "Thomas 複製人軍隊將軍 - Number C 116",
+    "hp": 4000,
+    "atk": 120,
+    "def": 25,
+    "element": 6,
+    "itemDropRate": 0.0,
+    "stage": 3,
+    "dropRank": [],
+    "isBoss": true
   }
 ]

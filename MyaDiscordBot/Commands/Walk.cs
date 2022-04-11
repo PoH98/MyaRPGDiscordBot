@@ -35,7 +35,7 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你正在休息！無法進行任何探索或者戰鬥！", ephemeral: true);
                 return;
             }
-            if(player.CurrentHP < 5)
+            if (player.CurrentHP < 5)
             {
                 await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！", ephemeral: true);
                 return;
@@ -43,7 +43,7 @@ namespace MyaDiscordBot.Commands
             var loc = new Coordinate() { X = player.Coordinate.X, Y = player.Coordinate.Y };
             var hitWall = false;
             var enemy = _playerService.Walk(player, (long)command.Data.Options.First().Value);
-            if(player.Coordinate.X == loc.X && player.Coordinate.Y == loc.Y)
+            if (player.Coordinate.X == loc.X && player.Coordinate.Y == loc.Y)
             {
                 hitWall = true;
             }
@@ -62,8 +62,8 @@ namespace MyaDiscordBot.Commands
                     player.Exp += 1;
                     player.KilledEnemies++;
                     player.TotalKilledEnemies++;
-                    var item = _battleService.GetReward(enemy);
-                    if(item == null)
+                    var item = _battleService.GetReward(enemy, player);
+                    if (item == null)
                     {
                         if (hitWall)
                         {
@@ -77,7 +77,7 @@ namespace MyaDiscordBot.Commands
                     }
                     else
                     {
-                        if(_playerService.AddItem(player, item))
+                        if (_playerService.AddItem(player, item))
                         {
                             if (hitWall)
                             {
@@ -87,7 +87,7 @@ namespace MyaDiscordBot.Commands
                             {
                                 await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$再額外獲得" + item.Name + "*1！", ephemeral: true);
                             }
-                                
+
                         }
                         else
                         {

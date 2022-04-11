@@ -1,10 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -20,7 +15,7 @@ namespace MyaDiscordBot.Commands
         {
             if (!File.Exists("joke.txt"))
             {
-                File.WriteAllText("joke.txt","");
+                File.WriteAllText("joke.txt", "");
             }
             await File.AppendAllTextAsync("joke.txt", ((string)command.Data.Options.First().Value) + "\n");
             if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)

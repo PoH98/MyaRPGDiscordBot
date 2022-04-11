@@ -27,7 +27,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Task SaveData()
         {
-           return File.WriteAllTextAsync("config\\items.json", JsonConvert.SerializeObject(items, Formatting.Indented));
+            return File.WriteAllTextAsync("config\\items.json", JsonConvert.SerializeObject(items, Formatting.Indented));
         }
     }
 }

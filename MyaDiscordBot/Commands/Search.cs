@@ -52,7 +52,7 @@ namespace MyaDiscordBot.Commands
                     player.Exp += 1;
                     player.KilledEnemies++;
                     player.TotalKilledEnemies++;
-                    var item = _battleService.GetReward(enemy);
+                    var item = _battleService.GetReward(enemy, player);
                     if (item == null)
                     {
                         await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣！", ephemeral: true);
@@ -73,7 +73,7 @@ namespace MyaDiscordBot.Commands
                 }
                 else
                 {
-                    await command.RespondWithFileAsync("Assets\\wasted.png","wasted.png", "你已死亡，請等待米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
+                    await command.RespondWithFileAsync("Assets\\wasted.png", "wasted.png", "你已死亡，請等待米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
                 }
             }
             else

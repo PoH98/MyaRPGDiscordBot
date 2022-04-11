@@ -34,7 +34,7 @@ namespace MyaDiscordBot.Commands
                 player.CurrentHP = player.HP;
             }
             player.NextCommand = DateTime.Now.AddMinutes(wait);
-            if(player.CurrentHP > 4)
+            if (player.CurrentHP > 4)
             {
                 await command.RespondAsync("你在原地與米亞一起建設左帳篷開始休息，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
             }

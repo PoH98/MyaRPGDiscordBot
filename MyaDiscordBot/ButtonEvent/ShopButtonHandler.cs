@@ -40,7 +40,7 @@ namespace MyaDiscordBot.ButtonEvent
                     return;
                 }
                 player.Coin -= selected.Price;
-                if(playerService.AddItem(player, selected))
+                if (playerService.AddItem(player, selected))
                 {
                     await message.RespondAsync("購買成功！", ephemeral: true);
                 }

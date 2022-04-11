@@ -112,7 +112,7 @@ namespace MyaDiscordBot.Commands
             {
                 Directory.CreateDirectory("save");
             }
-            
+
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
             buttons = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(IButtonHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as IButtonHandler);
             await _client.SetGameAsync("頂米亞與甘米大冒險", type: ActivityType.Playing);

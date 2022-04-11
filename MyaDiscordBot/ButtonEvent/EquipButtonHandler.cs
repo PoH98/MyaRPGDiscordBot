@@ -25,39 +25,59 @@ namespace MyaDiscordBot.ButtonEvent
             if (message.Data.CustomId.StartsWith("unequip-"))
             {
                 var item = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("unequip-", "").ToLower()).First();
-                item.IsEquiped = false;
-                if(item.UseTimes == -1)
+                if (item.IsEquiped)
                 {
-                    player.HP -= item.HP;
-                    player.Atk -= item.Atk;
-                    player.Def -= item.Def;
+                    item.IsEquiped = false;
+                    if (item.UseTimes == -1)
+                    {
+                        player.HP -= item.HP;
+                        player.Atk -= item.Atk;
+                        player.Def -= item.Def;
+                    }
+                    await message.RespondAsync("已經解除裝備" + item.Name + "！", ephemeral: true);
                 }
-                await message.RespondAsync("已經解除裝備" + item.Name + "！", ephemeral: true);
+                else
+                {
+                    await message.RespondAsync("你都無裝備" + item.Name + "，如何解除裝備？", ephemeral: true);
+                }
             }
             else
             {
                 //equip
                 var item = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("equip-", "").ToLower()).First();
-                if (item.UseTimes == -1)
+                if (!item.IsEquiped)
                 {
-                    if(player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element))
+                    if (item.UseTimes == -1)
                     {
-                        //not allow to equip different elements
-                        await message.RespondAsync("你已經裝備其他屬性的裝備，無法裝備當前依個裝備！請卸下你的當前裝備後再進行換裝！");
-                        return;
+                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element))
+                        {
+                            //not allow to equip different elements
+                            await message.RespondAsync("你已經裝備其他屬性的裝備，無法裝備當前依個裝備！請卸下你的當前裝備後再進行換裝！", ephemeral: true);
+                            return;
+                        }
+                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type))
+                        {
+                            //not allow to equip same type equipments
+                            await message.RespondAsync("你已經裝備" + item.Type.ToString() + "，無法裝備當前依個裝備！請卸下你的當前裝備後再進行換裝！", ephemeral: true);
+                            return;
+                        }
+                        player.HP += item.HP;
+                        player.Atk += item.Atk;
+                        player.Def += item.Def;
                     }
-                    player.HP += item.HP;
-                    player.Atk += item.Atk;
-                    player.Def += item.Def;
+                    item.IsEquiped = true;
+                    await message.RespondAsync("已經成功裝備" + item.Name + "！", ephemeral: true);
                 }
-                item.IsEquiped = true;
-                await message.RespondAsync("已經成功裝備" + item.Name + "！", ephemeral: true);
+                else
+                {
+                    await message.RespondAsync("你已經裝備" + item.Name + "，唔需要再重新裝備！", ephemeral: true);
+                }
             }
-            if(player.Def > player.HighestDef)
+            if (player.Def > player.HighestDef)
             {
                 player.HighestDef = player.Def;
             }
-            if(player.Atk > player.HighestAtk)
+            if (player.Atk > player.HighestAtk)
             {
                 player.HighestAtk = player.Atk;
             }
