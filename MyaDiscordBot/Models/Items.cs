@@ -80,13 +80,13 @@ namespace MyaDiscordBot.Models
 
     public enum ItemType
     {
-        Item,
-        Weapon,
-        Amor,
-        Ring,
-        Necklece,
-        Shoes,
-        Shield
+        道具,
+        武器,
+        護甲,
+        指環,
+        頸鏈,
+        鞋,
+        盾
     }
 
     public enum Ability

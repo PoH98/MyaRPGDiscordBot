@@ -24,7 +24,7 @@ namespace MyaDiscordBot.Commands
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
         {
-            new SlashCommandOptionBuilder().WithName("direction").WithDescription("Walk Direction").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Front", 8).AddChoice("Back", 2).AddChoice("Left", 4).AddChoice("Right", 6)
+            new SlashCommandOptionBuilder().WithName("direction").WithDescription("Walk Direction").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Up", 8).AddChoice("Down", 2).AddChoice("Left", 4).AddChoice("Right", 6)
         };
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)

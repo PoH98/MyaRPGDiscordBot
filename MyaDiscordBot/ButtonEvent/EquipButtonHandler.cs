@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using System.Text;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -47,18 +48,38 @@ namespace MyaDiscordBot.ButtonEvent
                 var item = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("equip-", "").ToLower()).First();
                 if (!item.IsEquiped)
                 {
+                    StringBuilder sb = new StringBuilder();
                     if (item.UseTimes == -1)
                     {
-                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element))
+                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
                         {
                             //not allow to equip different elements
-                            await message.RespondAsync("你已經裝備其他屬性的裝備，無法裝備當前依個裝備！請卸下你的當前裝備後再進行換裝！", ephemeral: true);
-                            return;
+                            foreach(var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
+                            {
+                                i.IsEquiped = false;
+                                if (i.UseTimes == -1)
+                                {
+                                    player.HP -= i.HP;
+                                    player.Atk -= i.Atk;
+                                    player.Def -= i.Def;
+                                }
+                                sb.AppendLine(i.Name + "已經因屬性唔同而自動被解除裝備！");
+                            }
                         }
-                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type))
+                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
                         {
                             //not allow to equip same type equipments
-                            await message.RespondAsync("你已經裝備" + item.Type.ToString() + "，無法裝備當前依個裝備！請卸下你的當前裝備後再進行換裝！", ephemeral: true);
+                            foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
+                            {
+                                i.IsEquiped = false;
+                                if (i.UseTimes == -1)
+                                {
+                                    player.HP -= i.HP;
+                                    player.Atk -= i.Atk;
+                                    player.Def -= i.Def;
+                                }
+                                sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
+                            }
                             return;
                         }
                         player.HP += item.HP;
@@ -66,7 +87,14 @@ namespace MyaDiscordBot.ButtonEvent
                         player.Def += item.Def;
                     }
                     item.IsEquiped = true;
-                    await message.RespondAsync("已經成功裝備" + item.Name + "！", ephemeral: true);
+                    if(sb.Length > 0)
+                    {
+                        await message.RespondAsync(sb.ToString() + "\n已經成功裝備" + item.Name + "！", ephemeral: true);
+                    }
+                    else
+                    {
+                        await message.RespondAsync("已經成功裝備" + item.Name + "！", ephemeral: true);
+                    }
                 }
                 else
                 {
