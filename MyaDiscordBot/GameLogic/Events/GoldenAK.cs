@@ -6,7 +6,7 @@ namespace MyaDiscordBot.GameLogic.Events
 {
     public class GoldenAK : IRandomEvent
     {
-        public Task Response(SocketSlashCommand command, Player player, bool isWall)
+        public Task Response(SocketSlashCommand command, Player player)
         {
             var builder = new ComponentBuilder();
             builder.WithButton("黃金AK", "goldenAK1", ButtonStyle.Success);

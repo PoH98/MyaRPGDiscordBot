@@ -51,45 +51,13 @@
         /// </summary>
         public List<ItemEquip> Bag { get; set; }
         /// <summary>
-        /// 玩家地圖上位置
-        /// </summary>
-        public Coordinate Coordinate { get; set; }
-        /// <summary>
         /// 防止Spam
         /// </summary>
         public DateTime NextCommand { get; set; }
         /// <summary>
-        /// 米亞代幣，通關完畢後會自動統計
-        /// </summary>
-        public int MyaCoin { get; set; }
-        /// <summary>
-        /// 殺死怪物數量
-        /// </summary>
-        public int KilledEnemies { get; set; }
-        /// <summary>
         /// 統計對Boss造成幾多傷害
         /// </summary>
         public int BossDamage { get; set; }
-        /// <summary>
-        /// 總共歷代打死幾多怪
-        /// </summary>
-        public long TotalKilledEnemies { get; set; }
-        /// <summary>
-        /// 角色最高傷害記錄
-        /// </summary>
-        public int HighestAtk { get; set; }
-        /// <summary>
-        /// 角色最高防禦記錄
-        /// </summary>
-        public int HighestDef { get; set; }
-        /// <summary>
-        /// 角色最高血量記錄
-        /// </summary>
-        public int HighestHP { get; set; }
-        /// <summary>
-        /// 玩家當前層數，用來判定數據使用
-        /// </summary>
-        public int CurrentStage { get; set; }
     }
 
     public class Coordinate

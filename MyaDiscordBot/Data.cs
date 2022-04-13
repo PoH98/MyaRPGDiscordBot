@@ -19,7 +19,7 @@ namespace MyaDiscordBot
             }
         }
         public IContainer Container { get; set; }
-        public Dictionary<ulong, Enemy> Boss { get; set; } = new Dictionary<ulong, Enemy>();
+        public ExpirableList<Tuple<ulong, Enemy>> Boss { get; set; } = new ExpirableList<Tuple<ulong, Enemy>>(604800000);
         public ExpirableList<ulong> CacheDisableResponse { get; set; } = new ExpirableList<ulong>(5000);
         public int LastRnd { get; set; }
     }

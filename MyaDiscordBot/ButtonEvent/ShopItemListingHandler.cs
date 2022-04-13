@@ -56,25 +56,25 @@ namespace MyaDiscordBot.ButtonEvent
             switch (parts[1])
             {
                 case "weapon":
-                    items = items.Where(x => x.Type == Models.ItemType.Weapon);
+                    items = items.Where(x => x.Type == Models.ItemType.武器);
                     break;
                 case "amor":
-                    items = items.Where(x => x.Type == Models.ItemType.Amor);
+                    items = items.Where(x => x.Type == Models.ItemType.道具);
                     break;
                 case "ring":
-                    items = items.Where(x => x.Type == Models.ItemType.Ring);
+                    items = items.Where(x => x.Type == Models.ItemType.指環);
                     break;
                 case "necklece":
-                    items = items.Where(x => x.Type == Models.ItemType.Necklece);
+                    items = items.Where(x => x.Type == Models.ItemType.頸鏈);
                     break;
                 case "shoes":
-                    items = items.Where(x => x.Type == Models.ItemType.Shoes);
+                    items = items.Where(x => x.Type == Models.ItemType.鞋);
                     break;
                 case "shield":
-                    items = items.Where(x => x.Type == Models.ItemType.Shield);
+                    items = items.Where(x => x.Type == Models.ItemType.盾);
                     break;
                 default:
-                    items = items.Where(x => x.Type == Models.ItemType.Item);
+                    items = items.Where(x => x.Type == Models.ItemType.道具);
                     break;
             }
             var builder = new ComponentBuilder();

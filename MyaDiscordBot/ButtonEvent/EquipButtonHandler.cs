@@ -54,7 +54,7 @@ namespace MyaDiscordBot.ButtonEvent
                         if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
                         {
                             //not allow to equip different elements
-                            foreach(var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
+                            foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
                             {
                                 i.IsEquiped = false;
                                 if (i.UseTimes == -1)
@@ -87,7 +87,7 @@ namespace MyaDiscordBot.ButtonEvent
                         player.Def += item.Def;
                     }
                     item.IsEquiped = true;
-                    if(sb.Length > 0)
+                    if (sb.Length > 0)
                     {
                         await message.RespondAsync(sb.ToString() + "\n已經成功裝備" + item.Name + "！", ephemeral: true);
                     }
@@ -100,18 +100,6 @@ namespace MyaDiscordBot.ButtonEvent
                 {
                     await message.RespondAsync("你已經裝備" + item.Name + "，唔需要再重新裝備！", ephemeral: true);
                 }
-            }
-            if (player.Def > player.HighestDef)
-            {
-                player.HighestDef = player.Def;
-            }
-            if (player.Atk > player.HighestAtk)
-            {
-                player.HighestAtk = player.Atk;
-            }
-            if (player.HP > player.HighestHP)
-            {
-                player.HighestHP = player.HP;
             }
             playerService.SavePlayer(player);
         }

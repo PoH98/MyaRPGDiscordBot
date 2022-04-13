@@ -4,8 +4,8 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     public interface ISpawnerService
     {
-        Enemy Spawn(int stage, params MapItem[] tile);
-        Enemy SpawnBoss(int stage);
+        Enemy Spawn(Element mapType, int lv);
+        Enemy SpawnBoss(int lv);
     }
     public class SpawnerService : ISpawnerService
     {
@@ -14,74 +14,36 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             _enemy = enemies;
         }
-        public Enemy Spawn(int stage, params MapItem[] tile)
+        public Enemy Spawn(Element mapType, int lv)
         {
-            if (tile.Length == 0)
-            {
-                return null;
-            }
             Random rnd = new Random();
-            var selectedGene = tile.Length > 1 ? tile[rnd.Next(tile.Length)] : tile[0];
             var probability = rnd.NextDouble();
             if (probability < 0.3)
             {
                 //no spawn
                 return null;
             }
-            switch (selectedGene)
-            {
-                case MapItem.Wall:
-                    var enemies = _enemy.Where(x => x.Element == Element.Earth && x.Stage == stage && !x.IsBoss).ToList();
-                    if (enemies.Count == 0)
-                    {
-                        return null;
-                    }
-                    var enemySelected = rnd.Next(enemies.Count());
-                    return (Enemy)enemies[enemySelected].Clone();
-                case MapItem.Water:
-                    enemies = _enemy.Where(x => x.Element == Element.Water && x.Stage == stage && !x.IsBoss).ToList();
-                    if (enemies.Count == 0)
-                    {
-                        return null;
-                    }
-                    enemySelected = rnd.Next(enemies.Count());
-                    return (Enemy)enemies[enemySelected].Clone();
-                case MapItem.Lava:
-                    enemies = _enemy.Where(x => x.Element == Element.Fire && x.Stage == stage && !x.IsBoss).ToList();
-                    if (enemies.Count == 0)
-                    {
-                        return null;
-                    }
-                    enemySelected = rnd.Next(enemies.Count());
-                    return (Enemy)enemies[enemySelected].Clone();
-                case MapItem.Land:
-                    enemies = _enemy.Where(x => x.Element == Element.Wind && x.Stage == stage && !x.IsBoss).ToList();
-                    if (enemies.Count == 0)
-                    {
-                        return null;
-                    }
-                    enemySelected = rnd.Next(enemies.Count());
-                    return (Enemy)enemies[enemySelected].Clone();
-            }
-            return null;
+            var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == ((lv / 10) < 1 ? 1 : (lv / 10)) && !x.IsBoss).ToList();
+            var enemySelected = rnd.Next(enemies.Count());
+            return (Enemy)enemies[enemySelected].Clone();
         }
 
-        public Enemy SpawnBoss(int stage)
+        public Enemy SpawnBoss(int lv)
         {
             Random rnd = new Random();
-            var bosses = _enemy.Where(x => x.IsBoss && x.Stage == stage).ToArray();
+            var bosses = _enemy.Where(x => x.IsBoss && x.Stage == lv / 10).ToArray();
             if (bosses.Length < 1)
             {
 #if DEBUG
                 //no boss, lets create one default boss
                 return new Enemy
                 {
-                    Atk = 100 * stage,
+                    Atk = 100 * lv / 10,
                     Def = 0,
-                    HP = 1 * stage,
+                    HP = 1 * lv / 10,
                     Element = Element.God,
                     IsBoss = true,
-                    Stage = stage,
+                    Stage = lv / 10,
                     Name = "虛無之鬼"
                 };
 #else

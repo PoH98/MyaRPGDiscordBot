@@ -9,10 +9,27 @@ using MyaDiscordBot.GameLogic.Events;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using Newtonsoft.Json;
+using Quartz;
+using Quartz.Impl;
 using System.Reflection;
+
 //Create DC Bot Client//
 var _client = new DiscordSocketClient();
+StdSchedulerFactory factory = new StdSchedulerFactory();
 _client.Log += Log;
+IScheduler scheduler = await factory.GetScheduler();
+IJobDetail job = JobBuilder.Create<BossJob>()
+    .WithIdentity("job", "group")
+    .Build();
+
+// Trigger the job to run now, and then repeat every 10 seconds
+ITrigger trigger = TriggerBuilder.Create()
+    .WithIdentity("trigger", "group")
+    .StartAt(DateTimeOffset.Now.AddDays(7 - (int)DateTime.Now.DayOfWeek))
+    .WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+    .Build();
+await scheduler.ScheduleJob(job, trigger);
+await scheduler.Start();
 var commandHandler = new CommandHandler(_client);
 await commandHandler.InstallCommandsAsync();
 //==============================================================================//
@@ -47,8 +64,7 @@ var items = JsonConvert.DeserializeObject<Items>(File.ReadAllText("config\\items
 builder.RegisterInstance<Items>(items);
 var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("config\\enemy.json"));
 builder.RegisterInstance<Enemies>(enemy);
-var map = JsonConvert.DeserializeObject<Maps>(File.ReadAllText("config\\map.json"));
-builder.RegisterInstance<Maps>(map);
+builder.RegisterInstance<DiscordSocketClient>(_client);
 //Load all Services
 builder.RegisterType<PlayerService>().As<IPlayerService>();
 builder.RegisterType<MapService>().As<IMapService>();
@@ -56,9 +72,8 @@ builder.RegisterType<SpawnerService>().As<ISpawnerService>();
 builder.RegisterType<BattleService>().As<IBattleService>();
 builder.RegisterType<ItemService>().As<IItemService>();
 builder.RegisterType<EventService>().As<IEventService>();
-//todo: add all json into DI
-
-
+builder.RegisterType<SettingService>().As<ISettingService>();
+builder.RegisterType<BossService>().As<IBossService>();
 //=============================================================================//
 //Start Bot//
 Data.Instance.Container = builder.Build();

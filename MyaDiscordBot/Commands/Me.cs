@@ -21,24 +21,38 @@ namespace MyaDiscordBot.Commands
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            StringBuilder sb = new StringBuilder("我的資料：\n當前血量：" + player.CurrentHP + "/" + player.HP + "\n傷害：" + player.Atk + "\n防禦：" + player.Def + "\n院友卡餘額：" + player.Coin + "$\n經驗值：" + player.Exp + "\n當前啦loop總共已經擊殺怪獸數量：" + player.KilledEnemies + "\n總共所有loop已經擊殺怪物數量：" + player.TotalKilledEnemies + "\n背包：\n");
-            foreach (var item in player.Bag.OrderByDescending(x => x.Rank).Take(20))
+            EmbedBuilder eb = new EmbedBuilder() { Color = Color.Blue };
+            eb.WithTitle("我的資料");
+            eb.AddField("血量", player.CurrentHP + "/" + player.HP);
+            eb.AddField("傷害", player.Atk);
+            eb.AddField("防禦", player.Def);
+            eb.AddField("院友卡餘額", player.Coin + "$");
+            eb.AddField("經驗值", player.Exp);
+            eb.AddField("等級", player.Lv);
+            EmbedBuilder bag = new EmbedBuilder() { Color = Color.Blue };
+            bag.WithTitle("我的背包");
+            var items = player.Bag.OrderByDescending(x => x.Rank);
+            if(items.Count() < 1)
+            {
+                bag.WithDescription("你的背包空的哦！咩都無！");
+            }
+            foreach (var item in items)
             {
                 //infinite use
                 if (item.ItemLeft == -1)
                 {
-                    sb.AppendLine(item.Name + "\t" + (item.IsEquiped ? "已裝備" : "未裝備"));
+                    bag.AddField(item.Name, item.IsEquiped ? "已裝備" : "未裝備");
                 }
                 else
                 {
-                    sb.AppendLine(item.Name + "\t" + (item.IsEquiped ? "已裝備" : "未裝備") + "\t剩" + item.ItemLeft);
+                    bag.AddField(item.Name, (item.IsEquiped ? "已裝備" : "未裝備") + "\t剩" + item.ItemLeft);
                 }
             }
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
-                sb.AppendLine("**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**");
+                eb.WithFooter("**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**");
             }
-            return command.RespondAsync(sb.ToString(), ephemeral: true);
+            return command.RespondAsync("", embeds: new Embed[] { eb.Build(), bag.Build() }, ephemeral: true);
         }
     }
 }

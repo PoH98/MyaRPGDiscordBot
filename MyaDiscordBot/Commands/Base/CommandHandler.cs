@@ -144,6 +144,18 @@ namespace MyaDiscordBot.Commands
 
         private async Task client_SlashCommandExecuted(SocketSlashCommand arg)
         {
+            if(arg.CommandName != "setting")
+            {
+                using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                {
+                    var setting = scope.Resolve<ISettingService>();
+                    if (!setting.CorrectChannel(arg, out ulong correctChannel))
+                    {
+                        await arg.RespondAsync("請到" + MentionUtils.MentionChannel(correctChannel) + "使用Bot指令哦！", ephemeral: true);
+                        return;
+                    }
+                }
+            }
             var command = commands.First(x => x.Name == arg.CommandName);
             try
             {

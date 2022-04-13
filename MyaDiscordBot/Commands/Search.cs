@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.Commands
 {
@@ -10,18 +11,33 @@ namespace MyaDiscordBot.Commands
         private readonly IBattleService _battleService;
         private readonly IMapService _mapService;
         private readonly IEventService _eventService;
-        public Search(IPlayerService playerService, IBattleService battleService, IMapService mapService, IEventService eventService)
+        private readonly IBossService _bossService;
+        public Search(IPlayerService playerService, IBattleService battleService, IMapService mapService,IBossService bossService, IEventService eventService)
         {
             _playerService = playerService;
             _battleService = battleService;
             _mapService = mapService;
             _eventService = eventService;
+            _bossService = bossService;
         }
         public string Name => "search";
 
         public string Description => "Search around in your current location";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
+        {
+            GetOption()
+        };
+
+        private SlashCommandOptionBuilder GetOption()
+        {
+            var op = new SlashCommandOptionBuilder().WithName("field").WithDescription("The place you want to go").WithRequired(true).WithType(ApplicationCommandOptionType.Integer);
+            foreach (var e in Enum.GetValues(typeof(Element)).Cast<Element>().Except(new List<Element>() { Element.Dark, Element.God, Element.Light }))
+            {
+                op.AddChoice(e.ToString(), (int)e);
+            }
+            return op;
+        }
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
@@ -36,12 +52,12 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！", ephemeral: true);
                 return;
             }
-            var enemy = _playerService.Walk(player, 5);//stay
+            var enemy = _playerService.Walk(player, (Element)Convert.ToInt32(command.Data.Options.First().Value));
             if (enemy != null)
             {
                 if (enemy.IsBoss)
                 {
-                    Data.Instance.Boss.Add((command.Channel as SocketGuildChannel).Guild.Id, enemy);
+                    _bossService.AddBoss((command.Channel as SocketGuildChannel).Guild.Id, enemy);
                     await command.RespondAsync("Boss已經生成！請各位玩家準備消滅" + enemy.Name + "！！");
                     return;
                 }
@@ -49,27 +65,23 @@ namespace MyaDiscordBot.Commands
                 if (br.IsVictory)
                 {
                     player.Coin += 2;
-                    player.Exp += 1;
-                    player.KilledEnemies++;
-                    player.TotalKilledEnemies++;
+                    _playerService.AddExp(player, 1);
                     var item = _battleService.GetReward(enemy, player);
                     if (item == null)
                     {
-                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣！", ephemeral: true);
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
                     }
                     else
                     {
                         if (_playerService.AddItem(player, item))
                         {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$再額外獲得" + item.Name + "*1！", ephemeral: true);
                         }
                         else
                         {
-                            //add failed, ignore and nothing happens
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2金幣！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
                         }
                     }
-                    await _mapService.KilledEnemy(player.ServerId);
                 }
                 else
                 {
@@ -79,7 +91,7 @@ namespace MyaDiscordBot.Commands
             else
             {
                 var @event = _eventService.GetRandomEvent();
-                await @event.Response(command, player, false);
+                await @event.Response(command, player);
             }
             _playerService.SavePlayer(player);
         }
