@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
 {

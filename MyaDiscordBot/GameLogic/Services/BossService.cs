@@ -20,7 +20,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     //get joined servers
                     var guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
-                    if(DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+                    if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
                     {
                         bossService.AddBoss(guild.Id, new Enemy
                         {
@@ -95,7 +95,7 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 var col = db.GetCollection<BossSpawned>("boss");
                 var list = col.Find(x => x.GuildId == serverId).ToList();
-                if(list.Count > 0)
+                if (list.Count > 0)
                 {
                     return list.Where(x => DateTime.Compare(x.ExpiredTime, DateTime.Now) > 0);
                 }
@@ -108,7 +108,7 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
             {
                 var col = db.GetCollection<BossSpawned>("boss");
-                foreach(var i in col.Find(x => x.GuildId == serverId).ToList().Where(x => DateTime.Compare(x.ExpiredTime, DateTime.Now) < 0))
+                foreach (var i in col.Find(x => x.GuildId == serverId).ToList().Where(x => DateTime.Compare(x.ExpiredTime, DateTime.Now) < 0))
                 {
                     col.Delete(i.Id);
                 }

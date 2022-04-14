@@ -12,7 +12,7 @@ namespace MyaDiscordBot.Commands
         private readonly IMapService _mapService;
         private readonly IEventService _eventService;
         private readonly IBossService _bossService;
-        public Search(IPlayerService playerService, IBattleService battleService, IMapService mapService,IBossService bossService, IEventService eventService)
+        public Search(IPlayerService playerService, IBattleService battleService, IMapService mapService, IBossService bossService, IEventService eventService)
         {
             _playerService = playerService;
             _battleService = battleService;

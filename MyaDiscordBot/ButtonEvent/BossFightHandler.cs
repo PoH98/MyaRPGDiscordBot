@@ -1,10 +1,5 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -37,7 +32,7 @@ namespace MyaDiscordBot.ButtonEvent
                 return;
             }
             var bosses = bossService.GetEnemy((message.Channel as SocketGuildChannel).Guild.Id);
-            if(bosses.Count() < 1)
+            if (bosses.Count() < 1)
             {
                 await message.RespondAsync("此Boss已經唔存在！無法展開戰鬥！", ephemeral: true);
                 return;
@@ -46,7 +41,7 @@ namespace MyaDiscordBot.ButtonEvent
             var result = battleService.Battle(boss.Enemy, player);
             bossService.UpdateEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
             var coin = result.DamageDealt / 10;
-            if(coin < 2)
+            if (coin < 2)
             {
                 coin = 2;
             }
@@ -55,7 +50,7 @@ namespace MyaDiscordBot.ButtonEvent
             if (result.IsVictory)
             {
                 bossService.DefeatedEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
-                await message.RespondAsync(message.User.Mention + "對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！院友們自動被傳送到下一層！");
+                await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！");
                 if (player.CurrentHP < 0)
                 {
                     player.CurrentHP = 0;
@@ -85,7 +80,7 @@ namespace MyaDiscordBot.ButtonEvent
                     player.CurrentHP = player.HP;
                 }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
-                await message.RespondAsync(message.User.Mention + "對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$! 不過由於Boss實在太強大，你已經陣亡而且被米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>");
+                await message.RespondAsync("你對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$! 不過由於Boss實在太強大，你已經陣亡而且被米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
             }
             player.BossDamage += result.DamageDealt;
             playerService.SavePlayer(player);

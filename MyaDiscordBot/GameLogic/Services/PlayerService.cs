@@ -20,7 +20,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public PlayerService(IMapService mapService, IConfiguration configuration)
         {
             _mapService = mapService;
-            _configuration= configuration;
+            _configuration = configuration;
         }
         private string GetID(ulong id, ulong serverId)
         {

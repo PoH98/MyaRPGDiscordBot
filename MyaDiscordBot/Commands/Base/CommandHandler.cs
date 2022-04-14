@@ -3,6 +3,9 @@ using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.ButtonEvent;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
+using MyaDiscordBot.Models.Blacklister;
+using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.Commands
@@ -12,20 +15,33 @@ namespace MyaDiscordBot.Commands
         private readonly DiscordSocketClient _client;
         private IEnumerable<ICommand> commands;
         private IEnumerable<IButtonHandler> buttons;
-        public CommandHandler(DiscordSocketClient client)
+        private HttpClient hc = new HttpClient();
+        public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
+            hc.BaseAddress = new Uri("https://api.blacklister.xyz");
+            hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
         }
 
-        public Task InstallCommandsAsync()
+        public void InstallCommands()
         {
             // Hook the MessageReceived event into our command handler
             _client.SlashCommandExecuted += client_SlashCommandExecuted;
             _client.Ready += client_Ready;
             _client.JoinedGuild += _client_JoinedGuild;
+            _client.UserJoined += _client_UserJoined;
             _client.ButtonExecuted += _client_ButtonExecuted;
             _client.MessageReceived += _client_MessageReceived;
-            return Task.CompletedTask;
+        }
+
+        private async Task _client_UserJoined(SocketGuildUser arg)
+        {
+            var response = await hc.GetAsync(arg.Id.ToString());
+            var result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
+            if (result.Blacklisted)
+            {
+                await arg.KickAsync(result.Reason + " in other server on " + result.Date);
+            }
         }
 
         private async Task _client_MessageReceived(SocketMessage arg)
@@ -46,7 +62,7 @@ namespace MyaDiscordBot.Commands
                     var sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
                     await message.AddReactionAsync(sssmya);
                 }
-                else if ((message.Content.Contains("愛") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && (!message.Content.Contains("甘米")))
+                else if ((message.Content.Contains("愛") || message.Content.Contains("萬歲") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && (!message.Content.Contains("甘米")))
                 {
                     var kiramya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("kiramya")).Last();
                     await message.AddReactionAsync(kiramya);
@@ -144,7 +160,7 @@ namespace MyaDiscordBot.Commands
 
         private async Task client_SlashCommandExecuted(SocketSlashCommand arg)
         {
-            if(arg.CommandName != "setting")
+            if (arg.CommandName != "setting")
             {
                 using (var scope = Data.Instance.Container.BeginLifetimeScope())
                 {

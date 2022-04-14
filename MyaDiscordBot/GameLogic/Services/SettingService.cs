@@ -1,11 +1,6 @@
 ﻿using Discord.WebSocket;
 using LiteDB;
 using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -27,7 +22,7 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var db = new LiteDatabase("Filename=save\\" + (command.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
             {
                 var guild = db.GetCollection<ServerSettings>("settings");
-                if(!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
+                if (!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
                 {
                     //not set
                     correctChannel = (command.Channel as SocketGuildChannel).Guild.DefaultChannel.Id;
@@ -37,7 +32,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     var setting = guild.FindOne(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id);
                     correctChannel = setting.ChannelId;
-                    if((command.Channel as SocketGuildChannel).Id == setting.ChannelId)
+                    if ((command.Channel as SocketGuildChannel).Id == setting.ChannelId)
                     {
                         return true;
                     }
@@ -57,14 +52,14 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public void SetChannel(SocketSlashCommand command)
         {
-            if(configuration.AdminId != command.User.Id)
+            if (configuration.AdminId != command.User.Id)
             {
                 throw new ArgumentException("Invalid permission");
             }
             using (var db = new LiteDatabase("Filename=save\\" + (command.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
             {
                 var guild = db.GetCollection<ServerSettings>("settings");
-                if(!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
+                if (!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
                 {
                     guild.Insert(new ServerSettings
                     {

@@ -18,7 +18,11 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             Random rnd = new Random();
             var probability = rnd.NextDouble();
-            if (probability < 0.3)
+            if (probability < 0.1)
+            {
+                return SpawnBoss(lv);
+            }
+            if (probability < 0.4)
             {
                 //no spawn
                 return null;
@@ -31,7 +35,12 @@ namespace MyaDiscordBot.GameLogic.Services
         public Enemy SpawnBoss(int lv)
         {
             Random rnd = new Random();
-            var bosses = _enemy.Where(x => x.IsBoss && x.Stage == lv / 10).ToArray();
+            var stage = lv / 10;
+            if (stage < 1)
+            {
+                stage = 1;
+            }
+            var bosses = _enemy.Where(x => x.IsBoss && x.Stage == stage).ToArray();
             if (bosses.Length < 1)
             {
 #if DEBUG

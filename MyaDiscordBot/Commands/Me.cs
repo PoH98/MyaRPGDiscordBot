@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System.Text;
 
 namespace MyaDiscordBot.Commands
 {
@@ -32,7 +31,7 @@ namespace MyaDiscordBot.Commands
             EmbedBuilder bag = new EmbedBuilder() { Color = Color.Blue };
             bag.WithTitle("我的背包");
             var items = player.Bag.OrderByDescending(x => x.Rank);
-            if(items.Count() < 1)
+            if (items.Count() < 1)
             {
                 bag.WithDescription("你的背包空的哦！咩都無！");
             }
