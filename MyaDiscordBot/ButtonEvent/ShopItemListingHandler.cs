@@ -82,18 +82,26 @@ namespace MyaDiscordBot.ButtonEvent
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("**" + i.Name + "**");
-                if (i.Atk > 0)
+                if (i.Type == Models.ItemType.道具)
                 {
-                    sb.Append(" 提升" + i.Atk + "傷害");
+                    sb.Append(" * " + i.UseTimes + " 恢復" + i.HP + "血量");
                 }
-                if (i.Def > 0)
+                else
                 {
-                    sb.Append(" 提升" + i.Def + "護甲");
+                    if (i.Atk > 0)
+                    {
+                        sb.Append(" 提升" + i.Atk + "傷害");
+                    }
+                    if (i.Def > 0)
+                    {
+                        sb.Append(" 提升" + i.Def + "護甲");
+                    }
+                    if (i.HP > 0)
+                    {
+                        sb.Append(" 提升" + i.Def + "血量");
+                    }
                 }
-                if (i.HP > 0)
-                {
-                    sb.Append(" 提升" + i.Def + "血量");
-                }
+
                 if (i.Ability != Models.Ability.None)
                 {
                     switch (i.Ability)

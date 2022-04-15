@@ -36,11 +36,14 @@ namespace MyaDiscordBot.Commands
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
-            var response = await hc.GetAsync(arg.Id.ToString());
-            var result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
-            if (result.Blacklisted)
+            if (!arg.IsBot)
             {
-                await arg.KickAsync(result.Reason + " in other server on " + result.Date);
+                var response = await hc.GetAsync(arg.Id.ToString());
+                var result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
+                if (result.Blacklisted)
+                {
+                    await arg.KickAsync(result.Reason + " in other server on " + result.Date);
+                }
             }
         }
 
@@ -73,6 +76,12 @@ namespace MyaDiscordBot.Commands
                     await message.AddReactionAsync(what);
                 }
             }
+            else if(message.Content.StartsWith("$refreshCommands") && message.Author.Id == 294835963442757632)
+            {
+                await message.ReplyAsync("Job Executing");
+                await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
+                await message.ReplyAsync("Job Done");
+            }
         }
 
         private async Task _client_ButtonExecuted(SocketMessageComponent arg)
@@ -100,9 +109,15 @@ namespace MyaDiscordBot.Commands
             }
         }
 
-        private async Task _client_JoinedGuild(SocketGuild arg)
+        private Task _client_JoinedGuild(SocketGuild arg)
         {
-            foreach (var command in commands)
+            return UpdateCommands(arg);
+        }
+
+        private async Task UpdateCommands(SocketGuild arg = null)
+        {
+            await arg.DeleteApplicationCommandsAsync();
+            await Parallel.ForEachAsync(commands, new ParallelOptions { MaxDegreeOfParallelism = 4 }, async (command, cancellationToken) =>
             {
                 try
                 {
@@ -119,7 +134,7 @@ namespace MyaDiscordBot.Commands
                 {
                     Console.WriteLine(ex.Message);
                 }
-            }
+            });
         }
 
         private async Task client_Ready()

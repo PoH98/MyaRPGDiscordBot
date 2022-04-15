@@ -27,11 +27,11 @@ namespace MyaDiscordBot.GameLogic.Services
                 var elementWin = ElementDmg(player, enemy);
                 if (elementWin > 0 || elementWin == -2)
                 {
-                    atk = (int)Math.Round(atk * 1.2);
+                    atk = (int)Math.Round(atk * 1.5);
                 }
                 else if (elementWin == -1)
                 {
-                    atk = (int)Math.Round(atk / 1.2);
+                    atk = (int)Math.Round(atk / 1.5);
                 }
                 atk -= enemy.Def;
                 enemy.HP -= atk;

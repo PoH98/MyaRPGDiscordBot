@@ -3,7 +3,6 @@ using Autofac;
 using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot;
-using MyaDiscordBot.Commands;
 using MyaDiscordBot.Extension;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;

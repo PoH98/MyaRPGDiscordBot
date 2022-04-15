@@ -19,8 +19,16 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            setting.SetChannel(command);
-            return Task.CompletedTask;
+            try
+            {
+                setting.SetChannel(command);
+                return command.RespondAsync("Done", ephemeral: true);
+            }
+            catch
+            {
+                return command.RespondAsync("你無權限綁定Channel作為遊戲用途！", ephemeral: true);
+            }
+
         }
     }
 }
