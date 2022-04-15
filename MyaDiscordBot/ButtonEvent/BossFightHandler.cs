@@ -55,9 +55,10 @@ namespace MyaDiscordBot.ButtonEvent
             {
                 bossService.DefeatedEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
                 await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！");
-                if (player.CurrentHP < (player.HP / 100 * 70))
+                //recover 70% HP directly
+                if (player.CurrentHP < (player.HP * 70 / 100))
                 {
-                    player.CurrentHP = player.HP / 100 * 70;
+                    player.CurrentHP = player.HP * 70 / 100;
                 }
                 player.CurrentHP += player.HP;
                 int wait = player.HP * 3;

@@ -59,7 +59,6 @@ namespace MyaDiscordBot.ButtonEvent
             {
                 await message.RespondAsync("已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
             }
-
         }
     }
 }
