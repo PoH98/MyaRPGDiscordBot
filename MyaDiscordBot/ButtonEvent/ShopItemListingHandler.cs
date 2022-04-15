@@ -77,7 +77,7 @@ namespace MyaDiscordBot.ButtonEvent
                     items = items.Where(x => x.Type == Models.ItemType.道具);
                     break;
             }
-            if(items.Count() < 1)
+            if (items.Count() < 1)
             {
                 return message.RespondAsync("Ermmm小貓搵唔到你想要的野哦！QAQ");
             }

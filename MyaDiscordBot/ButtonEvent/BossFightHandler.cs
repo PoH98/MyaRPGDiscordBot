@@ -45,7 +45,7 @@ namespace MyaDiscordBot.ButtonEvent
             {
                 coin = 10;
             }
-            if(coin > 100)
+            if (coin > 100)
             {
                 coin = 100;
             }

@@ -4,7 +4,7 @@ using Discord.WebSocket;
 namespace MyaDiscordBot.Commands
 {
     //Disabled first since we havent able to add blacklist yet
-    public class Blacklist:ICommand
+    public class Blacklist : ICommand
     {
         public string Name => "blacklist";
 
