@@ -1,5 +1,4 @@
-﻿using Discord;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using Newtonsoft.Json;
@@ -53,7 +52,7 @@ namespace MyaDiscordBot.ButtonEvent
                 await user.KickAsync();
                 await message.RespondAsync("已經黑名單" + user.DisplayName + "！自動踢出用戶！");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await message.RespondAsync("已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
             }
