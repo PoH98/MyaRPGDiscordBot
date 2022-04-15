@@ -61,6 +61,7 @@ namespace MyaDiscordBot.ButtonEvent
                     await message.RespondAsync("熊貓神覺得唔開心，強硬卑左你一把黃金AK後消失左！不過你手上已經有另一把黃金AK所以你將佢dum左", ephemeral: true);
                 }
             }
+            playerService.SavePlayer(player);
         }
     }
 }

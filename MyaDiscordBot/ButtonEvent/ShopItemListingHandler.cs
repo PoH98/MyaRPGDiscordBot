@@ -79,13 +79,13 @@ namespace MyaDiscordBot.ButtonEvent
             }
             if (items.Count() < 1)
             {
-                return message.RespondAsync("Ermmm小貓搵唔到你想要的野哦！QAQ");
+                return message.RespondAsync("Ermmm小貓搵唔到你想要的野哦！QAQ", ephemeral: true);
             }
             var builder = new ComponentBuilder();
             foreach (var i in items)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("**" + i.Name + "**");
+                sb.Append(i.Name);
                 if (i.Type == Models.ItemType.道具)
                 {
                     sb.Append(" * " + i.UseTimes + " 恢復" + i.HP + "血量");

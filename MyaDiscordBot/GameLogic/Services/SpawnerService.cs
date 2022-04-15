@@ -18,11 +18,11 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             Random rnd = new Random();
             var probability = rnd.NextDouble();
-            if (probability < 0.1)
+            if (probability < 0.01)
             {
                 return SpawnBoss(lv);
             }
-            if (probability < 0.4)
+            if (probability < 0.3)
             {
                 //no spawn
                 return null;
