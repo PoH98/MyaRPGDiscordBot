@@ -72,9 +72,10 @@ namespace MyaDiscordBot.ButtonEvent
             }
             else
             {
-                if (player.CurrentHP < 0)
+                //recover 70% HP directly
+                if (player.CurrentHP < (player.HP * 70 / 100))
                 {
-                    player.CurrentHP = 0;
+                    player.CurrentHP = player.HP * 70 / 100;
                 }
                 player.CurrentHP += player.HP;
                 int wait = player.HP * 3;

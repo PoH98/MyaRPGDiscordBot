@@ -106,8 +106,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public void AddExp(Player player, int exp)
         {
             player.Exp += exp;
-            var lvUpRequired = _configuration.LV[player.Lv.ToString()];
-            while (player.Exp >= lvUpRequired)
+            while (player.Exp >= _configuration.LV[player.Lv.ToString()])
             {
                 if (_configuration.MaxPlayerLv > player.Lv)
                 {
