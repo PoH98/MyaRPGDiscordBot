@@ -58,7 +58,7 @@ namespace MyaDiscordBot.Commands
                 if (enemy.IsBoss)
                 {
                     _bossService.AddBoss((command.Channel as SocketGuildChannel).Guild.Id, enemy);
-                    await command.RespondAsync("Boss已經生成！請各位玩家準備消滅" + enemy.Name + "！！");
+                    await command.RespondAsync("野外Boss已經出現！請各位玩家準備消滅" + enemy.Name + "！！");
                     return;
                 }
                 var br = _battleService.Battle(enemy, player);
