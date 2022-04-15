@@ -34,6 +34,9 @@ namespace MyaDiscordBot.ButtonEvent
                 case "2":
                     reason = "[AUTO MOD] Posting Scam links in Guild";
                     break;
+                case "3":
+                    reason = "[AUTO MOD] Testing from Discord.NET HttpClient";
+                    break;
                 default:
                     reason = "[AUTO MOD] Fast Spamming";
                     break;

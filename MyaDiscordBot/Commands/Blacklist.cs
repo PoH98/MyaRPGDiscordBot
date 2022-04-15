@@ -4,13 +4,13 @@ using Discord.WebSocket;
 namespace MyaDiscordBot.Commands
 {
     //Disabled first since we havent able to add blacklist yet
-    public class Blacklist
+    public class Blacklist:ICommand
     {
         public string Name => "blacklist";
 
         public string Description => "Blacklist user from the server, also from other servers with same database used";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[2] { new SlashCommandOptionBuilder().WithName("user").WithDescription("User to be blacklisted").WithType(ApplicationCommandOptionType.User).WithRequired(true), new SlashCommandOptionBuilder().WithName("reason").WithDescription("Blacklist reason").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Ads", 1).AddChoice("Scam", 2) };
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[2] { new SlashCommandOptionBuilder().WithName("user").WithDescription("User to be blacklisted").WithType(ApplicationCommandOptionType.User).WithRequired(true), new SlashCommandOptionBuilder().WithName("reason").WithDescription("Blacklist reason").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Ads", 1).AddChoice("Scam", 2).AddChoice("Testing", 3) };
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {

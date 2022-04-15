@@ -47,11 +47,12 @@ namespace MyaDiscordBot.Commands
                     bag.AddField(item.Name, (item.IsEquiped ? "已裝備" : "未裝備") + "\t剩" + item.ItemLeft);
                 }
             }
+            string desc = "";
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
-                eb.WithFooter("**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**");
+                desc = "**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**";
             }
-            return command.RespondAsync("", embeds: new Embed[] { eb.Build(), bag.Build() }, ephemeral: true);
+            return command.RespondAsync(desc, embeds: new Embed[] { eb.Build(), bag.Build() }, ephemeral: true);
         }
     }
 }

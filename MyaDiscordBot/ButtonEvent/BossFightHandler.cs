@@ -41,9 +41,13 @@ namespace MyaDiscordBot.ButtonEvent
             var result = battleService.Battle(boss.Enemy, player);
             bossService.UpdateEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
             var coin = result.DamageDealt / 10;
-            if (coin < 2)
+            if (coin < 10)
             {
-                coin = 2;
+                coin = 10;
+            }
+            if(coin > 100)
+            {
+                coin = 100;
             }
             player.Coin += coin;
             player.Exp += coin / 2;
@@ -51,9 +55,9 @@ namespace MyaDiscordBot.ButtonEvent
             {
                 bossService.DefeatedEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
                 await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！");
-                if (player.CurrentHP < 0)
+                if (player.CurrentHP < (player.HP / 100 * 70))
                 {
-                    player.CurrentHP = 0;
+                    player.CurrentHP = player.HP / 100 * 70;
                 }
                 player.CurrentHP += player.HP;
                 int wait = player.HP * 3;
