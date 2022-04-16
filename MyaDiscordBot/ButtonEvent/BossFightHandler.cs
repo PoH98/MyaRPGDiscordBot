@@ -50,7 +50,7 @@ namespace MyaDiscordBot.ButtonEvent
                 coin = 100;
             }
             player.Coin += coin;
-            player.Exp += coin / 2;
+            player.Exp += coin / 5;
             if (result.IsVictory)
             {
                 bossService.DefeatedEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);

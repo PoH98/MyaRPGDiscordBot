@@ -106,7 +106,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         items[slot].DropRate = cumulSum;
                     }
                     double divSpot = rnd.NextDouble() * cumulSum;
-                    return items.FirstOrDefault(i => i.DropRate >= divSpot);
+                    return reward.FirstOrDefault(i => i.DropRate >= divSpot);
                 }
             }
             return null;

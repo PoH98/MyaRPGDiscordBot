@@ -8,12 +8,14 @@ using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Logging;
 //==============================================================================//
 //Create DC Bot Client//
 var _client = new DiscordSocketClient();
 _client.Log += Log;
 //==============================================================================//
 //Scheduller Register//
+LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
 StdSchedulerFactory factory = new StdSchedulerFactory();
 IScheduler scheduler = await factory.GetScheduler();
 IJobDetail job = JobBuilder.Create<BossJob>()
@@ -21,11 +23,9 @@ IJobDetail job = JobBuilder.Create<BossJob>()
     .Build();
 ITrigger trigger = TriggerBuilder.Create()
     .WithIdentity("trigger", "group")
-    .StartAt(DateTimeOffset.Now.AddDays(7 - (int)DateTime.Now.DayOfWeek))
-    .WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
-await scheduler.Start();
 //==============================================================================//
 //Register DI//
 var builder = new ContainerBuilder();
@@ -44,6 +44,7 @@ var token = Data.Instance.Container.Resolve<IConfiguration>().Token;
 //==============================================================================//
 //Start bot//
 await _client.LoginAsync(TokenType.Bot, token);
+await scheduler.Start();
 await _client.StartAsync();
 
 await Task.Delay(-1);
@@ -52,4 +53,29 @@ Task Log(LogMessage msg)
 {
     Console.WriteLine(msg.ToString());
     return Task.CompletedTask;
+}
+
+class ConsoleLogProvider : ILogProvider
+{
+    public Logger GetLogger(string name)
+    {
+        return (level, func, exception, parameters) =>
+        {
+            if (level >= LogLevel.Info && func != null)
+            {
+                Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] [" + level + "] " + func(), parameters);
+            }
+            return true;
+        };
+    }
+
+    public IDisposable OpenNestedContext(string message)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IDisposable OpenMappedContext(string key, object value, bool destructure = false)
+    {
+        throw new NotImplementedException();
+    }
 }

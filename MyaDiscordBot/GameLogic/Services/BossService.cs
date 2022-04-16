@@ -11,6 +11,7 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         public async Task Execute(IJobExecutionContext context)
         {
+            Console.WriteLine("Boss scheduller running");
             using (var scope = Data.Instance.Container.BeginLifetimeScope())
             {
                 var bossService = scope.Resolve<IBossService>();
