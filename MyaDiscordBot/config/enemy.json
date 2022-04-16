@@ -71,7 +71,7 @@
     "element": 3,
     "itemDropRate": 0.0,
     "stage": 1,
-    "dropRank": [],
+    "dropRank": [3],
     "isBoss": true
   },
   {
@@ -82,7 +82,7 @@
     "element": 3,
     "itemDropRate": 0.0,
     "stage": 1,
-    "dropRank": [],
+    "dropRank": [3],
     "isBoss": true
   },
   {

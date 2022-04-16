@@ -34,6 +34,10 @@ namespace MyaDiscordBot.GameLogic.Services
                     atk = (int)Math.Round(atk / 1.5);
                 }
                 atk -= enemy.Def;
+                if (atk < 0)
+                {
+                    atk = 0;
+                }
                 enemy.HP -= atk;
                 result.DamageDealt += player.Atk - enemy.Def;
                 if (enemy.HP > 0)
@@ -47,11 +51,11 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         atk = (int)Math.Round(atk / 1.2);
                     }
+                    atk -= player.Def;
                     if (atk < 0)
                     {
                         atk = 0;
                     }
-                    atk -= player.Def;
                     player.CurrentHP -= atk;
                     result.DamageReceived += atk;
                 }

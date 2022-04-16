@@ -80,7 +80,6 @@ namespace MyaDiscordBot.ButtonEvent
                                 }
                                 sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
                             }
-                            return;
                         }
                         player.HP += item.HP;
                         player.Atk += item.Atk;

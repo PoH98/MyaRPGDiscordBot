@@ -18,11 +18,12 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public IEnumerable<Item> GetShopItem(Player player)
         {
-            if (player.Bag.Count > 0)
+            var userRank = player.Lv / 10;
+            if (userRank < 1)
             {
-                return items.Where(x => x.Price > 0 && x.Rank >= player.Bag.Max(x => x.Rank) && x.Rank <= player.Bag.Max(x => x.Rank) + 1);
+                userRank = 1;
             }
-            return items.Where(x => x.Price > 0 && x.Rank == 1);
+            return items.Where(x => x.Price > 0 && x.Rank <= userRank);
         }
 
         public Task SaveData()
