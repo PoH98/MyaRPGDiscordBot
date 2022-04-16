@@ -43,21 +43,45 @@ namespace MyaDiscordBot.ButtonEvent
             }
             HttpClient hc = new HttpClient();
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
-            StringContent content = new StringContent(JsonConvert.SerializeObject(new ReportUser
+            var inputJson = JsonConvert.SerializeObject(new ReportUser
             {
                 Reason = reason
-            }), Encoding.UTF8, "application/json");
-            _ = hc.PostAsync("https://api.blacklister.xyz/report/" + parts[1], content);
+            });
+            StringContent content = new StringContent(inputJson, Encoding.UTF8, "application/json");
+            await message.DeferLoadingAsync();
+            var response = await hc.PostAsync("https://api.blacklister.xyz/report/" + parts[1], content);
+            var result = await response.Content.ReadAsStringAsync();
+            bool blackListed = false;
+            if(result.Contains("\"err\":false"))
+            {
+                //success
+                blackListed = true;
+            }
             var userId = Convert.ToUInt64(parts[1]);
             var user = (message.Channel as SocketGuildChannel).Guild.GetUser(userId);
-            try
+            if (blackListed)
             {
-                await user.KickAsync();
-                await message.RespondAsync("已經黑名單" + user.DisplayName + "！自動踢出用戶！");
+                try
+                {
+                    await user.KickAsync();
+                    await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！自動踢出用戶！");
+                }
+                catch (Exception ex)
+                {
+                    await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                await message.RespondAsync("已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
+                try
+                {
+                    await user.KickAsync();
+                    await message.ModifyOriginalResponseAsync(x => x.Content = "黑名單" + user.DisplayName + "失敗！自動踢出用戶！");
+                }
+                catch (Exception ex)
+                {
+                    await message.ModifyOriginalResponseAsync(x => x.Content = "黑名單" + user.DisplayName + "失敗！用戶踢出失敗！錯誤原因：" + ex.Message);
+                }
             }
         }
     }

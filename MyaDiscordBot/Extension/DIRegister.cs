@@ -36,6 +36,8 @@ namespace MyaDiscordBot.Extension
             builder.RegisterInstance<Items>(items);
             var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("config\\enemy.json"));
             builder.RegisterInstance<Enemies>(enemy);
+            Console.WriteLine("Detected " + items.Count() + " Items");
+            Console.WriteLine("Detected " + enemy.Count() + " Enemies");
             return builder;
         }
 
@@ -62,6 +64,9 @@ namespace MyaDiscordBot.Extension
                 method = method.MakeGenericMethod(e);
                 method.Invoke(builder, new object[1] { builder });
             }
+            Console.WriteLine("Detected " + commands.Count() + " Commands");
+            Console.WriteLine("Detected " + buttons.Count() + " Handlers");
+            Console.WriteLine("Detected " + rndEvents.Count() + " Events");
             return builder;
         }
     }

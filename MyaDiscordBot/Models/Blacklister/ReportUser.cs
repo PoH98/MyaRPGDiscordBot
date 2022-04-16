@@ -12,5 +12,7 @@ namespace MyaDiscordBot.Models.Blacklister
 
         [JsonProperty("anythingelse")]
         public string AnythingElse { get; set; } = "";
+        [JsonProperty("reporter")]
+        public object Reporter { get; set; } = new { };
     }
 }

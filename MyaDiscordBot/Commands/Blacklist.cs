@@ -10,11 +10,17 @@ namespace MyaDiscordBot.Commands
 
         public string Description => "Blacklist user from the server, also from other servers with same database used";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[2] { new SlashCommandOptionBuilder().WithName("user").WithDescription("User to be blacklisted").WithType(ApplicationCommandOptionType.User).WithRequired(true), new SlashCommandOptionBuilder().WithName("reason").WithDescription("Blacklist reason").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Ads", 1).AddChoice("Scam", 2).AddChoice("Test", 3) };
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[2] { new SlashCommandOptionBuilder().WithName("user").WithDescription("User to be blacklisted").WithType(ApplicationCommandOptionType.User).WithRequired(true), new SlashCommandOptionBuilder().WithName("reason").WithDescription("Blacklist reason").WithRequired(true).WithType(ApplicationCommandOptionType.Integer).AddChoice("Ads", 1).AddChoice("Scam", 2) };
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var user = command.User as SocketGuildUser;
+            if (((SocketGuildUser)command.Data.Options.First().Value).Id == client.CurrentUser.Id)
+            {
+                //the fuck you report??
+                var angry = client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
+                return command.RespondAsync("我XXXXXXX？！竟然Blacklist我？！食屎啦你！！" + angry.ToString());
+            }
             if (!command.User.IsBot && (user.GuildPermissions.BanMembers || user.GuildPermissions.KickMembers || user.GuildPermissions.Administrator || user.GuildPermissions.ManageGuild))
             {
                 ComponentBuilder cb = new ComponentBuilder();
