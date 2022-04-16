@@ -99,7 +99,7 @@ namespace MyaDiscordBot.GameLogic.Services
             decimal i = (decimal)rnd.NextDouble();
             if (i <= enemy.ItemDropRate)
             {
-                var reward = items.Where(x => enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id)).ToList();
+                var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id)).ToList();
                 if (reward.Any())
                 {
                     double cumulSum = 0;
@@ -107,7 +107,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     for (int slot = 0; slot < cnt; slot++)
                     {
                         cumulSum += items[slot].DropRate;
-                        items[slot].DropRate = cumulSum;
+                        reward[slot].DropRate = cumulSum;
                     }
                     double divSpot = rnd.NextDouble() * cumulSum;
                     return reward.FirstOrDefault(i => i.DropRate >= divSpot);

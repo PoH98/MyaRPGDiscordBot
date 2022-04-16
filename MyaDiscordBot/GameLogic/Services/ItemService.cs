@@ -23,7 +23,7 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 userRank = 1;
             }
-            return items.Where(x => x.Price > 0 && x.Rank <= userRank);
+            return items.Where(x => x.Price > 0 && x.Rank <= userRank && player.Bag.Any(y => y.Id == y.Id));
         }
 
         public Task SaveData()

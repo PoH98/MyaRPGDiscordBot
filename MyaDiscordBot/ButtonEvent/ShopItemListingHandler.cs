@@ -59,7 +59,7 @@ namespace MyaDiscordBot.ButtonEvent
                     items = items.Where(x => x.Type == Models.ItemType.武器);
                     break;
                 case "amor":
-                    items = items.Where(x => x.Type == Models.ItemType.道具);
+                    items = items.Where(x => x.Type == Models.ItemType.護甲);
                     break;
                 case "ring":
                     items = items.Where(x => x.Type == Models.ItemType.指環);
