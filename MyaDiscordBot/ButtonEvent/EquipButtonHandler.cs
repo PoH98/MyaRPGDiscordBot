@@ -49,7 +49,7 @@ namespace MyaDiscordBot.ButtonEvent
                 if (!item.IsEquiped)
                 {
                     StringBuilder sb = new StringBuilder();
-                    if (item.UseTimes == -1)
+                    if (item.UseTimes == -1 && item.Type != Models.ItemType.道具)
                     {
                         if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
                         {

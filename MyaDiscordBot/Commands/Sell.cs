@@ -2,11 +2,6 @@
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -52,7 +47,7 @@ namespace MyaDiscordBot.Commands
                     break;
             }
             var earned = 0;
-            foreach(var d in dump)
+            foreach (var d in dump)
             {
                 player.Bag.Remove(d);
                 player.Coin += 3;

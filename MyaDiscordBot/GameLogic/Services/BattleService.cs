@@ -39,7 +39,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     atk = 0;
                 }
                 enemy.HP -= atk;
-                result.DamageDealt += player.Atk - enemy.Def;
+                result.DamageDealt += atk;
                 if (enemy.HP > 0)
                 {
                     atk = enemy.Atk;
@@ -99,18 +99,37 @@ namespace MyaDiscordBot.GameLogic.Services
             decimal i = (decimal)rnd.NextDouble();
             if (i <= enemy.ItemDropRate)
             {
-                var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id)).ToList();
-                if (reward.Any())
+                if (!enemy.IsBoss)
                 {
-                    double cumulSum = 0;
-                    int cnt = reward.Count();
-                    for (int slot = 0; slot < cnt; slot++)
+                    var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id)).ToList();
+                    if (reward.Any())
                     {
-                        cumulSum += items[slot].DropRate;
-                        reward[slot].DropRate = cumulSum;
+                        double cumulSum = 0;
+                        int cnt = reward.Count();
+                        for (int slot = 0; slot < cnt; slot++)
+                        {
+                            cumulSum += items[slot].DropRate;
+                            reward[slot].DropRate = cumulSum;
+                        }
+                        double divSpot = rnd.NextDouble() * cumulSum;
+                        return reward.FirstOrDefault(i => i.DropRate >= divSpot);
                     }
-                    double divSpot = rnd.NextDouble() * cumulSum;
-                    return reward.FirstOrDefault(i => i.DropRate >= divSpot);
+                }
+                else
+                {
+                    var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && (x.Element == Element.Light || x.Element == Element.Dark) && !player.Bag.Any(y => y.Id == x.Id)).ToList();
+                    if (reward.Any())
+                    {
+                        double cumulSum = 0;
+                        int cnt = reward.Count();
+                        for (int slot = 0; slot < cnt; slot++)
+                        {
+                            cumulSum += items[slot].DropRate;
+                            reward[slot].DropRate = cumulSum;
+                        }
+                        double divSpot = rnd.NextDouble() * cumulSum;
+                        return reward.FirstOrDefault(i => i.DropRate >= divSpot);
+                    }
                 }
             }
             return null;

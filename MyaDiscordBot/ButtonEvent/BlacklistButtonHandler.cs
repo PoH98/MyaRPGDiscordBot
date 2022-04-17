@@ -52,7 +52,7 @@ namespace MyaDiscordBot.ButtonEvent
             var response = await hc.PostAsync("https://api.blacklister.xyz/report/" + parts[1], content);
             var result = await response.Content.ReadAsStringAsync();
             bool blackListed = false;
-            if(result.Contains("\"err\":false"))
+            if (result.Contains("\"err\":false"))
             {
                 //success
                 blackListed = true;

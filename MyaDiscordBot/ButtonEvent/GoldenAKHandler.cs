@@ -38,7 +38,8 @@ namespace MyaDiscordBot.ButtonEvent
                 Ability = Ability.None,
                 Atk = -10,
                 Def = -10,
-                Element = Element.God
+                Element = Element.God,
+                Type = ItemType.武器
             }))
             {
                 if (message.Data.CustomId == "goldenAK1")

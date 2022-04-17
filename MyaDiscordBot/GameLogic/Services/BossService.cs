@@ -28,7 +28,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             Name = "米講粗口亞",
                             Atk = 9999,
                             Def = 0,
-                            HP = 999999,
+                            HP = 99999,
                             Element = Element.God,
                             IsBoss = true,
                             Stage = -1
