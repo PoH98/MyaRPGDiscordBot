@@ -1,6 +1,6 @@
 ﻿[
-  //T1
   {
+    "Id": "12fa3b12-42f8-49f0-a06d-215c5cc16ef4",
     "Name": "玩具風車",
     "Rank": 1,
     "Price": -1,
@@ -14,6 +14,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "c3f41bc3-baf5-453e-8154-57501e32c67a",
     "Name": "破損風之騎士的盔甲",
     "Rank": 1,
     "Price": -1,
@@ -27,6 +28,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f3b24a3b-69b0-44d4-b4df-6b21fbeae8ef",
     "Name": "破損風之騎士的護盾",
     "Rank": 1,
     "Price": -1,
@@ -40,6 +42,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "3309c40b-5199-46c0-a5a7-04b175be8a8d",
     "Name": "破損風之騎士的鞋",
     "Rank": 1,
     "Price": -1,
@@ -53,6 +56,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "24a57202-228d-45e6-ba0b-83263e2a221d",
     "Name": "水槍",
     "Rank": 1,
     "Price": -1,
@@ -66,6 +70,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "c0c348d4-fe52-4813-9ced-cb04238c67d6",
     "Name": "性感破爛古老比基尼",
     "Rank": 1,
     "Price": -1,
@@ -79,6 +84,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "37921e14-f40c-4134-a71e-8c66256af7ca",
     "Name": "水母盾",
     "Rank": 1,
     "Price": -1,
@@ -92,6 +98,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "0c97eddf-8cc7-4211-9912-a06b6d4f8d54",
     "Name": "廢棄古老蛙鞋",
     "Rank": 1,
     "Price": -1,
@@ -105,6 +112,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e2cc950a-d4f0-4cc7-afee-5a9f30be58da",
     "Name": "火焰長槍",
     "Rank": 1,
     "Price": -1,
@@ -118,6 +126,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "182a25ee-4e4e-4feb-9ee8-f8f39b0f49dc",
     "Name": "燒焦的樹葉",
     "Rank": 1,
     "Price": -1,
@@ -131,6 +140,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "93962fd3-de09-4464-a154-7004468b7ea5",
     "Name": "火焰盾魔法書",
     "Rank": 1,
     "Price": -1,
@@ -144,6 +154,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "860149f8-5615-432e-84c8-a928969f8464",
     "Name": "鞋灰",
     "Rank": 1,
     "Price": -1,
@@ -157,6 +168,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "24e43db1-59b2-4efa-b485-22aa86d97829",
     "Name": "碎石",
     "Rank": 1,
     "Price": -1,
@@ -170,6 +182,21 @@
     "DropRate": 0.3
   },
   {
+    "Id": "24e43db1-59b2-4efa-b485-22aa86d97829",
+    "Name": "碎石",
+    "Rank": 1,
+    "Price": -1,
+    "Atk": 5,
+    "Def": 0,
+    "UseTimes": -1,
+    "Element": 4,
+    "Type": 1,
+    "HP": 0,
+    "Ability": 0,
+    "DropRate": 0.3
+  },
+  {
+    "Id": "6f42d1a4-d664-49d0-96b2-d1582936b9f9",
     "Name": "沙甲",
     "Rank": 1,
     "Price": -1,
@@ -183,6 +210,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "1cb97d29-c89b-4c58-8a22-0649046c4e9b",
     "Name": "沙盾",
     "Rank": 1,
     "Price": -1,
@@ -196,6 +224,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e154a7fa-0fa6-471e-9a57-b8025f7ac226",
     "Name": "沙鞋",
     "Rank": 1,
     "Price": -1,
@@ -208,8 +237,8 @@
     "Ability": 0,
     "DropRate": 0.3
   },
-  //T1 商店,
   {
+    "Id": "bf0385dd-cb76-41e3-b4ef-79917b478872",
     "Name": "恢復藥水（Ultra mini）",
     "Rank": 1,
     "Price": 10,
@@ -223,6 +252,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "1cd34e8b-7cb3-4b84-b3dc-2b21169fa57c",
     "Name": "大風車",
     "Rank": 1,
     "Price": 30,
@@ -236,6 +266,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "4daadf54-e474-4541-95e5-687a677e734d",
     "Name": "風之騎士的護甲",
     "Rank": 1,
     "Price": 12,
@@ -249,6 +280,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "126eb00f-196a-4729-a04c-94d006d8a827",
     "Name": "風之騎士的護盾",
     "Rank": 1,
     "Price": 20,
@@ -262,6 +294,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "06addfb0-ccd1-4f46-af44-f6d1c62c3a27",
     "Name": "風之騎士的鞋",
     "Rank": 1,
     "Price": 18,
@@ -275,6 +308,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "8472ef36-f72b-4629-a059-6e2b90f3d9ae",
     "Name": "高壓水槍",
     "Rank": 1,
     "Price": 30,
@@ -288,6 +322,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "35683aff-5526-405f-9510-9347f094c403",
     "Name": "性感沙灘比基尼",
     "Rank": 1,
     "Price": 12,
@@ -301,6 +336,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "72c3153e-efb9-4900-a442-7d7ca11b5e4c",
     "Name": "加大軟綿綿水母盾",
     "Rank": 1,
     "Price": 20,
@@ -314,6 +350,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e40f957a-5c62-4196-99ab-cbb12ca5597d",
     "Name": "新穎蛙鞋",
     "Rank": 1,
     "Price": 18,
@@ -327,6 +364,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "8396a14b-457b-4e50-b5eb-755589b0dd0e",
     "Name": "熾熱火焰長槍",
     "Rank": 1,
     "Price": 30,
@@ -340,6 +378,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "de4a6258-cdc1-49cd-a16a-147991d01033",
     "Name": "初級火焰魔法師之袍",
     "Rank": 1,
     "Price": 12,
@@ -353,6 +392,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "4d525626-bc9a-472c-96ad-5cf7843fd4f0",
     "Name": "初級火焰盾魔法書",
     "Rank": 1,
     "Price": 20,
@@ -366,6 +406,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "c6d03fe1-024b-4993-864b-1e4bbd0dd708",
     "Name": "初級火焰魔法師之鞋",
     "Rank": 1,
     "Price": 18,
@@ -379,6 +420,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "cb0fea6e-25e4-49f5-8ace-fbf816571e46",
     "Name": "石頭",
     "Rank": 1,
     "Price": 30,
@@ -392,6 +434,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "84f1574b-2b82-4271-9065-ad44da733820",
     "Name": "岩石護甲",
     "Rank": 1,
     "Price": 12,
@@ -405,6 +448,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "47d02fd4-48d6-463b-8cc8-4b98610565ef",
     "Name": "岩石護盾",
     "Rank": 1,
     "Price": 20,
@@ -418,6 +462,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "5213b706-982a-4a78-9f07-8e347000a752",
     "Name": "岩石鞋",
     "Rank": 1,
     "Price": 18,
@@ -430,8 +475,8 @@
     "Ability": 0,
     "DropRate": 0.3
   },
-  //T2
   {
+    "Id": "07c2d303-fbae-425c-8d6e-80bf71d85ebd",
     "Name": "吹風筒頭",
     "Rank": 2,
     "Price": -1,
@@ -445,6 +490,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d0160efe-cdc3-4652-b393-ab07c5319dd5",
     "Name": "吹風筒的機身",
     "Rank": 2,
     "Price": -1,
@@ -458,6 +504,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "84cd2a6c-61c8-4d71-b80a-25d348c212da",
     "Name": "吹風筒的插頭",
     "Rank": 2,
     "Price": -1,
@@ -471,6 +518,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "0fda4a20-a9f3-45ca-b1cc-da36419529dc",
     "Name": "吹風筒的開關",
     "Rank": 2,
     "Price": -1,
@@ -484,6 +532,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "36ac56b4-1310-48ce-91db-403cd0d36331",
     "Name": "高射水炮",
     "Rank": 2,
     "Price": -1,
@@ -497,6 +546,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "aa3bce33-d31c-4f55-a354-b3ca4d7d1572",
     "Name": "水袋護甲",
     "Rank": 2,
     "Price": -1,
@@ -510,6 +560,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "da10d407-c484-4ac4-b01c-aa9ed1ffc187",
     "Name": "暖袋盾",
     "Rank": 2,
     "Price": -1,
@@ -523,6 +574,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "64be9422-691d-4c1d-a794-d8dfae2f6b5b",
     "Name": "水母鞋",
     "Rank": 2,
     "Price": -1,
@@ -536,6 +588,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "523d7a78-c812-4a2d-816c-039c4c21b4b8",
     "Name": "火杖",
     "Rank": 2,
     "Price": -1,
@@ -549,6 +602,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f4141847-c761-4f4c-b904-9f3fa063155c",
     "Name": "火焰飛彈護甲",
     "Rank": 2,
     "Price": -1,
@@ -562,6 +616,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "35a5f16d-764e-4718-b421-a9c4cf063f8b",
     "Name": "火焰墻魔法書",
     "Rank": 2,
     "Price": -1,
@@ -575,6 +630,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "3760fc82-11d4-4583-bf2a-fb8f6408df1c",
     "Name": "火焰鞋",
     "Rank": 2,
     "Price": -1,
@@ -588,6 +644,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "545800cb-3204-4319-967b-fdf11ebf3c29",
     "Name": "卡係石頭入面的劍",
     "Rank": 2,
     "Price": -1,
@@ -601,6 +658,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "2e22e334-7334-462b-ba26-745f0fc11f94",
     "Name": "硬化生鏽護甲",
     "Rank": 2,
     "Price": -1,
@@ -614,6 +672,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "91246f3b-c316-44a5-8c16-bab21e071c21",
     "Name": "硬化生鏽護盾",
     "Rank": 2,
     "Price": -1,
@@ -627,6 +686,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "b848b83e-d5d3-4373-810b-6c794ded636c",
     "Name": "硬化生鏽鞋",
     "Rank": 2,
     "Price": -1,
@@ -640,6 +700,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "542d2a56-f228-415c-afe6-af5d021799cb",
     "Name": "神聖聖光",
     "Rank": 2,
     "Price": -1,
@@ -653,6 +714,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d6055cdd-dcd0-485c-992b-0c287e61f83b",
     "Name": "神聖馬賽克",
     "Rank": 2,
     "Price": -1,
@@ -666,6 +728,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e182999c-8e48-4ddc-af47-438c6c60531c",
     "Name": "神聖黑條",
     "Rank": 2,
     "Price": -1,
@@ -679,6 +742,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "955d003f-e34a-4697-87d3-c4e0fa72baf6",
     "Name": "神聖之鞋",
     "Rank": 2,
     "Price": -1,
@@ -692,6 +756,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e88536a9-7b91-46f0-b926-4e02b272ba2a",
     "Name": "詛咒之弓",
     "Rank": 2,
     "Price": -1,
@@ -705,6 +770,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "9eeff985-10f9-4316-80be-7234ea781720",
     "Name": "詛咒之甲",
     "Rank": 2,
     "Price": -1,
@@ -718,6 +784,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f72ae06b-fec7-4d97-9931-36de61a389ec",
     "Name": "詛咒之盾",
     "Rank": 2,
     "Price": -1,
@@ -731,6 +798,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "ec59fa1c-ac58-4133-9599-c3930ca20d08",
     "Name": "神詛咒之鞋",
     "Rank": 2,
     "Price": -1,
@@ -743,8 +811,8 @@
     "Ability": 0,
     "DropRate": 0.3
   },
-  //T2 商店
   {
+    "Id": "320b1f0e-0d12-43ed-be28-b9b420829449",
     "Name": "風繼續吹之弓",
     "Rank": 2,
     "Price": 50,
@@ -758,6 +826,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "09ac2b19-7923-4e6f-91f9-e79ae867597b",
     "Name": "泡泡炸彈",
     "Rank": 2,
     "Price": 50,
@@ -771,6 +840,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "a38e7436-1406-4083-aa82-517ec9da2386",
     "Name": "DD炸彈",
     "Rank": 2,
     "Price": 50,
@@ -784,6 +854,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "6645d11f-ee45-4115-844d-4be9352ab5b4",
     "Name": "肝硬化",
     "Rank": 2,
     "Price": 50,
@@ -797,6 +868,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "9b076d24-0481-4357-94fc-c4a467f09464",
     "Name": "水上漂秘籍頸鏈",
     "Rank": 2,
     "Price": 150,
@@ -810,6 +882,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "c0a9e7de-a22b-4480-b103-791742684b5a",
     "Name": "火上跑秘籍頸鏈",
     "Rank": 2,
     "Price": 150,
@@ -822,8 +895,8 @@
     "Ability": 2,
     "DropRate": 0.3
   },
-  //T3
   {
+    "Id": "338ea078-8c31-4c50-a1a4-61ab74e283a7",
     "Name": "放屁洩氣弓",
     "Rank": 3,
     "Price": -1,
@@ -837,6 +910,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "20d64912-6bfb-4710-89fd-0adc5c699474",
     "Name": "狐臭Debuff裝甲",
     "Rank": 3,
     "Price": -1,
@@ -850,6 +924,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d9e69bf2-1346-4cb4-83e6-adb991a8c064",
     "Name": "口臭Debuff圓盾",
     "Rank": 3,
     "Price": -1,
@@ -863,6 +938,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "bc499d7f-af31-4776-9189-34bad2018cef",
     "Name": "腳臭Debuff鞋",
     "Rank": 3,
     "Price": -1,
@@ -876,6 +952,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "1ea004fc-c208-42db-862f-2e0efdb512b8",
     "Name": "激烈的海膽",
     "Rank": 3,
     "Price": -1,
@@ -889,6 +966,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "48d9b01d-17bf-41ec-9df7-3d5c8f2c4bfc",
     "Name": "激烈的泳裝",
     "Rank": 3,
     "Price": -1,
@@ -902,6 +980,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "35d9e42d-f494-4e68-ae35-fdb870700d20",
     "Name": "激烈的滑板",
     "Rank": 3,
     "Price": -1,
@@ -915,6 +994,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "cd6c389d-1bde-4d55-92ed-8bbdeb8d36d7",
     "Name": "激烈的沙灘鞋",
     "Rank": 3,
     "Price": -1,
@@ -928,6 +1008,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "465b3daf-0842-46b6-ac74-404758432626",
     "Name": "火車原子彈",
     "Rank": 3,
     "Price": -1,
@@ -941,6 +1022,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "229e3d2a-282e-4b31-9df4-4ec9548fd879",
     "Name": "火車車身",
     "Rank": 3,
     "Price": -1,
@@ -954,6 +1036,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f293d91b-4b43-477d-9eac-ff4ed3188d75",
     "Name": "火車車身",
     "Rank": 3,
     "Price": -1,
@@ -967,6 +1050,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "271d125b-842c-4b5d-b551-b724b40e039f",
     "Name": "火車車輪",
     "Rank": 3,
     "Price": -1,
@@ -980,6 +1064,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "32572f3a-3cd2-454c-9202-6cea6ddf61c0",
     "Name": "硬化漢堡包麵包",
     "Rank": 3,
     "Price": -1,
@@ -993,6 +1078,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d4fad25e-ccb2-438c-8aff-51191bc1fb87",
     "Name": "漢堡包硬化袋",
     "Rank": 3,
     "Price": -1,
@@ -1006,6 +1092,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "b0338a4b-df01-4b5c-a520-47973e6a1ef3",
     "Name": "漢堡包硬化肉餅",
     "Rank": 3,
     "Price": -1,
@@ -1019,6 +1106,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "6ff2339e-af46-400a-b179-91cbfa76c510",
     "Name": "漢堡包硬化蔬菜",
     "Rank": 3,
     "Price": -1,
@@ -1032,6 +1120,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "39cd53ee-a2e1-4851-95e0-fa1f509ce866",
     "Name": "女神的警告",
     "Rank": 2,
     "Price": -1,
@@ -1045,6 +1134,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "29f04072-8971-49ab-b03d-5755455c2781",
     "Name": "女神的庇護",
     "Rank": 2,
     "Price": -1,
@@ -1058,6 +1148,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "92db26d1-5725-47a8-bcff-68728c27861f",
     "Name": "女神的懲罰",
     "Rank": 2,
     "Price": -1,
@@ -1071,6 +1162,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "36f75d4e-e49d-4cde-975a-9331023f3fcc",
     "Name": "女神的治愈",
     "Rank": 2,
     "Price": -1,
@@ -1084,6 +1176,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f4e5a787-5286-4199-baff-716f3c5e5ee0",
     "Name": "暗影匕首",
     "Rank": 2,
     "Price": -1,
@@ -1097,6 +1190,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d031dae3-5e43-4c0b-a1da-491c77c76ecd",
     "Name": "暗影披風",
     "Rank": 2,
     "Price": -1,
@@ -1110,6 +1204,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "3dff562c-6483-4cee-9821-5f63dfb95abb",
     "Name": "暗影盾",
     "Rank": 2,
     "Price": -1,
@@ -1123,6 +1218,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "bc488ee4-c623-485f-ae6c-b43c37f9be0c",
     "Name": "暗影鞋",
     "Rank": 2,
     "Price": -1,
@@ -1135,8 +1231,8 @@
     "Ability": 0,
     "DropRate": 0.3
   },
-  //T3 商店
   {
+    "Id": "5c798e70-4bf8-4cc8-bc94-275c9e98f200",
     "Name": "恢復藥水（Mini）",
     "Rank": 3,
     "Price": 25,
@@ -1150,6 +1246,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "79a527ad-392a-4902-bf82-d0e14e7b65a8",
     "Name": "恢復藥水（Normal）",
     "Rank": 3,
     "Price": 50,
@@ -1163,6 +1260,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "adcb15e9-1257-4373-838d-305aef3155d0",
     "Name": "裂變迴旋鏢",
     "Rank": 3,
     "Price": 80,
@@ -1176,6 +1274,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "2983199f-4659-4a9b-a735-411be0a83b73",
     "Name": "旋風裝甲",
     "Rank": 3,
     "Price": 70,
@@ -1189,6 +1288,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "ab1ac981-0963-42ef-a208-39319dfb2818",
     "Name": "旋風之翼",
     "Rank": 3,
     "Price": 90,
@@ -1202,6 +1302,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "8832eb29-7926-46cd-a403-9c62b136d342",
     "Name": "旋風反重力鞋",
     "Rank": 3,
     "Price": 60,
@@ -1215,6 +1316,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "b9832957-0912-4ab2-b887-3971c7689114",
     "Name": "針狙水球",
     "Rank": 3,
     "Price": 80,
@@ -1228,6 +1330,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "40b32505-fc09-4c57-aacd-576fcc1893bc",
     "Name": "魔法師的長袍",
     "Rank": 3,
     "Price": 70,
@@ -1241,6 +1344,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "16f34987-fa18-4ae6-9ad4-1c6775cab3a1",
     "Name": "魔法師之書",
     "Rank": 3,
     "Price": 90,
@@ -1254,6 +1358,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "cae65500-e597-48b8-b774-87f85b2db844",
     "Name": "激烈的沙灘鞋",
     "Rank": 3,
     "Price": 60,
@@ -1267,6 +1372,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "ba4a5269-26c5-414c-8e5f-8f79a5438826",
     "Name": "異次元炎爆狙擊槍",
     "Rank": 3,
     "Price": 80,
@@ -1280,6 +1386,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "5646b511-6664-4e36-be6b-bf22bf98100a",
     "Name": "異次元防護衫",
     "Rank": 3,
     "Price": 70,
@@ -1293,6 +1400,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e9264f4c-cab1-43de-9e04-e16d07e9f192",
     "Name": "異次元的戰鬥機械女僕",
     "Rank": 3,
     "Price": 90,
@@ -1306,6 +1414,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "8c1eff5d-80bf-41f9-a581-ecdd4c4e99c8",
     "Name": "異次元瞬移裝置",
     "Rank": 3,
     "Price": 60,
@@ -1319,6 +1428,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "dc14be9a-1f61-42df-951f-479e2cebcc23",
     "Name": "十字軍之重弩",
     "Rank": 3,
     "Price": 80,
@@ -1332,6 +1442,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f1d50eff-9835-494a-acd1-14214b6f2719",
     "Name": "十字軍重盔甲",
     "Rank": 3,
     "Price": 70,
@@ -1345,6 +1456,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "8859b675-ca4e-44ad-aa6b-4b8efe097d75",
     "Name": "十字軍重盾",
     "Rank": 3,
     "Price": 90,
@@ -1358,6 +1470,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "5030a4ec-5ad3-41cc-8ce7-c45f492db0c3",
     "Name": "十字軍重坐騎",
     "Rank": 3,
     "Price": 60,
@@ -1370,8 +1483,8 @@
     "Ability": 0,
     "DropRate": 0.3
   },
-  //T4
   {
+    "Id": "7a83f9b7-f821-458a-94cb-1a3123014be0",
     "Name": "空間神扭曲炮",
     "Rank": 2,
     "Price": -1,
@@ -1385,6 +1498,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "60fb697b-1624-4d3a-8076-bba990ad53e6",
     "Name": "空間神盔甲",
     "Rank": 2,
     "Price": -1,
@@ -1398,6 +1512,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "327b51e5-6d42-424a-884e-f1cb5c8e56fb",
     "Name": "空間神防護網",
     "Rank": 2,
     "Price": -1,
@@ -1411,6 +1526,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "28962f02-90a7-4e08-97fc-88f9351d3d28",
     "Name": "空間神之翼",
     "Rank": 2,
     "Price": -1,
@@ -1424,6 +1540,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "158ead56-66c1-464b-a81e-1bc2f44ffc60",
     "Name": "死者呼喚",
     "Rank": 2,
     "Price": -1,
@@ -1437,6 +1554,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d2812074-3191-42fe-af25-5b2b95067649",
     "Name": "亡靈護甲",
     "Rank": 2,
     "Price": -1,
@@ -1450,6 +1568,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "b1f84cdf-4d61-4366-ac2b-1a736243ce58",
     "Name": "亡靈之盾",
     "Rank": 2,
     "Price": -1,
@@ -1463,6 +1582,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "262a1660-92bc-44af-b793-7d870c595170",
     "Name": "亡靈之鞋",
     "Rank": 2,
     "Price": -1,
