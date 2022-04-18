@@ -12,6 +12,7 @@ namespace MyaDiscordBot.GameLogic.Services
         void SavePlayer(Player player);
         bool AddItem(Player player, Item item);
         void AddExp(Player player, int exp);
+        List<Player> GetPlayers(ulong serverId);
     }
     public class PlayerService : IPlayerService
     {
@@ -57,16 +58,21 @@ namespace MyaDiscordBot.GameLogic.Services
                         Coin = 0,
                         HP = 20,
                         Atk = 5,
-                        Def = 5,
+                        Def = 2,
                         Bag = new List<ItemEquip>(),
                         CurrentHP = 20,
                         Exp = 0,
                         Lv = 1,
                         Title = new List<string>(),
                         ServerId = serverId,
+                        DiscordId = userid
                     });
                 }
                 var player = col.FindOne((data) => data.Id == id && serverId == data.ServerId);
+                if (player.DiscordId == 0)
+                {
+                    player.DiscordId = userid;
+                }
                 return player;
             }
         }
@@ -94,7 +100,7 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             if (player.Bag.Any(x => x.Name == item.Name))
             {
-                player.Bag.Where(x => x.Name == item.Name).First().ItemLeft++;
+                player.Bag.Where(x => x.Name == item.Name).First().ItemLeft += item.UseTimes;
             }
             else
             {
@@ -116,6 +122,15 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     break;
                 }
+            }
+        }
+
+        public List<Player> GetPlayers(ulong serverId)
+        {
+            using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
+            {
+                var col = db.GetCollection<Player>("player");
+                return col.Find(x => x.ServerId == serverId).ToList();
             }
         }
     }

@@ -50,22 +50,37 @@ namespace MyaDiscordBot.ButtonEvent
                 coin = 100;
             }
             player.Coin += coin;
-            player.Exp += coin / 5;
+            playerService.AddExp(player, coin / 5);
             if (result.IsVictory)
             {
+                var reward = battleService.GetReward(boss.Enemy, player);
                 bossService.DefeatedEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
-                await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！");
+                if (reward != null)
+                {
+                    if (playerService.AddItem(player, reward))
+                    {
+                        await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！恭喜額外獲得" + reward.Name + "！");
+                    }
+                    else
+                    {
+                        await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！");
+                    }
+                }
+                else
+                {
+                    await message.RespondAsync(message.User.Mention + "對" + boss.Enemy.Name + "造成左" + result.DamageDealt + "傷害，獲得" + coin + "$!\n Boss已被擊殺！");
+                }
+
                 //recover 70% HP directly
                 if (player.CurrentHP < (player.HP * 70 / 100))
                 {
                     player.CurrentHP = player.HP * 70 / 100;
                 }
-                player.CurrentHP += player.HP;
-                int wait = player.HP * 3;
+                var healAmount = player.HP - player.CurrentHP;
+                var wait = healAmount * 3;
+                player.CurrentHP += healAmount;
                 if (player.CurrentHP > player.HP)
                 {
-                    int extra = player.CurrentHP - player.HP;
-                    wait -= extra * 3;
                     player.CurrentHP = player.HP;
                 }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
@@ -77,12 +92,11 @@ namespace MyaDiscordBot.ButtonEvent
                 {
                     player.CurrentHP = player.HP * 70 / 100;
                 }
-                player.CurrentHP += player.HP;
-                int wait = player.HP * 3;
+                var healAmount = player.HP - player.CurrentHP;
+                var wait = healAmount * 3;
+                player.CurrentHP += healAmount;
                 if (player.CurrentHP > player.HP)
                 {
-                    int extra = player.CurrentHP - player.HP;
-                    wait -= extra * 3;
                     player.CurrentHP = player.HP;
                 }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);

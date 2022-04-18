@@ -3,13 +3,17 @@
     public class Player
     {
         /// <summary>
-        /// 玩家ID, 也是Discord ID
+        /// Unique Id
         /// </summary>
         public string Id { get; set; }
         /// <summary>
         /// 防止玩家去其他ser係唔正確的地圖上刷怪
         /// </summary>
         public ulong ServerId { get; set; }
+        /// <summary>
+        /// Discord個人ID
+        /// </summary>
+        public ulong DiscordId { get; set; }
         /// <summary>
         /// 玩家有幾多錢
         /// </summary>
@@ -58,6 +62,14 @@
         /// 統計對Boss造成幾多傷害
         /// </summary>
         public int BossDamage { get; set; }
+        /// <summary>
+        /// Next rob time
+        /// </summary>
+        public DateTime NextRob { get; set; }
+        /// <summary>
+        /// Robbed Shield
+        /// </summary>
+        public DateTime RobShield { get; set; }
     }
 
     public class Coordinate

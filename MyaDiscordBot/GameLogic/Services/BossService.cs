@@ -21,14 +21,14 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     //get joined servers
                     var guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
-                    if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+                    if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                     {
                         bossService.AddBoss(guild.Id, new Enemy
                         {
                             Name = "米講粗口亞",
-                            Atk = 9999,
+                            Atk = 999,
                             Def = 0,
-                            HP = 99999,
+                            HP = 9999,
                             Element = Element.God,
                             IsBoss = true,
                             Stage = -1
@@ -72,12 +72,24 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
             {
                 var col = db.GetCollection<BossSpawned>("boss");
-                col.Insert(new BossSpawned
+                if (enemy.Name != "米講粗口亞")
                 {
-                    Enemy = enemy,
-                    ExpiredTime = DateTime.Now.AddDays(1),
-                    GuildId = serverId
-                });
+                    col.Insert(new BossSpawned
+                    {
+                        Enemy = enemy,
+                        ExpiredTime = DateTime.Now.AddDays(1),
+                        GuildId = serverId
+                    });
+                }
+                else
+                {
+                    col.Insert(new BossSpawned
+                    {
+                        Enemy = enemy,
+                        ExpiredTime = DateTime.Now.AddDays(6),
+                        GuildId = serverId
+                    });
+                }
             }
         }
 

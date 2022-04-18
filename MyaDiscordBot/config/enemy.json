@@ -2,15 +2,23 @@
   {
     "name": "風史萊姆", //怪的名
     "hp": 10, //怪的血量
-    "atk": 8, //怪的傷害
-    "def": 1, //怪的防禦
+    "atk": 12, //怪的傷害
+    "def": 2, //怪的防禦
+    "element": 3, //怪的屬性
+    "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
+  },
+  {
+    "name": "狂暴化風史萊姆", //怪的名
+    "hp": 25, //怪的血量
+    "atk": 20, //怪的傷害
+    "def": 3, //怪的防禦
     "element": 3, //怪的屬性
     "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
   },
   {
     "name": "風之寶箱怪", //怪的名
     "hp": 20, //怪的血量
-    "atk": 6, //怪的傷害
+    "atk": 10, //怪的傷害
     "def": 3, //怪的防禦
     "element": 3, //怪的屬性
     "itemDropRate": 1 //跌裝備幾率，0.3代表30%, 1.0代表100%
@@ -18,15 +26,23 @@
   {
     "name": "土史萊姆", //怪的名
     "hp": 10, //怪的血量
-    "atk": 8, //怪的傷害
-    "def": 1, //怪的防禦
+    "atk": 12, //怪的傷害
+    "def": 2, //怪的防禦
+    "element": 4, //怪的屬性
+    "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
+  },
+  {
+    "name": "狂暴化土史萊姆", //怪的名
+    "hp": 25, //怪的血量
+    "atk": 20, //怪的傷害
+    "def": 3, //怪的防禦
     "element": 4, //怪的屬性
     "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
   },
   {
     "name": "土之寶箱怪", //怪的名
     "hp": 20, //怪的血量
-    "atk": 6, //怪的傷害
+    "atk": 10, //怪的傷害
     "def": 3, //怪的防禦
     "element": 4, //怪的屬性
     "itemDropRate": 1 //跌裝備幾率，0.3代表30%, 1.0代表100%
@@ -34,15 +50,23 @@
   {
     "name": "水史萊姆", //怪的名
     "hp": 10, //怪的血量
-    "atk": 8, //怪的傷害
-    "def": 1, //怪的防禦
+    "atk": 12, //怪的傷害
+    "def": 2, //怪的防禦
+    "element": 5, //怪的屬性
+    "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
+  },
+  {
+    "name": "狂暴化水史萊姆", //怪的名
+    "hp": 25, //怪的血量
+    "atk": 20, //怪的傷害
+    "def": 3, //怪的防禦
     "element": 5, //怪的屬性
     "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
   },
   {
     "name": "水之寶箱怪", //怪的名
     "hp": 20, //怪的血量
-    "atk": 6, //怪的傷害
+    "atk": 10, //怪的傷害
     "def": 3, //怪的防禦
     "element": 5, //怪的屬性
     "itemDropRate": 1 //跌裝備幾率，0.3代表30%, 1.0代表100%
@@ -50,45 +74,53 @@
   {
     "name": "火史萊姆", //怪的名
     "hp": 10, //怪的血量
-    "atk": 8, //怪的傷害
-    "def": 1, //怪的防禦
+    "atk": 12, //怪的傷害
+    "def": 2, //怪的防禦
+    "element": 2, //怪的屬性
+    "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
+  },
+  {
+    "name": "狂暴化火史萊姆", //怪的名
+    "hp": 25, //怪的血量
+    "atk": 20, //怪的傷害
+    "def": 3, //怪的防禦
     "element": 2, //怪的屬性
     "itemDropRate": 0.3 //跌裝備幾率，0.3代表30%, 1.0代表100%
   },
   {
     "name": "火之寶箱怪", //怪的名
     "hp": 20, //怪的血量
-    "atk": 6, //怪的傷害
+    "atk": 10, //怪的傷害
     "def": 3, //怪的防禦
     "element": 2, //怪的屬性
     "itemDropRate": 1 //跌裝備幾率，0.3代表30%, 1.0代表100%
   },
   {
     "name": "大樹守衛Lite版",
-    "hp": 300,
-    "atk": 50,
+    "hp": 350,
+    "atk": 30,
     "def": 0,
     "element": 3,
     "itemDropRate": 1,
     "stage": 1,
-    "dropRank": [2],
+    "dropRank": [ 2 ],
     "isBoss": true
   },
   {
     "name": "大樹守衛Pixel版",
-    "hp": 300,
-    "atk": 40,
-    "def": 10,
+    "hp": 350,
+    "atk": 20,
+    "def": 5,
     "element": 3,
     "itemDropRate": 1,
     "stage": 1,
-    "dropRank": [2],
+    "dropRank": [ 2 ],
     "isBoss": true
   },
   {
     "name": "飛天忍者",
-    "hp": 20,
-    "atk": 8,
+    "hp": 30,
+    "atk": 20,
     "def": 4,
     "element": 3,
     "itemDropRate": 0.3,
@@ -97,8 +129,8 @@
   },
   {
     "name": "火爆忍者",
-    "hp": 20,
-    "atk": 8,
+    "hp": 30,
+    "atk": 20,
     "def": 4,
     "element": 2,
     "itemDropRate": 0.3,
@@ -107,8 +139,8 @@
   },
   {
     "name": "石頭忍者",
-    "hp": 20,
-    "atk": 8,
+    "hp": 30,
+    "atk": 20,
     "def": 4,
     "element": 4,
     "itemDropRate": 0.3,
@@ -117,8 +149,8 @@
   },
   {
     "name": "放水忍者",
-    "hp": 20,
-    "atk": 8,
+    "hp": 30,
+    "atk": 20,
     "def": 4,
     "element": 5,
     "itemDropRate": 0.3,
@@ -127,8 +159,8 @@
   },
   {
     "name": "黃金飛天忍者",
-    "hp": 20,
-    "atk": 10,
+    "hp": 30,
+    "atk": 23,
     "def": 2,
     "element": 3,
     "itemDropRate": 0.6,
@@ -137,8 +169,8 @@
   },
   {
     "name": "黃金火爆忍者",
-    "hp": 20,
-    "atk": 10,
+    "hp": 30,
+    "atk": 23,
     "def": 2,
     "element": 2,
     "itemDropRate": 0.6,
@@ -147,8 +179,8 @@
   },
   {
     "name": "黃金石頭忍者",
-    "hp": 20,
-    "atk": 10,
+    "hp": 30,
+    "atk": 23,
     "def": 2,
     "element": 4,
     "itemDropRate": 0.6,
@@ -157,8 +189,8 @@
   },
   {
     "name": "黃金放水忍者",
-    "hp": 20,
-    "atk": 10,
+    "hp": 30,
+    "atk": 23,
     "def": 2,
     "element": 5,
     "itemDropRate": 0.6,
@@ -167,8 +199,8 @@
   },
   {
     "name": "RGB飛天忍者",
-    "hp": 30,
-    "atk": 12,
+    "hp": 40,
+    "atk": 26,
     "def": 0,
     "element": 3,
     "itemDropRate": 0.4,
@@ -177,8 +209,8 @@
   },
   {
     "name": "RGB火爆忍者",
-    "hp": 30,
-    "atk": 12,
+    "hp": 40,
+    "atk": 26,
     "def": 0,
     "element": 2,
     "itemDropRate": 0.4,
@@ -187,8 +219,8 @@
   },
   {
     "name": "RGB石頭忍者",
-    "hp": 30,
-    "atk": 12,
+    "hp": 40,
+    "atk": 26,
     "def": 0,
     "element": 4,
     "itemDropRate": 0.4,
@@ -197,8 +229,8 @@
   },
   {
     "name": "RGB放水忍者",
-    "hp": 30,
-    "atk": 12,
+    "hp": 40,
+    "atk": 26,
     "def": 0,
     "element": 5,
     "itemDropRate": 0.4,
@@ -208,125 +240,267 @@
   {
     "name": "噴屎唔忍將軍 - RGB KTL",
     "hp": 500,
-    "atk": 80,
+    "atk": 50,
     "def": 10,
     "element": 6,
     "itemDropRate": 1,
     "stage": 2,
-    "dropRank": [3],
+    "dropRank": [ 3 ],
     "isBoss": true
   },
   {
     "name": "忍屎將軍 - RGB MX Low",
     "hp": 500,
-    "atk": 65,
-    "def": 25,
+    "atk": 45,
+    "def": 15,
     "element": 6,
     "itemDropRate": 1,
     "stage": 2,
-    "dropRank": [3],
+    "dropRank": [ 3 ],
     "isBoss": true
   },
   {
     "name": "無限∞吹風機",
-    "hp": 30,
-    "atk": 15,
+    "hp": 50,
+    "atk": 35,
     "def": 0,
     "element": 3,
-    "itemDropRate": 0.4,
+    "itemDropRate": 0.2,
     "stage": 3,
     "dropRank": [ 3, 4 ]
   },
   {
     "name": "無限∞打火機",
-    "hp": 30,
-    "atk": 15,
+    "hp": 50,
+    "atk": 35,
     "def": 0,
     "element": 2,
-    "itemDropRate": 0.4,
+    "itemDropRate": 0.2,
     "stage": 3,
     "dropRank": [ 3, 4 ]
   },
   {
     "name": "無限∞鑽地機",
-    "hp": 30,
-    "atk": 15,
+    "hp": 50,
+    "atk": 35,
     "def": 0,
     "element": 4,
-    "itemDropRate": 0.4,
+    "itemDropRate": 0.2,
     "stage": 3,
     "dropRank": [ 3, 4 ]
   },
   {
     "name": "無限∞噴水機",
-    "hp": 30,
-    "atk": 15,
+    "hp": 50,
+    "atk": 35,
     "def": 0,
     "element": 5,
-    "itemDropRate": 0.4,
+    "itemDropRate": 0.2,
+    "stage": 3,
+    "dropRank": [ 3, 4 ]
+  },
+  {
+    "name": "解除限制吹風機",
+    "hp": 55,
+    "atk": 30,
+    "def": 8,
+    "element": 3,
+    "itemDropRate": 0.25,
     "stage": 3,
     "dropRank": [ 3 ]
   },
   {
-    "name": "解除限制吹風機",
-    "hp": 35,
-    "atk": 12,
-    "def": 8,
-    "element": 3,
-    "itemDropRate": 0.8,
-    "stage": 3,
-    "dropRank": [ 3, 4 ]
-  },
-  {
     "name": "解除限制打火機",
-    "hp": 35,
-    "atk": 12,
+    "hp": 55,
+    "atk": 30,
     "def": 8,
     "element": 2,
-    "itemDropRate": 0.8,
+    "itemDropRate": 0.25,
     "stage": 3,
-    "dropRank": [ 3, 4 ]
+    "dropRank": [ 3 ]
   },
   {
     "name": "解除限制鑽地機",
-    "hp": 35,
-    "atk": 12,
+    "hp": 55,
+    "atk": 30,
     "def": 8,
     "element": 4,
-    "itemDropRate": 0.8,
+    "itemDropRate": 0.25,
     "stage": 3,
-    "dropRank": [ 3, 4 ]
+    "dropRank": [ 3 ]
   },
   {
     "name": "解除限制噴水機",
-    "hp": 35,
-    "atk": 12,
+    "hp": 55,
+    "atk": 30,
     "def": 8,
     "element": 5,
-    "itemDropRate": 0.8,
+    "itemDropRate": 0.25,
+    "stage": 3,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "超進化吹風機",
+    "hp": 60,
+    "atk": 26,
+    "def": 12,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 3,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "超進化打火機",
+    "hp": 60,
+    "atk": 26,
+    "def": 12,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 3,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "超進化鑽地機",
+    "hp": 60,
+    "atk": 26,
+    "def": 12,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 3,
+    "dropRank": [ 3 ]
+  },
+  {
+    "name": "超進化噴水機",
+    "hp": 60,
+    "atk": 26,
+    "def": 12,
+    "element": 5,
+    "itemDropRate": 0.2,
     "stage": 3,
     "dropRank": [ 3 ]
   },
   {
     "name": "Thomas 複製人軍隊將軍 - Number C 59",
     "hp": 800,
-    "atk": 100,
+    "atk": 60,
     "def": 10,
     "element": 6,
     "itemDropRate": 1,
     "stage": 3,
-    "dropRank": [4],
+    "dropRank": [ 4 ],
     "isBoss": true
   },
   {
     "name": "Thomas 複製人軍隊將軍 - Number C 116",
     "hp": 800,
-    "atk": 80,
+    "atk": 45,
     "def": 25,
     "element": 6,
     "itemDropRate": 1,
     "stage": 3,
-    "dropRank": [4],
+    "dropRank": [ 4 ],
+    "isBoss": true
+  },
+  {
+    "name": "天氣精靈-微風",
+    "hp": 60,
+    "atk": 35,
+    "def": 5,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-晴天",
+    "hp": 60,
+    "atk": 35,
+    "def": 5,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-閃電",
+    "hp": 60,
+    "atk": 35,
+    "def": 5,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-細雨",
+    "hp": 60,
+    "atk": 35,
+    "def": 5,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-暴風",
+    "hp": 60,
+    "atk": 40,
+    "def": 10,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-旱災",
+    "hp": 60,
+    "atk": 40,
+    "def": 10,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-雷擊",
+    "hp": 60,
+    "atk": 40,
+    "def": 10,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-暴雨",
+    "hp": 60,
+    "atk": 40,
+    "def": 10,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 4,
+    "dropRank": [ 4 ]
+  },
+  {
+    "name": "天氣精靈-混沌",
+    "hp": 1000,
+    "atk": 70,
+    "def": 20,
+    "element": 1,
+    "itemDropRate": 1,
+    "stage": 4,
+    "dropRank": [ 5 ],
+    "isBoss": true
+  },
+  {
+    "name": "天氣精靈-彩虹",
+    "hp": 1000,
+    "atk": 55,
+    "def": 25,
+    "element": 0,
+    "itemDropRate": 1,
+    "stage": 4,
+    "dropRank": [ 5 ],
     "isBoss": true
   }
 ]

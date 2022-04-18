@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.Commands
 {
@@ -23,11 +24,19 @@ namespace MyaDiscordBot.Commands
             var builder = new ComponentBuilder();
             foreach (var i in player.Bag.Where(x => x.IsEquiped))
             {
+                if (i.Type == ItemType.道具 && i.ItemLeft == 0)
+                {
+                    continue;
+                }
                 //Already have this thing
                 builder.WithButton(i.Name + " - 解除裝備", "unequip-" + i.Name.ToLower());
             }
             foreach (var i in player.Bag.Where(x => !x.IsEquiped))
             {
+                if (i.Type == ItemType.道具 && i.ItemLeft == 0)
+                {
+                    continue;
+                }
                 //Already have this thing
                 builder.WithButton(i.Name + " - 裝備", "equip-" + i.Name.ToLower());
             }
