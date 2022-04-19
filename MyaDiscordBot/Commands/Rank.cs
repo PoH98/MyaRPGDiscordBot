@@ -20,21 +20,29 @@ namespace MyaDiscordBot.Commands
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            var players = playerService.GetPlayers((command.Channel as SocketGuildChannel).Guild.Id).Where(x => GetRank(x.Lv) == GetRank(player.Lv));
+            var players = playerService.GetPlayers((command.Channel as SocketGuildChannel).Guild.Id).Where(x => GetRank(x.Lv) == GetRank(player.Lv) && x.DiscordId != 0);
             EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.WithTitle("富豪排行");
+            embedBuilder.WithTitle("同你差唔多戰力的玩家富豪排行");
             embedBuilder.WithColor(Color.Green);
             var guild = client.GetGuild((command.Channel as SocketGuildChannel).Guild.Id);
-            var take = Math.Min(players.Count(), 20);
-            foreach (var p in players.OrderByDescending(x => x.Coin).Take(take))
+            var currentIndex = 0;
+            foreach (var p in players.OrderByDescending(x => x.Coin))
             {
-                if(p.DiscordId == 0)
+                if(p.DiscordId == client.CurrentUser.Id)
                 {
-                    //bugged data
                     continue;
                 }
                 var user = guild.GetUser(p.DiscordId);
+                if(user == null)
+                {
+                    continue;
+                }
                 embedBuilder.AddField(user.DisplayName, "當前擁有" + p.Coin + "$");
+                currentIndex++;
+                if(currentIndex >= 20)
+                {
+                    break;
+                }
             }
             await command.RespondAsync("", embed: embedBuilder.Build(), ephemeral: true);
         }

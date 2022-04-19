@@ -26,6 +26,13 @@ namespace MyaDiscordBot.Commands
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            if (client.CurrentUser.Id == ((SocketGuildUser)command.Data.Options.First().Value).Id)
+            {
+                player.CurrentHP = 1;
+                await command.RespondAsync("你竟然打劫米亞？！米亞將你打成殘血！", ephemeral: true);
+                playerService.SavePlayer(player);
+                return;
+            }
             if (player.Lv < 10)
             {
                 await command.RespondAsync("你未到10級，所以未解鎖此功能哦！", ephemeral: true);
@@ -53,6 +60,14 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你搞笑咩？對個新手咁惡，想搞到依個遊戲無人玩？", ephemeral: true);
                 return;
             }
+            if(player.DiscordId == victim.DiscordId)
+            {
+                //???
+                player.CurrentHP = 1;
+                await command.RespondAsync("你打左自己一餐，完全唔知道你想點？", ephemeral: true);
+                playerService.SavePlayer(player);
+                return;
+            }
             var victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             if (Enumerable.Range(victimRank - 1, 3).Contains(rank))
             {
@@ -72,8 +87,10 @@ namespace MyaDiscordBot.Commands
                     player.Coin += gain;
                     victim.Coin -= gain;
                     victim.CurrentHP = victim.HP;
+                    player.CurrentHP = player.HP;
                     victim.RobShield = DateTime.Now.AddHours(12);
                     player.NextRob = DateTime.Now.AddHours(8);
+                    player.NextCommand = DateTime.Now.AddMinutes(30);
                     victim.NextCommand = DateTime.Now.AddMinutes(30);
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，獲得左受害者" + gain + "蚊！");
                 }
@@ -84,9 +101,11 @@ namespace MyaDiscordBot.Commands
                     player.Coin -= gain;
                     victim.Coin += gain;
                     player.CurrentHP = player.HP;
+                    victim.CurrentHP = victim.HP;
                     player.RobShield = DateTime.Now.AddHours(8);
                     player.NextRob = DateTime.Now.AddHours(8);
                     player.NextCommand = DateTime.Now.AddMinutes(30);
+                    victim.NextCommand = DateTime.Now.AddMinutes(30);
                     victim.RobShield = DateTime.Now.AddHours(2);
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，可惜被反殺無左" + gain + "蚊！");
                 }

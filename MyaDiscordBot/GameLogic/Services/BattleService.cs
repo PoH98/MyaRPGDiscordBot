@@ -166,13 +166,25 @@ namespace MyaDiscordBot.GameLogic.Services
                             {
                                 player.CurrentHP = player.HP;
                             }
-                            if (result.ItemsUsed.Any(x => x.Key == item))
+                        }
+                    }
+                }
+                if(enemy.CurrentHP > 0)
+                {
+                    var items = enemy.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
+                    if (items.Count() > 0)
+                    {
+                        //use items
+                        while ((enemy.CurrentHP <= player.Atk || enemy.CurrentHP < 5) && enemy.CurrentHP < enemy.HP && items.Any(x => x.HP > 0))
+                        {
+                            var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
+                            item.ItemLeft--;
+                            enemy.CurrentHP += item.HP;
+                            //add max HP forever
+                            enemy.HP += item.HP / 5;
+                            if (enemy.CurrentHP > enemy.HP)
                             {
-                                result.ItemsUsed[item]++;
-                            }
-                            else
-                            {
-                                result.ItemsUsed.Add(item, 1);
+                                enemy.CurrentHP = enemy.HP;
                             }
                         }
                     }
