@@ -52,7 +52,7 @@ namespace MyaDiscordBot.Commands
                         cb.WithButton(i.Name, "sell-" + i.Id.ToString());
                     }
                     await command.RespondAsync("甘米唔耐煩咁等你從背包拿出想賣的道具！", components: cb.Build(), ephemeral: true);
-                    break;
+                    return;
             }
             var earned = 0;
             foreach (var d in dump)

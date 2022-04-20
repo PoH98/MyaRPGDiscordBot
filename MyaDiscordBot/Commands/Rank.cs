@@ -32,6 +32,7 @@ namespace MyaDiscordBot.Commands
                 {
                     continue;
                 }
+                var users = guild.GetUsersAsync();
                 var user = guild.GetUser(p.DiscordId);
                 if (user == null)
                 {
@@ -50,10 +51,6 @@ namespace MyaDiscordBot.Commands
         private int GetRank(int lv)
         {
             var r = lv / 10;
-            if (r < 1)
-            {
-                r = 1;
-            }
             return r;
         }
     }
