@@ -32,7 +32,7 @@ namespace MyaDiscordBot.Commands
                 index = rnd.Next(jokes.Length);
             }
             Data.Instance.LastRnd = index;
-            await command.RespondAsync(jokes[index] + "\nFunny~");
+            await command.RespondAsync(jokes[index].Replace("\\n", "\n") + "\nFunny~");
         }
     }
 }

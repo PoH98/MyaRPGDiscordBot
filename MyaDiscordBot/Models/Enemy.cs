@@ -15,7 +15,7 @@ namespace MyaDiscordBot.Models
         public int Def { get; set; }
         public Element Element { get; set; }
         public decimal ItemDropRate { get; set; }
-        public int Stage { get; set; } = 1;
+        public int Stage { get; set; } = 0;
         public int[] DropRank { get; set; } = new int[1] { 1 };
         public bool IsBoss { get; set; } = false;
         public object Clone()

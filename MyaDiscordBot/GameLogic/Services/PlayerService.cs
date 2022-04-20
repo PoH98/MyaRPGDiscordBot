@@ -117,6 +117,10 @@ namespace MyaDiscordBot.GameLogic.Services
                 if (_configuration.MaxPlayerLv > player.Lv)
                 {
                     player.Lv++;
+                    if (player.Lv % 5 == 0)
+                    {
+                        player.SkillPoint++;
+                    }
                 }
                 else
                 {

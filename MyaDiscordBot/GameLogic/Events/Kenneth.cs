@@ -12,7 +12,7 @@ namespace MyaDiscordBot.GameLogic.Events
             {
                 player.CurrentHP = player.HP;
             }
-            player.NextCommand = DateTime.Now.AddMinutes(30);
+            player.NextCommand = DateTime.Now.AddMinutes(20);
             if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
             {
                 return command.RespondAsync("已經入夜，你想食宵夜的時候呼叫左Food Mya，等左無幾耐就見到個熊貓服裝叫Kenneth的外送員坐著個魔毯送到！你放底左訓著的米亞後好好咁享受左一餐美食！", ephemeral: true);

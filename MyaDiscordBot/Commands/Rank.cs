@@ -28,18 +28,18 @@ namespace MyaDiscordBot.Commands
             var currentIndex = 0;
             foreach (var p in players.OrderByDescending(x => x.Coin))
             {
-                if(p.DiscordId == client.CurrentUser.Id)
+                if (p.DiscordId == client.CurrentUser.Id)
                 {
                     continue;
                 }
                 var user = guild.GetUser(p.DiscordId);
-                if(user == null)
+                if (user == null)
                 {
                     continue;
                 }
                 embedBuilder.AddField(user.DisplayName, "當前擁有" + p.Coin + "$");
                 currentIndex++;
-                if(currentIndex >= 20)
+                if (currentIndex >= 20)
                 {
                     break;
                 }

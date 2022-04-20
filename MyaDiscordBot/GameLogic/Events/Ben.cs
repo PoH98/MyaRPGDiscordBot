@@ -5,14 +5,13 @@ namespace MyaDiscordBot.GameLogic.Events
 {
     public class Ben : IRandomEvent
     {
-        public Task Response(SocketSlashCommand command, Player player)
+        Task IRandomEvent.Response(SocketSlashCommand command, Player player)
         {
             if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
             {
-                player.CurrentHP = 1;
-                return command.RespondAsync("你突然見到空中似乎有火花同導彈飛來飛去，夜晚之中特別耀眼，似乎係倆個高達在戰鬥中！當你睇得入神的時候突然一個導彈向你飛來，你炸剩殘血！", ephemeral: true);
+                return command.RespondAsync("你見到夜空中閃過個機械人，佢同你揮手然後dum左一張紙條，上面寫著佢叫Ben，個機械人名叫高達完美超卓艾斯亞，你覺得一頭霧水...", ephemeral:true);
             }
-            return command.RespondAsync("路上你同米亞見到有個變形金剛飛左落來，米亞大叫左一聲高達後個變形金剛似乎極度唔開心就咁飛走左，你完全唔知道要點同米亞解釋...", ephemeral: true);
+            return command.RespondAsync("當你向住目的地前進時，突然見到一部超級巨大嘅機械人喺你面前降落，跟住一個右手帶有燒傷疤痕嘅人離開機體 佢話佢係Ben 而後面嗰部就係高達完美超卓艾斯亞。你同米亞都一樣一頭霧水但自稱係Ben的人已經返左佢個機械人走左...", ephemeral: true);
         }
     }
 }

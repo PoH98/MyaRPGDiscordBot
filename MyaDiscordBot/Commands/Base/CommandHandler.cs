@@ -6,6 +6,7 @@ using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.Commands
@@ -32,6 +33,14 @@ namespace MyaDiscordBot.Commands
             _client.UserJoined += _client_UserJoined;
             _client.ButtonExecuted += _client_ButtonExecuted;
             _client.MessageReceived += _client_MessageReceived;
+            _client.Disconnected += _client_Disconnected;
+        }
+
+        private Task _client_Disconnected(Exception arg)
+        {
+            Process.Start("MyaDiscordBot.exe");
+            Environment.Exit(0);
+            return Task.CompletedTask;
         }
 
         private async Task _client_UserJoined(SocketGuildUser arg)
@@ -79,12 +88,19 @@ namespace MyaDiscordBot.Commands
             else if (message.Content.StartsWith("$refreshCommands") && message.Author.Id == 294835963442757632)
             {
                 await message.ReplyAsync("Job Executing");
-                await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
-                await message.ReplyAsync("Job Done");
+                _ = Task.Run(async () =>
+                {
+                    await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
+                    await message.ReplyAsync("Job Done");
+                });
+            }
+            else if (message.Content.StartsWith("$ping"))
+            {
+                await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
             }
         }
 
-        private async Task _client_ButtonExecuted(SocketMessageComponent arg)
+        private Task _client_ButtonExecuted(SocketMessageComponent arg)
         {
             foreach (var command in buttons)
             {
@@ -92,25 +108,27 @@ namespace MyaDiscordBot.Commands
                 {
                     if (command.CheckUsage(arg.Data.Value))
                     {
-                        await command.Handle(arg, _client);
+                        _ = command.Handle(arg, _client);
                         //already handled, no need do any more thing
-                        return;
+                        return Task.CompletedTask;
                     }
                 }
                 else if (arg.Data.CustomId != null)
                 {
                     if (command.CheckUsage(arg.Data.CustomId))
                     {
-                        await command.Handle(arg, _client);
+                        _ = command.Handle(arg, _client);
                         //already handled, no need do any more thing
-                        return;
+                        return Task.CompletedTask;
                     }
                 }
             }
+            return Task.CompletedTask;
         }
 
         private Task _client_JoinedGuild(SocketGuild arg)
         {
+            arg.DefaultChannel.SendMessageAsync("Executing slash command creation...");
             return UpdateCommands(arg);
         }
 

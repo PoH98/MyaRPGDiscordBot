@@ -77,11 +77,15 @@ namespace MyaDiscordBot.ButtonEvent
                     player.CurrentHP = player.HP * 70 / 100;
                 }
                 var healAmount = player.HP - player.CurrentHP;
-                var wait = healAmount * 3;
+                var wait = healAmount * 2;
                 player.CurrentHP += healAmount;
                 if (player.CurrentHP > player.HP)
                 {
                     player.CurrentHP = player.HP;
+                }
+                if (wait > 20)
+                {
+                    wait = 20;
                 }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
             }
@@ -93,11 +97,15 @@ namespace MyaDiscordBot.ButtonEvent
                     player.CurrentHP = player.HP * 70 / 100;
                 }
                 var healAmount = player.HP - player.CurrentHP;
-                var wait = healAmount * 3;
+                var wait = healAmount * 2;
                 player.CurrentHP += healAmount;
                 if (player.CurrentHP > player.HP)
                 {
                     player.CurrentHP = player.HP;
+                }
+                if (wait > 20)
+                {
+                    wait = 20;
                 }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
                 await message.RespondAsync("你對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$! 不過由於Boss實在太強大，你已經陣亡而且被米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);

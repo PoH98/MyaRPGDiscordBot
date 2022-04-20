@@ -1,10 +1,16 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
 {
     public class Touch : ICommand
     {
+        private readonly IPlayerService _playerService;
+        public Touch(IPlayerService playerService)
+        {
+            _playerService = playerService;
+        }
         public string Name => "touch";
 
         public string Description => "Touch Mya";
@@ -17,6 +23,15 @@ namespace MyaDiscordBot.Commands
             {
                 return command.RespondAsync("zzZZZ (米亞已經訓著，無法回復你哦！)", ephemeral: true);
             }
+            Random rnd = new Random();
+            if (rnd.NextDouble() < 0.05)
+            {
+                var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+                player.CurrentHP = 1;
+                _playerService.SavePlayer(player);
+                return command.RespondAsync(command.User.Mention + "米亞發火用電擊棒治療左你一餐！", ephemeral: true);
+            }
+
             return command.RespondAsync(command.User.Mention + "啊~唔好掂我呀！米亞大叫一聲之後整個樓層的玩家都聽到嗮");
         }
     }

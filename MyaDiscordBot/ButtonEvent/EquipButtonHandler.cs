@@ -34,6 +34,10 @@ namespace MyaDiscordBot.ButtonEvent
                         player.HP -= item.HP;
                         player.Atk -= item.Atk;
                         player.Def -= item.Def;
+                        if (player.CurrentHP > player.HP)
+                        {
+                            player.CurrentHP = player.HP;
+                        }
                     }
                     await message.RespondAsync("已經解除裝備" + item.Name + "！", ephemeral: true);
                 }

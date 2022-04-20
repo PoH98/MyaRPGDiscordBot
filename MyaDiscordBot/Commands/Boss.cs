@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.Commands
 {
@@ -25,7 +26,35 @@ namespace MyaDiscordBot.Commands
                 ComponentBuilder cb = new ComponentBuilder();
                 foreach (var x in enemies)
                 {
-                    cb.WithButton(x.Enemy.Name + " - HP: " + x.Enemy.HP, "boss-" + x.Id);
+                    string el;
+                    switch (x.Enemy.Element)
+                    {
+                        case Element.Light:
+                            el = "光";
+                            break;
+                        case Element.Dark:
+                            el = "暗";
+                            break;
+                        case Element.God:
+                            el = "神";
+                            break;
+                        case Element.Fire:
+                            el = "火";
+                            break;
+                        case Element.Water:
+                            el = "水";
+                            break;
+                        case Element.Wind:
+                            el = "風";
+                            break;
+                        case Element.Earth:
+                            el = "土";
+                            break;
+                        default:
+                            el = "無";
+                            break;
+                    }
+                    cb.WithButton("[" + el + "] " + x.Enemy.Name + " - HP: " + x.Enemy.HP, "boss-" + x.Id);
                 }
                 await command.RespondAsync("當前所有Boss等待被擊殺: ", components: cb.Build(), ephemeral: true);
             }

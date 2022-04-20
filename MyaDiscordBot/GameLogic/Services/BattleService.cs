@@ -98,6 +98,10 @@ namespace MyaDiscordBot.GameLogic.Services
             else
             {
                 double wait = player.HP * 3.5;
+                if (wait > 120)
+                {
+                    wait = 120;
+                }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
             }
             return result;
@@ -127,7 +131,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = 0;
                 }
-                enemy.HP -= atk;
+                enemy.CurrentHP -= atk;
                 result.DamageDealt += atk;
                 if (enemy.HP > 0)
                 {
@@ -169,7 +173,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         }
                     }
                 }
-                if(enemy.CurrentHP > 0)
+                if (enemy.CurrentHP > 0)
                 {
                     var items = enemy.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
                     if (items.Count() > 0)
@@ -198,6 +202,10 @@ namespace MyaDiscordBot.GameLogic.Services
             else
             {
                 double wait = player.HP * 3.5;
+                if (wait > 120)
+                {
+                    wait = 120;
+                }
                 player.NextCommand = DateTime.Now.AddMinutes(wait);
             }
             return result;

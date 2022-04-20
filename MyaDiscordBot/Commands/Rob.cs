@@ -55,12 +55,12 @@ namespace MyaDiscordBot.Commands
             }
             var rank = player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             var victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            if(victim.Lv < 10)
+            if (victim.Lv < 10)
             {
                 await command.RespondAsync("你搞笑咩？對個新手咁惡，想搞到依個遊戲無人玩？", ephemeral: true);
                 return;
             }
-            if(player.DiscordId == victim.DiscordId)
+            if (player.DiscordId == victim.DiscordId)
             {
                 //???
                 player.CurrentHP = 1;

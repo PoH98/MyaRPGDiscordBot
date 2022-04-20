@@ -27,7 +27,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 //no spawn
                 return null;
             }
-            var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == ((lv / 10) < 1 ? 1 : (lv / 10)) && !x.IsBoss).ToList();
+            var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == (lv / 10) && !x.IsBoss).ToList();
             var enemySelected = rnd.Next(enemies.Count());
             return (Enemy)enemies[enemySelected].Clone();
         }
@@ -36,31 +36,31 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             Random rnd = new Random();
             var stage = lv / 10;
-            if (stage < 1)
-            {
-                stage = 1;
-            }
             var bosses = _enemy.Where(x => x.IsBoss && x.Stage == stage).ToArray();
             if (bosses.Length < 1)
             {
+                if (stage < 1)
+                {
+                    stage = 1;
+                }
 #if DEBUG
                 //no boss, lets create one default boss
                 return new Enemy
                 {
-                    Atk = 100 * lv / 10,
+                    Atk = 20 * stage,
                     Def = 0,
-                    HP = 1 * lv / 10,
+                    HP = 1 * stage,
                     Element = Element.God,
                     IsBoss = true,
-                    Stage = lv / 10,
+                    Stage = stage,
                     Name = "虛無之鬼"
                 };
 #else
                 return new Enemy
                 {
-                    Atk = 100 * stage,
+                    Atk = 20 * stage,
                     Def = 0,
-                    HP = 1000 * stage,
+                    HP = 100 * stage,
                     Element = Element.God,
                     IsBoss= true,
                     Stage = stage,

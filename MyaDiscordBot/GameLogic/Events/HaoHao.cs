@@ -7,7 +7,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            player.NextCommand = DateTime.Now.AddMinutes(30);
+            player.NextCommand = DateTime.Now.AddMinutes(20);
             player.CurrentHP += 10;
             if (player.CurrentHP > player.HP)
             {

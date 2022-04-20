@@ -102,7 +102,7 @@ namespace MyaDiscordBot.ButtonEvent
                     }
                     if (i.HP > 0)
                     {
-                        sb.Append(" 提升" + i.Def + "血量");
+                        sb.Append(" 提升" + i.HP + "血量");
                     }
                 }
 

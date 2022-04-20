@@ -16,7 +16,7 @@ namespace MyaDiscordBot.Commands
 
         public string Description => "Sell off all your unwanted equipments and gain fast money!";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1] { new SlashCommandOptionBuilder().WithType(ApplicationCommandOptionType.Number).WithName("method").WithDescription("Choose your selling logic here!").AddChoice("No Ability and Weaker than what you equiped the most weakest!", 1).AddChoice("No Ability and All not equiped, no matter what rank", 2).WithRequired(true) };
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1] { new SlashCommandOptionBuilder().WithType(ApplicationCommandOptionType.Number).WithName("method").WithDescription("Choose your selling logic here!").AddChoice("No Ability and Weaker than what you equiped the most weakest!", 1).AddChoice("No Ability and All not equiped, no matter what rank", 2).AddChoice("Sell just 1 item", 3).WithRequired(true) };
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
@@ -44,6 +44,14 @@ namespace MyaDiscordBot.Commands
                             dump.Add(i);
                         }
                     }
+                    break;
+                case 3:
+                    ComponentBuilder cb = new ComponentBuilder();
+                    foreach (var i in player.Bag.Where(x => !x.IsEquiped && x.Id != Guid.Empty && x.Type != ItemType.道具))
+                    {
+                        cb.WithButton(i.Name, "sell-" + i.Id.ToString());
+                    }
+                    await command.RespondAsync("甘米唔耐煩咁等你從背包拿出想賣的道具！", components: cb.Build(), ephemeral: true);
                     break;
             }
             var earned = 0;

@@ -25,12 +25,12 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你已經正在休息！唔可以雙重休息哦！", ephemeral: true);
                 return;
             }
-            player.CurrentHP += 10;
+            player.CurrentHP += 15;
             int wait = 30;
             if (player.CurrentHP > player.HP)
             {
                 int extra = player.CurrentHP - player.HP;
-                wait -= extra * 3;
+                wait -= extra * 2;
                 player.CurrentHP = player.HP;
             }
             player.NextCommand = DateTime.Now.AddMinutes(wait);
