@@ -1,15 +1,18 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.Commands
 {
     public class Me : ICommand
     {
         private readonly IPlayerService playerService;
-        public Me(IPlayerService playerService)
+        private readonly IConfiguration configuration;
+        public Me(IPlayerService playerService, IConfiguration configuration)
         {
             this.playerService = playerService;
+            this.configuration = configuration;
         }
         public string Name => "me";
 
@@ -26,7 +29,7 @@ namespace MyaDiscordBot.Commands
             eb.AddField("傷害", player.Atk);
             eb.AddField("防禦", player.Def);
             eb.AddField("院友卡餘額", player.Coin + "$");
-            eb.AddField("經驗值", player.Exp);
+            eb.AddField("經驗值", player.Exp +"/"+ configuration.LV[player.Lv.ToString()]);
             eb.AddField("等級", player.Lv);
             EmbedBuilder bag = new EmbedBuilder() { Color = Color.Blue };
             bag.WithTitle("我的背包");

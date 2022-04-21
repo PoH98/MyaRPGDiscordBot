@@ -32,7 +32,6 @@ namespace MyaDiscordBot.Commands
                 {
                     continue;
                 }
-                var users = guild.GetUsersAsync();
                 var user = guild.GetUser(p.DiscordId);
                 if (user == null)
                 {

@@ -72,8 +72,11 @@ namespace MyaDiscordBot.GameLogic.Services
                             var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                             item.ItemLeft--;
                             player.CurrentHP += item.HP;
-                            //add max HP forever
-                            player.HP += item.HP / 5;
+                            //add max HP forever, but limit a rate
+                            if(player.HP < 90)
+                            {
+                                player.HP += item.HP / 5;
+                            }
                             if (player.CurrentHP > player.HP)
                             {
                                 player.CurrentHP = player.HP;

@@ -71,7 +71,7 @@ namespace MyaDiscordBot.Commands
             var victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             if (Enumerable.Range(victimRank - 1, 3).Contains(rank))
             {
-                if (DateTime.Compare(player.RobShield, DateTime.Now) > 0)
+                if (DateTime.Compare(victim.RobShield, DateTime.Now) > 0)
                 {
                     await command.RespondAsync("你見到你想打劫的對象實在太窮，連底褲都破破爛爛就知道佢剛剛先卑其他人打劫完，決定放過佢一馬！", ephemeral: true);
                     return;
@@ -106,7 +106,6 @@ namespace MyaDiscordBot.Commands
                     player.NextRob = DateTime.Now.AddHours(8);
                     player.NextCommand = DateTime.Now.AddMinutes(30);
                     victim.NextCommand = DateTime.Now.AddMinutes(30);
-                    victim.RobShield = DateTime.Now.AddHours(2);
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，可惜被反殺無左" + gain + "蚊！");
                 }
                 playerService.SavePlayer(player);
