@@ -33,7 +33,7 @@ namespace MyaDiscordBot.ButtonEvent
                     return;
                 }
                 var selected = data.First();
-                var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+                var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id, message.User.Username);
                 if (player.Coin < selected.Price)
                 {
                     await message.RespondAsync("小貓用彩虹棍敲左你個頭後走左，留底一張紙條表示窮鬼唔好煩佢", ephemeral: true);
@@ -47,7 +47,14 @@ namespace MyaDiscordBot.ButtonEvent
                 else
                 {
                     player.Coin += selected.Price;
-                    await message.RespondAsync("你已經存在依個裝備！小貓唔允許你再購買多一次！", ephemeral: true);
+                    if(player.Bag.Count >= 25)
+                    {
+                        await message.RespondAsync("你背包滿左！買唔到依樣野！", ephemeral: true);
+                    }
+                    else
+                    {
+                        await message.RespondAsync("你已經存在依個裝備！小貓唔允許你再購買多一次！", ephemeral: true);
+                    }
                 }
                 playerService.SavePlayer(player);
             }

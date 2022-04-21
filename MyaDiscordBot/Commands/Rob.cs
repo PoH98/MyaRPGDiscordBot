@@ -25,7 +25,7 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
             if (client.CurrentUser.Id == ((SocketGuildUser)command.Data.Options.First().Value).Id)
             {
                 player.CurrentHP = 1;
@@ -53,8 +53,12 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你搞笑咩？空手打劫當自己係成龍或者係李小龍？", ephemeral: true);
                 return;
             }
-            var rank = player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
-            var victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            var rank = 0;
+            if(player.Bag.Count > 0)
+            {
+                rank = player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
+            }
+            var victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
             if (victim.Lv < 10)
             {
                 await command.RespondAsync("你搞笑咩？對個新手咁惡，想搞到依個遊戲無人玩？", ephemeral: true);
@@ -68,7 +72,11 @@ namespace MyaDiscordBot.Commands
                 playerService.SavePlayer(player);
                 return;
             }
-            var victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
+            var victimRank = 0;
+            if(victim.Bag.Count > 0)
+            {
+                victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
+            }
             if (Enumerable.Range(victimRank - 1, 3).Contains(rank))
             {
                 if (DateTime.Compare(victim.RobShield, DateTime.Now) > 0)

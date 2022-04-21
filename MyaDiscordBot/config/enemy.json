@@ -447,7 +447,7 @@
     "atk": 60,
     "def": 10,
     "element": 6,
-    "itemDropRate": 1,
+    "itemDropRate": 0.5,
     "stage": 3,
     "dropRank": [ 4 ],
     "isBoss": true
@@ -458,7 +458,7 @@
     "atk": 45,
     "def": 25,
     "element": 6,
-    "itemDropRate": 1,
+    "itemDropRate": 0.5,
     "stage": 3,
     "dropRank": [ 4 ],
     "isBoss": true
@@ -549,7 +549,7 @@
     "atk": 70,
     "def": 20,
     "element": 1,
-    "itemDropRate": 1,
+    "itemDropRate": 0.5,
     "stage": 4,
     "dropRank": [ 5 ],
     "isBoss": true
@@ -560,7 +560,7 @@
     "atk": 55,
     "def": 25,
     "element": 0,
-    "itemDropRate": 1,
+    "itemDropRate": 0.5,
     "stage": 4,
     "dropRank": [ 5 ],
     "isBoss": true

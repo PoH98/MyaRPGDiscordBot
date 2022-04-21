@@ -19,7 +19,7 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
             if (player.SkillPoint < 1)
             {
                 return command.RespondAsync("你擁有的點數：" + player.SkillPoint, ephemeral: true);

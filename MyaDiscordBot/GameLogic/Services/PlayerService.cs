@@ -7,7 +7,7 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     public interface IPlayerService
     {
-        Player LoadPlayer(ulong id, ulong serverId);
+        Player LoadPlayer(ulong id, ulong serverId, string name);
         Enemy Walk(Player player, Element direction);
         void SavePlayer(Player player);
         bool AddItem(Player player, Item item);
@@ -39,7 +39,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 return builder.ToString();
             }
         }
-        public Player LoadPlayer(ulong userid, ulong serverId)
+        public Player LoadPlayer(ulong userid, ulong serverId, string name)
         {
             if (!Directory.Exists("save"))
             {
@@ -73,6 +73,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     player.DiscordId = userid;
                 }
+                player.Name = name;
                 return player;
             }
         }
@@ -95,6 +96,10 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             //no duplicate add for equipment
             if (item.UseTimes == -1 && player.Bag.Any(x => x.Name == item.Name))
+            {
+                return false;
+            }
+            if(player.Bag.Count >= 25)
             {
                 return false;
             }

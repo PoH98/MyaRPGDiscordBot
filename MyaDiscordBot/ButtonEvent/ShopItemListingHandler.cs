@@ -25,7 +25,7 @@ namespace MyaDiscordBot.ButtonEvent
 
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id, message.User.Username);
             var parts = message.Data.CustomId.Split("-").Skip(1).ToArray();
             var items = itemService.GetShopItem(player);
             //element

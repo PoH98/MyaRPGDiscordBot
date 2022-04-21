@@ -19,7 +19,7 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
             var players = playerService.GetPlayers((command.Channel as SocketGuildChannel).Guild.Id).Where(x => GetRank(x.Lv) == GetRank(player.Lv) && x.DiscordId != 0);
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.WithTitle("同你差唔多戰力的玩家富豪排行");
@@ -32,12 +32,21 @@ namespace MyaDiscordBot.Commands
                 {
                     continue;
                 }
-                var user = guild.GetUser(p.DiscordId);
-                if (user == null)
+                if(string.IsNullOrEmpty(p.Name))
+                {
+                    var user = guild.GetUser(p.DiscordId);
+                    if (user == null)
+                    {
+                        continue;
+                    }
+                    p.Name = user.DisplayName;
+                    playerService.SavePlayer(p);
+                }
+                if (string.IsNullOrEmpty(p.Name))
                 {
                     continue;
                 }
-                embedBuilder.AddField(user.DisplayName, "當前擁有" + p.Coin + "$");
+                embedBuilder.AddField(p.Name, "當前擁有" + p.Coin + "$");
                 currentIndex++;
                 if (currentIndex >= 20)
                 {

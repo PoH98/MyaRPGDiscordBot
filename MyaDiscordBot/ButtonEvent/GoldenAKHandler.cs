@@ -27,7 +27,7 @@ namespace MyaDiscordBot.ButtonEvent
                 await message.RespondAsync("熊貓神已經消失！", ephemeral: true);
                 return;
             }
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id, message.User.Username);
             Data.Instance.CacheDisableResponse.Add(message.Message.Id);
             if (playerService.AddItem(player, new Item
             {

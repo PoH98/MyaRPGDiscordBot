@@ -7,6 +7,10 @@
         /// </summary>
         public string Id { get; set; }
         /// <summary>
+        /// Player name
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// 防止玩家去其他ser係唔正確的地圖上刷怪
         /// </summary>
         public ulong ServerId { get; set; }
