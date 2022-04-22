@@ -26,7 +26,7 @@ namespace MyaDiscordBot.Commands
             Random rnd = new Random();
             if (rnd.NextDouble() < 0.05)
             {
-                var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
+                var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
                 player.CurrentHP = 1;
                 _playerService.SavePlayer(player);
                 return command.RespondAsync(command.User.Mention + "米亞發火用電擊棒治療左你一餐！", ephemeral: true);

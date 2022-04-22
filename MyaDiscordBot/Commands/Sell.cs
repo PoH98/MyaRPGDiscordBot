@@ -20,7 +20,8 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            player.Name = (command.User as SocketGuildUser).DisplayName;
             var dump = new List<ItemEquip>();
             switch ((double)command.Data.Options.First().Value)
             {

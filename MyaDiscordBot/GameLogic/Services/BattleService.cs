@@ -73,7 +73,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             item.ItemLeft--;
                             player.CurrentHP += item.HP;
                             //add max HP forever, but limit a rate
-                            if(player.HP < 90)
+                            if (player.HP < 90)
                             {
                                 player.HP += item.HP / 5;
                             }
@@ -197,8 +197,8 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                 }
             }
-            while (player.CurrentHP > 0 && enemy.HP > 0);
-            if (player.CurrentHP > 0 && enemy.HP <= 0)
+            while (player.CurrentHP > 0 && enemy.CurrentHP > 0);
+            if (player.CurrentHP > 0 && enemy.CurrentHP <= 0)
             {
                 result.IsVictory = true;
             }

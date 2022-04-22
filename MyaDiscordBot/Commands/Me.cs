@@ -23,14 +23,14 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             EmbedBuilder eb = new EmbedBuilder() { Color = Color.Blue };
             eb.WithTitle("我的資料");
             eb.AddField("血量", player.CurrentHP + "/" + player.HP);
             eb.AddField("傷害", player.Atk);
             eb.AddField("防禦", player.Def);
             eb.AddField("院友卡餘額", player.Coin + "$");
-            eb.AddField("經驗值", player.Exp +"/"+ configuration.LV[player.Lv.ToString()]);
+            eb.AddField("經驗值", player.Exp + "/" + configuration.LV[player.Lv.ToString()]);
             eb.AddField("等級", player.Lv);
             EmbedBuilder bag = new EmbedBuilder() { Color = Color.Green };
             EmbedBuilder bag2 = new EmbedBuilder() { Color = Color.Red };
@@ -39,6 +39,7 @@ namespace MyaDiscordBot.Commands
             if (items.Count() < 1)
             {
                 bag.WithDescription("你的背包空的哦！咩都無！");
+                bag2.WithDescription("你的背包空的哦！咩都無！");
             }
             else
             {

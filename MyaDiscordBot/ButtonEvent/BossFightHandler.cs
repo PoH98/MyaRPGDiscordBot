@@ -25,7 +25,7 @@ namespace MyaDiscordBot.ButtonEvent
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id, message.User.Username);
+            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
                 await message.RespondAsync("你正在休息！無法進行任何探索或者戰鬥！", ephemeral: true);

@@ -25,7 +25,8 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            player.Name = (command.User as SocketGuildUser).DisplayName;
             if (client.CurrentUser.Id == ((SocketGuildUser)command.Data.Options.First().Value).Id)
             {
                 player.CurrentHP = 1;
@@ -54,11 +55,11 @@ namespace MyaDiscordBot.Commands
                 return;
             }
             var rank = 0;
-            if(player.Bag.Count > 0)
+            if (player.Bag.Count > 0)
             {
                 rank = player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             }
-            var victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
+            var victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id);
             if (victim.Lv < 10)
             {
                 await command.RespondAsync("你搞笑咩？對個新手咁惡，想搞到依個遊戲無人玩？", ephemeral: true);
@@ -73,7 +74,7 @@ namespace MyaDiscordBot.Commands
                 return;
             }
             var victimRank = 0;
-            if(victim.Bag.Count > 0)
+            if (victim.Bag.Count > 0)
             {
                 victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             }

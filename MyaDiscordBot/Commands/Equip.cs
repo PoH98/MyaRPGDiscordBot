@@ -20,7 +20,7 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id, command.User.Username);
+            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             var builder = new ComponentBuilder();
             foreach (var i in player.Bag.Where(x => x.IsEquiped))
             {
@@ -29,7 +29,7 @@ namespace MyaDiscordBot.Commands
                     continue;
                 }
                 //Already have this thing
-                builder.WithButton(i.Name + " - 解除裝備", "unequip-" + i.Name.ToLower());
+                builder.WithButton(i.Name + " - 解除裝備", "unequip-" + i.Name.ToLower(), ButtonStyle.Danger);
             }
             foreach (var i in player.Bag.Where(x => !x.IsEquiped))
             {
@@ -38,7 +38,7 @@ namespace MyaDiscordBot.Commands
                     continue;
                 }
                 //Already have this thing
-                builder.WithButton(i.Name + " - 裝備", "equip-" + i.Name.ToLower());
+                builder.WithButton(i.Name + " - 裝備", "equip-" + i.Name.ToLower(), ButtonStyle.Success);
             }
             await command.RespondAsync("裝備背包內的道具：", ephemeral: true, components: builder.Build());
         }

@@ -1,11 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -29,7 +24,7 @@ namespace MyaDiscordBot.Commands
         {
             var itemName = command.Data.Options.First().Value.ToString();
             var item = items.FirstOrDefault(x => x.Name.Contains(itemName));
-            if(item == null)
+            if (item == null)
             {
                 return command.RespondAsync("米亞dum左本字典卑你，講佢搵唔到你講咩野！", ephemeral: true);
             }
@@ -66,32 +61,32 @@ namespace MyaDiscordBot.Commands
             }
             eb.AddField("屬性", el);
             eb.AddField("部位", item.Type);
-            if(item.Atk > 0)
+            if (item.Atk > 0)
             {
-                eb.AddField("傷害", "+"+item.Atk);
+                eb.AddField("傷害", "+" + item.Atk);
             }
-            else if(item.Atk < 0)
+            else if (item.Atk < 0)
             {
                 eb.AddField("傷害", item.Atk);
             }
-            if(item.Def > 0)
+            if (item.Def > 0)
             {
                 eb.AddField("防禦", "+" + item.Def);
             }
-            else if(item.Def < 0)
+            else if (item.Def < 0)
             {
                 eb.AddField("防禦", item.Def);
             }
-            if(item.HP > 0)
+            if (item.HP > 0)
             {
-                eb.AddField("血量", "+"+ item.HP);
+                eb.AddField("血量", "+" + item.HP);
             }
-            else if(item.HP < 0)
+            else if (item.HP < 0)
             {
                 eb.AddField("血量", item.HP);
             }
             eb.WithColor(Color.Teal);
-            return command.RespondAsync("", embed: eb.Build());
+            return command.RespondAsync("", embed: eb.Build(), ephemeral: true);
         }
     }
 }

@@ -11,7 +11,10 @@ using Quartz.Impl;
 using Quartz.Logging;
 //==============================================================================//
 //Create DC Bot Client//
-var _client = new DiscordSocketClient();
+var _client = new DiscordSocketClient(new DiscordSocketConfig
+{
+    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers
+});
 _client.Log += Log;
 //==============================================================================//
 //Scheduller Register//

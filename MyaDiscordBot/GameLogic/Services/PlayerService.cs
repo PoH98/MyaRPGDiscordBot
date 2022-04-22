@@ -7,7 +7,7 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     public interface IPlayerService
     {
-        Player LoadPlayer(ulong id, ulong serverId, string name);
+        Player LoadPlayer(ulong id, ulong serverId);
         Enemy Walk(Player player, Element direction);
         void SavePlayer(Player player);
         bool AddItem(Player player, Item item);
@@ -39,7 +39,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 return builder.ToString();
             }
         }
-        public Player LoadPlayer(ulong userid, ulong serverId, string name)
+        public Player LoadPlayer(ulong userid, ulong serverId)
         {
             if (!Directory.Exists("save"))
             {
@@ -73,7 +73,6 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     player.DiscordId = userid;
                 }
-                player.Name = name;
                 return player;
             }
         }
@@ -99,7 +98,7 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 return false;
             }
-            if(player.Bag.Count >= 25)
+            if (player.Bag.Count >= 25)
             {
                 return false;
             }

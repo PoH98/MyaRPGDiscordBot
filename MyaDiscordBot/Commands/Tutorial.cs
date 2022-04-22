@@ -1,10 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -24,7 +19,7 @@ namespace MyaDiscordBot.Commands
             switch (Convert.ToInt32(command.Data.Options.First().Value))
             {
                 case 1:
-                    return command.RespondAsync("屬性相剋：\n火 > 風 > 土 > 水 > 火\n光 > 暗 > 光\n神\n屬性相剋會造成1.5倍傷害哦！", ephemeral:true);
+                    return command.RespondAsync("屬性相剋：\n火 > 風 > 土 > 水 > 火\n光 > 暗 > 光\n神\n屬性相剋會造成1.5倍傷害哦！", ephemeral: true);
                 case 2:
                     return command.RespondAsync("道具/裝備使用：\n你可以通過/search打怪獲得裝備或者去/shop買！\n裝備獲得後記得用/equip裝備\n裝備不能混合其他屬性，所有裝備必須要同一個屬性！", ephemeral: true);
                 case 3:

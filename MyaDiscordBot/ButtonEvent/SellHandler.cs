@@ -21,7 +21,7 @@ namespace MyaDiscordBot.ButtonEvent
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = _playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id, message.User.Username);
+            var player = _playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             var item = player.Bag.FirstOrDefault(x => x.Id.ToString() == message.Data.CustomId.Replace("sell-", ""));
             if (item == null)
             {
