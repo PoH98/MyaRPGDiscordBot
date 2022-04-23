@@ -13,7 +13,7 @@ using Quartz.Logging;
 //Create DC Bot Client//
 var _client = new DiscordSocketClient(new DiscordSocketConfig
 {
-    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers
+    GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds
 });
 _client.Log += Log;
 //==============================================================================//
@@ -22,10 +22,8 @@ LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
 StdSchedulerFactory factory = new StdSchedulerFactory();
 IScheduler scheduler = await factory.GetScheduler();
 IJobDetail job = JobBuilder.Create<BossJob>()
-    .WithIdentity("job", "group")
     .Build();
 ITrigger trigger = TriggerBuilder.Create()
-    .WithIdentity("trigger", "group")
     .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
@@ -72,7 +70,7 @@ class ConsoleLogProvider : ILogProvider
         {
             if (level >= LogLevel.Info && func != null)
             {
-                Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] [" + level + "] " + func(), parameters);
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + level + " " + func(), parameters);
             }
             return true;
         };

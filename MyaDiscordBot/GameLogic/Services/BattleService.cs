@@ -73,9 +73,13 @@ namespace MyaDiscordBot.GameLogic.Services
                             item.ItemLeft--;
                             player.CurrentHP += item.HP;
                             //add max HP forever, but limit a rate
-                            if (player.HP < 90)
+                            if (player.HP < 90 && player.Lv < 40)
                             {
                                 player.HP += item.HP / 5;
+                            }
+                            else if (player.HP < 200 && player.Lv < 60)
+                            {
+                                player.HP += item.HP / 10;
                             }
                             if (player.CurrentHP > player.HP)
                             {
@@ -166,7 +170,14 @@ namespace MyaDiscordBot.GameLogic.Services
                         {
                             var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                             item.ItemLeft--;
-                            player.CurrentHP += item.HP;
+                            if (player.HP < 90 && player.Lv < 40)
+                            {
+                                player.HP += item.HP / 5;
+                            }
+                            else if (player.HP < 200 && player.Lv < 60)
+                            {
+                                player.HP += item.HP / 10;
+                            }
                             //add max HP forever
                             player.HP += item.HP / 5;
                             if (player.CurrentHP > player.HP)
@@ -186,7 +197,14 @@ namespace MyaDiscordBot.GameLogic.Services
                         {
                             var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                             item.ItemLeft--;
-                            enemy.CurrentHP += item.HP;
+                            if (enemy.HP < 90 && enemy.Lv < 40)
+                            {
+                                enemy.HP += item.HP / 5;
+                            }
+                            else if (enemy.HP < 200 && enemy.Lv < 60)
+                            {
+                                enemy.HP += item.HP / 10;
+                            }
                             //add max HP forever
                             enemy.HP += item.HP / 5;
                             if (enemy.CurrentHP > enemy.HP)

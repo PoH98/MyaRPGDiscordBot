@@ -15,7 +15,7 @@ namespace MyaDiscordBot.Commands
             this.playerService = playerService;
             this.configuration = configuration;
         }
-        public string Name => "me";
+        public string Name => "status";
 
         public string Description => "Check my status";
 

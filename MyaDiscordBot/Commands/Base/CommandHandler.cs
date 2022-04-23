@@ -7,7 +7,6 @@ using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.Commands
 {
@@ -128,7 +127,6 @@ namespace MyaDiscordBot.Commands
 
         private Task _client_JoinedGuild(SocketGuild arg)
         {
-            arg.DefaultChannel.SendMessageAsync("Executing slash command creation...");
             return UpdateCommands(arg);
         }
 
@@ -150,7 +148,7 @@ namespace MyaDiscordBot.Commands
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+
                 }
             });
         }
@@ -161,38 +159,16 @@ namespace MyaDiscordBot.Commands
             {
                 Directory.CreateDirectory("save");
             }
-
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
             buttons = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(IButtonHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as IButtonHandler);
             await _client.SetGameAsync("頂米亞與甘米大冒險", type: ActivityType.Playing);
             var i = Data.Instance.Container.Resolve<IItemService>();
             await i.SaveData();
-            foreach (var db in Directory.GetFiles("save", "*.json"))
-            {
-                var guild = _client.GetGuild(ulong.Parse(Regex.Match(db, @"\d+").Value));
-                foreach (var command in commands)
-                {
-                    try
-                    {
-                        var cmd = new SlashCommandBuilder();
-                        cmd.Name = command.Name;
-                        cmd.Description = command.Description;
-                        foreach (var o in command.Option)
-                        {
-                            cmd.AddOptions(o);
-                        }
-                        _ = guild.CreateApplicationCommandAsync(cmd.Build());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-            }
         }
 
         private async Task client_SlashCommandExecuted(SocketSlashCommand arg)
         {
+            Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + arg.CommandId + " triggered");
             if (arg.CommandName != "setting")
             {
                 using (var scope = Data.Instance.Container.BeginLifetimeScope())

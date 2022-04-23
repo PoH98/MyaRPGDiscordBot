@@ -25,8 +25,9 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你已經正在休息！唔可以雙重休息哦！", ephemeral: true);
                 return;
             }
-            player.CurrentHP += 15;
-            int wait = 30;
+            var heal = player.HP / 2;
+            player.CurrentHP += heal;
+            int wait = heal * 2;
             if (player.CurrentHP > player.HP)
             {
                 int extra = player.CurrentHP - player.HP;
@@ -34,7 +35,7 @@ namespace MyaDiscordBot.Commands
                 player.CurrentHP = player.HP;
             }
             player.NextCommand = DateTime.Now.AddMinutes(wait);
-            if (player.CurrentHP > 4)
+            if (player.CurrentHP > 5)
             {
                 await command.RespondAsync("你在原地與米亞一起建設左帳篷開始休息，下次可探險時間為：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
             }

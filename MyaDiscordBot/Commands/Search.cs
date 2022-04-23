@@ -65,7 +65,7 @@ namespace MyaDiscordBot.Commands
                 var br = _battleService.Battle(enemy, player);
                 if (br.IsVictory)
                 {
-                    player.Coin += 2;
+                    player.Coin += Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
                     _playerService.AddExp(player, 1);
                     var item = _battleService.GetReward(enemy, player);
                     if (item == null)

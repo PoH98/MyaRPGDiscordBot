@@ -36,7 +36,7 @@ namespace MyaDiscordBot.Commands
                 var user = guild.GetUser(p.DiscordId);
                 if (user == null)
                 {
-                    if(string.IsNullOrEmpty(p.Name))
+                    if (string.IsNullOrEmpty(p.Name))
                     {
                         continue;
                     }
