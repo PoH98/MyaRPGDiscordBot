@@ -91,8 +91,6 @@ namespace MyaDiscordBot.Models
 
     public enum Ability
     {
-        None = 0,
-        WalkOnWater = 1,
-        WalkOnLava = 2,
+        None = 0
     }
 }

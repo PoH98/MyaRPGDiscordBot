@@ -44,12 +44,14 @@ namespace MyaDiscordBot.Commands
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
+            Console.WriteLine(arg.Id + " had joined the server.");
             if (!arg.IsBot)
             {
                 var response = await hc.GetAsync(arg.Id.ToString());
                 var result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
                 if (result.Blacklisted)
                 {
+                    Console.WriteLine(arg.Id + " is evil!! Kick him!!");
                     await arg.KickAsync(result.Reason + " in other server on " + result.Date);
                 }
             }
@@ -68,7 +70,7 @@ namespace MyaDiscordBot.Commands
                     await message.AddReactionAsync(angry);
                     await message.AddReactionAsync(fuck);
                 }
-                else if (message.Content.Contains("屎"))
+                else if (message.Content.Contains("屎") || message.Content.Contains("shit") || message.Content.Contains("米田共"))
                 {
                     var sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
                     await message.AddReactionAsync(sssmya);
@@ -148,7 +150,7 @@ namespace MyaDiscordBot.Commands
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine(ex.ToString());
                 }
             });
         }

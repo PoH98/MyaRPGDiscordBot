@@ -26,9 +26,12 @@ namespace MyaDiscordBot.GameLogic.Services
             return items.Where(x => x.Price > 0 && x.Rank <= userRank && (!player.Bag.Any(y => x.Id == y.Id) || x.Type == ItemType.道具));
         }
 
-        public Task SaveData()
+        public async Task SaveData()
         {
-            return File.WriteAllTextAsync("config\\items.json", JsonConvert.SerializeObject(items, Formatting.Indented));
+            foreach (var t in items.GroupBy(x => x.Rank).ToDictionary(x => x.Key, x => x.ToList()))
+            {
+                await File.WriteAllTextAsync("config\\Items\\T" + t.Key + ".json", JsonConvert.SerializeObject(t.Value, Formatting.Indented));
+            }
         }
     }
 }

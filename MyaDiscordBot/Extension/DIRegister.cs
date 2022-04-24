@@ -32,7 +32,12 @@ namespace MyaDiscordBot.Extension
             //Register commands
             var commandHandler = new CommandHandler(_client, settings);
             commandHandler.InstallCommands();
-            var items = JsonConvert.DeserializeObject<Items>(File.ReadAllText("config\\items.json"));
+            var items = new Items();
+            foreach(var i in Directory.GetFiles("config\\Items", "*.json"))
+            {
+                var its = JsonConvert.DeserializeObject<Items>(File.ReadAllText(i));
+                items.AddRange(its);
+            }
             builder.RegisterInstance<Items>(items);
             var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("config\\enemy.json"));
             builder.RegisterInstance<Enemies>(enemy);

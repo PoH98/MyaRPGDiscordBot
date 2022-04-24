@@ -182,7 +182,7 @@
   {
     "name": "飛天忍者",
     "hp": 30,
-    "atk": 20,
+    "atk": 15,
     "def": 4,
     "element": 3,
     "itemDropRate": 0.3,
@@ -192,7 +192,7 @@
   {
     "name": "火爆忍者",
     "hp": 30,
-    "atk": 20,
+    "atk": 15,
     "def": 4,
     "element": 2,
     "itemDropRate": 0.3,
@@ -202,7 +202,7 @@
   {
     "name": "石頭忍者",
     "hp": 30,
-    "atk": 20,
+    "atk": 15,
     "def": 4,
     "element": 4,
     "itemDropRate": 0.3,
@@ -212,7 +212,7 @@
   {
     "name": "放水忍者",
     "hp": 30,
-    "atk": 20,
+    "atk": 15,
     "def": 4,
     "element": 5,
     "itemDropRate": 0.3,
@@ -222,7 +222,7 @@
   {
     "name": "黃金飛天忍者",
     "hp": 30,
-    "atk": 23,
+    "atk": 18,
     "def": 2,
     "element": 3,
     "itemDropRate": 0.2,
@@ -232,7 +232,7 @@
   {
     "name": "黃金火爆忍者",
     "hp": 30,
-    "atk": 23,
+    "atk": 18,
     "def": 2,
     "element": 2,
     "itemDropRate": 0.2,
@@ -242,7 +242,7 @@
   {
     "name": "黃金石頭忍者",
     "hp": 30,
-    "atk": 23,
+    "atk": 18,
     "def": 2,
     "element": 4,
     "itemDropRate": 0.2,
@@ -252,7 +252,7 @@
   {
     "name": "黃金放水忍者",
     "hp": 30,
-    "atk": 23,
+    "atk": 18,
     "def": 2,
     "element": 5,
     "itemDropRate": 0.2,
@@ -262,7 +262,7 @@
   {
     "name": "RGB飛天忍者",
     "hp": 40,
-    "atk": 26,
+    "atk": 20,
     "def": 0,
     "element": 3,
     "itemDropRate": 0.4,
@@ -272,7 +272,7 @@
   {
     "name": "RGB火爆忍者",
     "hp": 40,
-    "atk": 26,
+    "atk": 20,
     "def": 0,
     "element": 2,
     "itemDropRate": 0.4,
@@ -282,7 +282,7 @@
   {
     "name": "RGB石頭忍者",
     "hp": 40,
-    "atk": 26,
+    "atk": 20,
     "def": 0,
     "element": 4,
     "itemDropRate": 0.4,
@@ -292,7 +292,7 @@
   {
     "name": "RGB放水忍者",
     "hp": 40,
-    "atk": 26,
+    "atk": 20,
     "def": 0,
     "element": 5,
     "itemDropRate": 0.4,
@@ -346,7 +346,7 @@
   {
     "name": "無限∞吹風機",
     "hp": 50,
-    "atk": 35,
+    "atk": 25,
     "def": 0,
     "element": 3,
     "itemDropRate": 0.2,
@@ -356,7 +356,7 @@
   {
     "name": "無限∞打火機",
     "hp": 50,
-    "atk": 35,
+    "atk": 25,
     "def": 0,
     "element": 2,
     "itemDropRate": 0.2,
@@ -366,7 +366,7 @@
   {
     "name": "無限∞鑽地機",
     "hp": 50,
-    "atk": 35,
+    "atk": 25,
     "def": 0,
     "element": 4,
     "itemDropRate": 0.2,
@@ -376,7 +376,7 @@
   {
     "name": "無限∞噴水機",
     "hp": 50,
-    "atk": 35,
+    "atk": 25,
     "def": 0,
     "element": 5,
     "itemDropRate": 0.2,
@@ -386,7 +386,7 @@
   {
     "name": "解除限制吹風機",
     "hp": 55,
-    "atk": 30,
+    "atk": 20,
     "def": 8,
     "element": 3,
     "itemDropRate": 0.25,
@@ -396,7 +396,7 @@
   {
     "name": "解除限制打火機",
     "hp": 55,
-    "atk": 30,
+    "atk": 20,
     "def": 8,
     "element": 2,
     "itemDropRate": 0.25,
@@ -406,7 +406,7 @@
   {
     "name": "解除限制鑽地機",
     "hp": 55,
-    "atk": 30,
+    "atk": 20,
     "def": 8,
     "element": 4,
     "itemDropRate": 0.25,
@@ -416,7 +416,7 @@
   {
     "name": "解除限制噴水機",
     "hp": 55,
-    "atk": 30,
+    "atk": 20,
     "def": 8,
     "element": 5,
     "itemDropRate": 0.25,
@@ -426,7 +426,7 @@
   {
     "name": "超進化吹風機",
     "hp": 60,
-    "atk": 26,
+    "atk": 21,
     "def": 12,
     "element": 3,
     "itemDropRate": 0.2,
@@ -436,7 +436,7 @@
   {
     "name": "超進化打火機",
     "hp": 60,
-    "atk": 26,
+    "atk": 21,
     "def": 12,
     "element": 2,
     "itemDropRate": 0.2,
@@ -446,7 +446,7 @@
   {
     "name": "超進化鑽地機",
     "hp": 60,
-    "atk": 26,
+    "atk": 21,
     "def": 12,
     "element": 4,
     "itemDropRate": 0.2,
@@ -456,12 +456,56 @@
   {
     "name": "超進化噴水機",
     "hp": 60,
-    "atk": 26,
+    "atk": 21,
     "def": 12,
     "element": 5,
     "itemDropRate": 0.2,
     "stage": 3,
     "dropRank": [ 3 ]
+  },
+  {
+    "name": "Thomas 迷離軍團 - 116水波迷離",
+    "hp": 700,
+    "atk": 38,
+    "def": 12,
+    "element": 5,
+    "itemDropRate": 0.5,
+    "stage": 3,
+    "dropRank": [ 4 ],
+    "isBoss": true
+  },
+  {
+    "name": "Thomas 迷離軍團 - 116火焰迷離",
+    "hp": 700,
+    "atk": 38,
+    "def": 12,
+    "element": 2,
+    "itemDropRate": 0.5,
+    "stage": 3,
+    "dropRank": [ 4 ],
+    "isBoss": true
+  },
+  {
+    "name": "Thomas 迷離軍團 - 116風暴迷離",
+    "hp": 700,
+    "atk": 38,
+    "def": 12,
+    "element": 1,
+    "itemDropRate": 0.5,
+    "stage": 3,
+    "dropRank": [ 4 ],
+    "isBoss": true
+  },
+  {
+    "name": "Thomas 迷離軍團 - 116堅硬迷離",
+    "hp": 700,
+    "atk": 38,
+    "def": 12,
+    "element": 3,
+    "itemDropRate": 0.5,
+    "stage": 3,
+    "dropRank": [ 4 ],
+    "isBoss": true
   },
   {
     "name": "Thomas 複製人軍隊將軍 - Number C 59",
@@ -567,9 +611,9 @@
   },
   {
     "name": "天氣精靈-混沌",
-    "hp": 1000,
-    "atk": 70,
-    "def": 20,
+    "hp": 900,
+    "atk": 55,
+    "def": 15,
     "element": 1,
     "itemDropRate": 0.4,
     "stage": 4,
@@ -578,9 +622,9 @@
   },
   {
     "name": "天氣精靈-彩虹",
-    "hp": 1000,
-    "atk": 70,
-    "def": 20,
+    "hp": 900,
+    "atk": 55,
+    "def": 15,
     "element": 0,
     "itemDropRate": 0.4,
     "stage": 4,
@@ -589,13 +633,170 @@
   },
   {
     "name": "天氣精靈-天災",
-    "hp": 1000,
+    "hp": 900,
     "atk": 70,
-    "def": 15,
+    "def": 10,
     "element": 6,
     "itemDropRate": 1,
     "stage": 4,
     "dropRank": [ 5 ],
+    "isBoss": true
+  },
+  {
+    "name": "絕望都市-吹牛同事",
+    "hp": 70,
+    "atk": 30,
+    "def": 15,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-火爆鄰居",
+    "hp": 70,
+    "atk": 30,
+    "def": 15,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-孤寒老闆",
+    "hp": 70,
+    "atk": 30,
+    "def": 15,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-水軍部隊",
+    "hp": 70,
+    "atk": 30,
+    "def": 15,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-迅速扒手",
+    "hp": 70,
+    "atk": 40,
+    "def": 10,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-放火黑道",
+    "hp": 70,
+    "atk": 40,
+    "def": 10,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-恐龍肥仔",
+    "hp": 70,
+    "atk": 40,
+    "def": 10,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "絕望都市-瘋狂口水",
+    "hp": 70,
+    "atk": 40,
+    "def": 10,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 5,
+    "dropRank": [ 5 ]
+  },
+  {
+    "name": "呼吸困難-火之窒息",
+    "hp": 1000,
+    "atk": 70,
+    "def": 15,
+    "element": 2,
+    "itemDropRate": 1,
+    "stage": 5,
+    "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-風之窒息",
+    "hp": 1000,
+    "atk": 70,
+    "def": 15,
+    "element": 3,
+    "itemDropRate": 1,
+    "stage": 5,
+    "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-地之窒息",
+    "hp": 1000,
+    "atk": 70,
+    "def": 15,
+    "element": 4,
+    "itemDropRate": 1,
+    "stage": 5,
+    "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-水之窒息",
+    "hp": 1000,
+    "atk": 70,
+    "def": 15,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 5,
+    "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-快叫白車",
+    "hp": 1000,
+    "atk": 70,
+    "def": 10,
+    "element": 0,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-快叫黑車",
+    "hp": 1000,
+    "atk": 70,
+    "def": 10,
+    "element": 1,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-送入醫院",
+    "hp": 1000,
+    "atk": 70,
+    "def": 10,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 6 ],
     "isBoss": true
   }
 ]

@@ -110,12 +110,7 @@ namespace MyaDiscordBot.ButtonEvent
                 {
                     switch (i.Ability)
                     {
-                        case Models.Ability.WalkOnWater:
-                            sb.Append(" 可在水上行路");
-                            break;
-                        case Models.Ability.WalkOnLava:
-                            sb.Append(" 可在熔岩上行路");
-                            break;
+
                     }
                 }
                 builder.WithButton(sb.ToString() + " - " + i.Price + "$ ", "shop-" + i.Id.ToString());
