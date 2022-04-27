@@ -98,10 +98,6 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 return false;
             }
-            if (player.Bag.Count >= 25)
-            {
-                return false;
-            }
             if (player.Bag.Any(x => x.Name == item.Name))
             {
                 player.Bag.Where(x => x.Name == item.Name).First().ItemLeft += item.UseTimes;

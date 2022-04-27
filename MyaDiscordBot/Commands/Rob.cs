@@ -55,7 +55,7 @@ namespace MyaDiscordBot.Commands
                 return;
             }
             var rank = 0;
-            if (player.Bag.Count > 0)
+            if (player.Bag.Count > 0 && player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Count() > 0)
             {
                 rank = player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             }
@@ -74,7 +74,7 @@ namespace MyaDiscordBot.Commands
                 return;
             }
             var victimRank = 0;
-            if (victim.Bag.Count > 0)
+            if (victim.Bag.Count > 0 && victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Count() > 0)
             {
                 victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             }
@@ -99,8 +99,22 @@ namespace MyaDiscordBot.Commands
                     player.CurrentHP = player.HP;
                     victim.RobShield = DateTime.Now.AddHours(12);
                     player.NextRob = DateTime.Now.AddHours(8);
-                    player.NextCommand = DateTime.Now.AddMinutes(30);
-                    victim.NextCommand = DateTime.Now.AddMinutes(30);
+                    if(player.NextCommand > DateTime.Now)
+                    {
+                        player.NextCommand = player.NextCommand.AddMinutes(30);
+                    }
+                    else
+                    {
+                        player.NextCommand = DateTime.Now.AddMinutes(30);
+                    }
+                    if(victim.NextCommand > DateTime.Now)
+                    {
+                        victim.NextCommand = victim.NextCommand.AddMinutes(30);
+                    }
+                    else
+                    {
+                        victim.NextCommand = DateTime.Now.AddMinutes(30);
+                    }
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，獲得左受害者" + gain + "蚊！");
                 }
                 else
@@ -113,8 +127,23 @@ namespace MyaDiscordBot.Commands
                     victim.CurrentHP = victim.HP;
                     player.RobShield = DateTime.Now.AddHours(8);
                     player.NextRob = DateTime.Now.AddHours(8);
-                    player.NextCommand = DateTime.Now.AddMinutes(30);
-                    victim.NextCommand = DateTime.Now.AddMinutes(30);
+                    victim.RobShield = DateTime.Now.AddHours(4);
+                    if (player.NextCommand > DateTime.Now)
+                    {
+                        player.NextCommand = player.NextCommand.AddMinutes(30);
+                    }
+                    else
+                    {
+                        player.NextCommand = DateTime.Now.AddMinutes(30);
+                    }
+                    if (victim.NextCommand > DateTime.Now)
+                    {
+                        victim.NextCommand = victim.NextCommand.AddMinutes(30);
+                    }
+                    else
+                    {
+                        victim.NextCommand = DateTime.Now.AddMinutes(30);
+                    }
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，可惜被反殺無左" + gain + "蚊！");
                 }
                 playerService.SavePlayer(player);

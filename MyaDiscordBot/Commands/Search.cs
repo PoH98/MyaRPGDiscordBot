@@ -65,22 +65,23 @@ namespace MyaDiscordBot.Commands
                 var br = _battleService.Battle(enemy, player);
                 if (br.IsVictory)
                 {
-                    player.Coin += Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
+                    var gain = Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
+                    player.Coin += gain;
                     _playerService.AddExp(player, 1);
                     var item = _battleService.GetReward(enemy, player);
                     if (item == null)
                     {
-                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$！", ephemeral: true);
                     }
                     else
                     {
                         if (_playerService.AddItem(player, item))
                         {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$再額外獲得" + item.Name + "*1！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$再額外獲得" + item.Name + "*1！", ephemeral: true);
                         }
                         else
                         {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到2$！", ephemeral: true);
+                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$！", ephemeral: true);
                         }
                     }
                 }

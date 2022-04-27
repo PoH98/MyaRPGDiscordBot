@@ -59,16 +59,19 @@ namespace MyaDiscordBot.ButtonEvent
             }
             var userId = Convert.ToUInt64(parts[1]);
             var user = (message.Channel as SocketGuildChannel).Guild.GetUser(userId);
+            Console.WriteLine("Blacklisted Status: " + blackListed);
             if (blackListed)
             {
                 try
                 {
                     await user.KickAsync();
                     await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！自動踢出用戶！");
+                    Console.WriteLine("Kicked");
                 }
                 catch (Exception ex)
                 {
                     await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
+                    Console.WriteLine("Not Kicked");
                 }
             }
             else

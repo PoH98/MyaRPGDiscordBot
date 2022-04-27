@@ -12,7 +12,7 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var scope = Data.Instance.Container.BeginLifetimeScope())
             {
                 var client = scope.Resolve<DiscordSocketClient>();
-                if (client.ConnectionState == Discord.ConnectionState.Disconnected)
+                if (client.ConnectionState == Discord.ConnectionState.Disconnected || client.ConnectionState == Discord.ConnectionState.Disconnecting)
                 {
                     Process.Start("MyaDiscordBot.exe");
                     Environment.Exit(0);

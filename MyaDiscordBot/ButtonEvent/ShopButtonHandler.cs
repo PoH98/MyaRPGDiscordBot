@@ -47,14 +47,7 @@ namespace MyaDiscordBot.ButtonEvent
                 else
                 {
                     player.Coin += selected.Price;
-                    if (player.Bag.Count >= 25)
-                    {
-                        await message.RespondAsync("你背包滿左！買唔到依樣野！", ephemeral: true);
-                    }
-                    else
-                    {
-                        await message.RespondAsync("你已經存在依個裝備！小貓唔允許你再購買多一次！", ephemeral: true);
-                    }
+                    await message.RespondAsync("你已經存在依個裝備！小貓唔允許你再購買多一次！", ephemeral: true);
                 }
                 playerService.SavePlayer(player);
             }

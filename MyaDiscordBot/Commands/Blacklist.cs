@@ -23,6 +23,7 @@ namespace MyaDiscordBot.Commands
             }
             if (!command.User.IsBot && (user.GuildPermissions.BanMembers || user.GuildPermissions.KickMembers || user.GuildPermissions.Administrator || user.GuildPermissions.ManageGuild))
             {
+                Console.WriteLine("Confirming blacklist " + ((SocketGuildUser)command.Data.Options.First().Value).DisplayName);
                 ComponentBuilder cb = new ComponentBuilder();
                 cb.WithButton("確認", "ban-" + ((SocketGuildUser)command.Data.Options.First().Value).Id + "-" + command.Data.Options.Last().Value, ButtonStyle.Danger);
                 return command.RespondAsync("是否真要Ban" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "? 此舉動會令佢以後的Discord生活會極度淒慘並且無法取消此舉動！", components: cb.Build(), ephemeral: true);

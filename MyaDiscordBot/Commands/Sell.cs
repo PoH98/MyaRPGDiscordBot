@@ -47,12 +47,14 @@ namespace MyaDiscordBot.Commands
                     }
                     break;
                 case 3:
-                    ComponentBuilder cb = new ComponentBuilder();
-                    foreach (var i in player.Bag.Where(x => !x.IsEquiped && x.Id != Guid.Empty && x.Type != ItemType.道具))
-                    {
-                        cb.WithButton(i.Name, "sell-" + i.Id.ToString());
-                    }
-                    await command.RespondAsync("甘米唔耐煩咁等你從背包拿出想賣的道具！", components: cb.Build(), ephemeral: true);
+                    var builder = new ComponentBuilder();
+                    builder.WithButton("火", "sellType-fire");
+                    builder.WithButton("風", "sellType-wind");
+                    builder.WithButton("土", "sellType-earth");
+                    builder.WithButton("水", "sellType-water");
+                    builder.WithButton("光", "sellType-light");
+                    builder.WithButton("暗", "sellType-dark");
+                    await command.RespondAsync("甘米唔耐煩咁等你從背包拿出想賣的道具！", components: builder.Build(), ephemeral: true);
                     return;
             }
             var earned = 0;

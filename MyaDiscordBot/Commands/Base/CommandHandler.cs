@@ -5,6 +5,7 @@ using MyaDiscordBot.ButtonEvent;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
+using MyaDiscordBot.Models.SpamDetection;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
@@ -16,6 +17,7 @@ namespace MyaDiscordBot.Commands
         private IEnumerable<ICommand> commands;
         private IEnumerable<IButtonHandler> buttons;
         private HttpClient hc = new HttpClient();
+        private readonly Dictionary<ulong, Message> LastUserMessage = new Dictionary<ulong, Message>();
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
@@ -61,6 +63,15 @@ namespace MyaDiscordBot.Commands
         {
             var message = arg as SocketUserMessage;
             if (message == null) return;
+            using (var scope = Data.Instance.Container.BeginLifetimeScope())
+            {
+                var antiSpam = scope.Resolve<IAntiSpamService>();
+                if (antiSpam.IsSpam(message))
+                {
+                    await message.DeleteAsync();
+                    return;
+                }
+            }
             if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))
             {
                 if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("是DD") || message.Content.Contains("去死"))

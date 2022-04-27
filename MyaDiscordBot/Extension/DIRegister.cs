@@ -22,6 +22,7 @@ namespace MyaDiscordBot.Extension
             builder.RegisterType<EventService>().As<IEventService>();
             builder.RegisterType<SettingService>().As<ISettingService>();
             builder.RegisterType<BossService>().As<IBossService>();
+            builder.RegisterType<AntiSpamService>().As<IAntiSpamService>();
             return builder;
         }
 

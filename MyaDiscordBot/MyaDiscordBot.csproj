@@ -46,8 +46,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="config\Craft\" />
-  </ItemGroup>
-
 </Project>
