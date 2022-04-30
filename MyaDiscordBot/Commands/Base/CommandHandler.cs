@@ -17,7 +17,6 @@ namespace MyaDiscordBot.Commands
         private IEnumerable<ICommand> commands;
         private IEnumerable<IButtonHandler> buttons;
         private HttpClient hc = new HttpClient();
-        private readonly Dictionary<ulong, Message> LastUserMessage = new Dictionary<ulong, Message>();
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
@@ -99,7 +98,7 @@ namespace MyaDiscordBot.Commands
             }
             else if (message.Content.StartsWith("$refreshCommands") && message.Author.Id == 294835963442757632)
             {
-                await message.ReplyAsync("Job Executing");
+                await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
                 _ = Task.Run(async () =>
                 {
                     await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
@@ -146,7 +145,7 @@ namespace MyaDiscordBot.Commands
         private async Task UpdateCommands(SocketGuild arg = null)
         {
             await arg.DeleteApplicationCommandsAsync();
-            await Parallel.ForEachAsync(commands, new ParallelOptions { MaxDegreeOfParallelism = 4 }, async (command, cancellationToken) =>
+            await Parallel.ForEachAsync(commands, new ParallelOptions { MaxDegreeOfParallelism = 3 }, async (command, cancellationToken) =>
             {
                 try
                 {

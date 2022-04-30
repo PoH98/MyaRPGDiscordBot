@@ -33,6 +33,12 @@ trigger = TriggerBuilder.Create()
     .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInSeconds(5))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
+job = JobBuilder.Create<BackupJob>()
+    .Build();
+trigger = TriggerBuilder.Create()
+    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInMinutes(20))
+    .Build();
+await scheduler.ScheduleJob(job, trigger);
 //==============================================================================//
 //Register DI//
 var builder = new ContainerBuilder();

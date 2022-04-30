@@ -86,7 +86,7 @@ namespace MyaDiscordBot.Commands
                     return;
                 }
                 //can fight
-                var result = battleService.Battle(player, victim);
+                var result = battleService.Battle(victim, player);
                 Random rnd = new Random();
                 var percentage = rnd.Next(3, 6);
                 if (result.IsVictory)

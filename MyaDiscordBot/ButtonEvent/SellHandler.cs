@@ -28,6 +28,16 @@ namespace MyaDiscordBot.ButtonEvent
                 await message.RespondAsync("你卑甘米一堆空氣，甘米對著你關上左當鋪大門！", ephemeral: true);
                 return;
             }
+            if (item.IsEquiped)
+            {
+                player.Atk -= item.Atk;
+                player.Def -= item.Def;
+                player.HP -= item.HP;
+                if(player.CurrentHP > player.HP)
+                {
+                    player.CurrentHP = player.HP;
+                }
+            }
             player.Bag.Remove(item);
             player.Coin += 3;
             await message.RespondAsync("你賣左" + item.Name + "，獲得3蚊！", ephemeral: true);

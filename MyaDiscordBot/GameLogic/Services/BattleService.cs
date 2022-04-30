@@ -18,6 +18,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public BattleResult Battle(Enemy enemy, Player player)
         {
             var result = new BattleResult();
+            int battleLoop = 0;
             do
             {
                 var atk = player.Atk;
@@ -96,8 +97,9 @@ namespace MyaDiscordBot.GameLogic.Services
                         }
                     }
                 }
+                battleLoop++;
             }
-            while (player.CurrentHP > 0 && enemy.HP > 0);
+            while (player.CurrentHP > 0 && enemy.HP > 0 && battleLoop <= 1000);
             if (player.CurrentHP > 0 && enemy.HP <= 0)
             {
                 result.IsVictory = true;
@@ -117,6 +119,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public BattleResult Battle(Player enemy, Player player)
         {
             var result = new BattleResult();
+            int battleLoop = 0;
             do
             {
                 var atk = player.Atk;
@@ -214,20 +217,12 @@ namespace MyaDiscordBot.GameLogic.Services
                         }
                     }
                 }
+                battleLoop++;
             }
-            while (player.CurrentHP > 0 && enemy.CurrentHP > 0);
+            while (player.CurrentHP > 0 && enemy.CurrentHP > 0 && battleLoop < 1000);
             if (player.CurrentHP > 0 && enemy.CurrentHP <= 0)
             {
                 result.IsVictory = true;
-            }
-            else
-            {
-                double wait = player.HP * 3.5;
-                if (wait > 120)
-                {
-                    wait = 120;
-                }
-                player.NextCommand = DateTime.Now.AddMinutes(wait);
             }
             return result;
         }

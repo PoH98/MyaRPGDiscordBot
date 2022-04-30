@@ -273,7 +273,7 @@
     "Name": "核爆導彈搖搖",
     "Rank": 5,
     "Price": -1,
-    "Atk": 20,
+    "Atk": 19,
     "Def": 0,
     "UseTimes": -1,
     "Element": 2,
@@ -400,10 +400,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "風暴撕裂搖搖",
+    "Name": "狂風雷暴撕裂搖搖", //風屬性武器
     "Rank": 5,
-    "Price": -1,
-    "Atk": 13,
+    "Price": 1000,
+    "Atk": 14,
     "Def": 4,
     "UseTimes": -1,
     "Element": 1,
@@ -413,11 +413,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "風暴撕裂護甲",
+    "Name": "狂風雷暴撕裂護甲", //風屬性護甲
     "Rank": 5,
-    "Price": -1,
+    "Price": 800,
     "Atk": 3,
-    "Def": 6,
+    "Def": 7,
     "UseTimes": -1,
     "Element": 3,
     "Type": 2,
@@ -426,11 +426,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "風暴撕裂頸鏈",
+    "Name": "狂風雷暴撕裂頸鏈",
     "Rank": 5,
-    "Price": 450,
+    "Price": 1200,
     "Atk": 2,
-    "Def": 2,
+    "Def": 3,
     "UseTimes": -1,
     "Element": 1,
     "Type": 4,
@@ -439,10 +439,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "風暴撕裂護盾",
+    "Name": "狂風雷暴撕裂護盾",
     "Rank": 5,
-    "Price": -1,
-    "Atk": 1,
+    "Price": 900,
+    "Atk": 2,
     "Def": 5,
     "UseTimes": -1,
     "Element": 3,
@@ -452,10 +452,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "風暴撕裂鞋",
+    "Name": "狂風雷暴撕裂鞋",
     "Rank": 5,
-    "Price": -1,
-    "Atk": 3,
+    "Price": 700,
+    "Atk": 4,
     "Def": 2,
     "UseTimes": -1,
     "Element": 3,
@@ -465,10 +465,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "水生裂變搖搖",
+    "Name": "水流飛沫搖搖", //水屬性
     "Rank": 5,
-    "Price": -1,
-    "Atk": 13,
+    "Price": 1000,
+    "Atk": 14,
     "Def": 0,
     "UseTimes": -1,
     "Element": 5,
@@ -478,10 +478,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "水生裂變護甲",
+    "Name": "水流飛沫護甲",
     "Rank": 5,
-    "Price": -1,
-    "Atk": 1,
+    "Price": 800,
+    "Atk": 2,
     "Def": 7,
     "UseTimes": -1,
     "Element": 5,
@@ -491,11 +491,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "水生裂變頸鏈",
+    "Name": "水流飛沫頸鏈",
     "Rank": 5,
-    "Price": 450,
+    "Price": 1200,
     "Atk": 1,
-    "Def": 1,
+    "Def": 2,
     "UseTimes": -1,
     "Element": 5,
     "Type": 4,
@@ -504,11 +504,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "水生裂變護盾",
+    "Name": "水流飛沫護盾",
     "Rank": 5,
-    "Price": -1,
+    "Price": 900,
     "Atk": 0,
-    "Def": 7,
+    "Def": 8,
     "UseTimes": -1,
     "Element": 5,
     "Type": 6,
@@ -517,11 +517,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "水生裂變鞋",
+    "Name": "水流飛沫鞋",
     "Rank": 5,
-    "Price": -1,
+    "Price": 700,
     "Atk": 1,
-    "Def": 3,
+    "Def": 4,
     "UseTimes": -1,
     "Element": 5,
     "Type": 5,
@@ -530,9 +530,9 @@
     "DropRate": 0.3
   },
   {
-    "Name": "核爆導彈搖搖",
+    "Name": "核子分裂搖搖", //火屬性
     "Rank": 5,
-    "Price": -1,
+    "Price": 1000,
     "Atk": 20,
     "Def": 0,
     "UseTimes": -1,
@@ -543,11 +543,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "核爆導彈頸鏈",
+    "Name": "核子分裂頸鏈",
     "Rank": 5,
-    "Price": 450,
+    "Price": 1200,
     "Atk": 3,
-    "Def": 1,
+    "Def": 2,
     "UseTimes": -1,
     "Element": 2,
     "Type": 4,
@@ -556,10 +556,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "核爆導彈裝甲",
+    "Name": "核子分裂裝甲",
     "Rank": 5,
-    "Price": -1,
-    "Atk": 4,
+    "Price": 800,
+    "Atk": 5,
     "Def": 5,
     "UseTimes": -1,
     "Element": 2,
@@ -569,10 +569,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "核爆導彈護盾",
+    "Name": "核子分裂護盾",
     "Rank": 5,
-    "Price": -1,
-    "Atk": 4,
+    "Price": 900,
+    "Atk": 5,
     "Def": 5,
     "UseTimes": -1,
     "Element": 2,
@@ -582,10 +582,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "核爆導彈鞋",
+    "Name": "核子分裂鞋",
     "Rank": 5,
-    "Price": -1,
-    "Atk": 4,
+    "Price": 700,
+    "Atk": 5,
     "Def": 0,
     "UseTimes": -1,
     "Element": 2,
@@ -595,10 +595,10 @@
     "DropRate": 0.3
   },
   {
-    "Name": "美杜莎之眼搖搖",
+    "Name": "美杜莎之心搖搖", //土屬性
     "Rank": 5,
-    "Price": -1,
-    "Atk": 12,
+    "Price": 1000,
+    "Atk": 13,
     "Def": 5,
     "UseTimes": -1,
     "Element": 4,
@@ -608,11 +608,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "美杜莎之眼頸鏈",
+    "Name": "美杜莎之心頸鏈",
     "Rank": 5,
-    "Price": 450,
+    "Price": 1200,
     "Atk": 0,
-    "Def": 2,
+    "Def": 3,
     "UseTimes": -1,
     "Element": 4,
     "Type": 4,
@@ -621,11 +621,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "美杜莎之眼護甲",
+    "Name": "美杜莎之心護甲",
     "Rank": 5,
-    "Price": -1,
+    "Price": 800,
     "Atk": 0,
-    "Def": 8,
+    "Def": 9,
     "UseTimes": -1,
     "Element": 4,
     "Type": 2,
@@ -634,11 +634,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "美杜莎之眼護盾",
+    "Name": "美杜莎之心護盾",
     "Rank": 5,
-    "Price": -1,
+    "Price": 900,
     "Atk": 0,
-    "Def": 9,
+    "Def": 10,
     "UseTimes": -1,
     "Element": 4,
     "Type": 6,
@@ -647,11 +647,11 @@
     "DropRate": 0.3
   },
   {
-    "Name": "美杜莎之眼鞋",
+    "Name": "美杜莎之心鞋",
     "Rank": 5,
-    "Price": -1,
+    "Price": 700,
     "Atk": 0,
-    "Def": 5,
+    "Def": 6,
     "UseTimes": -1,
     "Element": 4,
     "Type": 5,
