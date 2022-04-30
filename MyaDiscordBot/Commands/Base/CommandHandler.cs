@@ -145,7 +145,7 @@ namespace MyaDiscordBot.Commands
         private async Task UpdateCommands(SocketGuild arg = null)
         {
             await arg.DeleteApplicationCommandsAsync();
-            await Parallel.ForEachAsync(commands, new ParallelOptions { MaxDegreeOfParallelism = 3 }, async (command, cancellationToken) =>
+            foreach(var command in commands)
             {
                 try
                 {
@@ -162,7 +162,7 @@ namespace MyaDiscordBot.Commands
                 {
                     Console.WriteLine(ex.ToString());
                 }
-            });
+            }
         }
 
         private async Task client_Ready()

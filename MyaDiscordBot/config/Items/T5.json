@@ -140,19 +140,21 @@
     "DropRate": 0.3
   },
   {
+    "Id": "d38299ce-c595-4b1d-b4df-4fe0377c5b71",
     "Name": "風暴撕裂搖搖",
     "Rank": 5,
     "Price": -1,
     "Atk": 13,
     "Def": 4,
     "UseTimes": -1,
-    "Element": 1,
+    "Element": 3,
     "Type": 1,
     "HP": 0,
     "Ability": 0,
     "DropRate": 0.3
   },
   {
+    "Id": "6ae98482-e250-4f29-aad9-3fb6e64437b9",
     "Name": "風暴撕裂護甲",
     "Rank": 5,
     "Price": -1,
@@ -166,19 +168,21 @@
     "DropRate": 0.3
   },
   {
+    "Id": "58537940-f013-4638-a6dc-62887cbc320e",
     "Name": "風暴撕裂頸鏈",
     "Rank": 5,
     "Price": 450,
     "Atk": 2,
     "Def": 2,
     "UseTimes": -1,
-    "Element": 1,
+    "Element": 3,
     "Type": 4,
     "HP": 5,
     "Ability": 0,
     "DropRate": 0.3
   },
   {
+    "Id": "cf144aa0-4227-472a-a355-87473d28b744",
     "Name": "風暴撕裂護盾",
     "Rank": 5,
     "Price": -1,
@@ -192,6 +196,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "f7afc0a4-67d8-43bb-ad65-a42dd9fa3d22",
     "Name": "風暴撕裂鞋",
     "Rank": 5,
     "Price": -1,
@@ -205,6 +210,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "0a6c37fd-a47e-4c22-9a80-b20d0d6dd0f3",
     "Name": "水生裂變搖搖",
     "Rank": 5,
     "Price": -1,
@@ -218,6 +224,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "5b84efc6-9008-48c7-8e3d-643c6f258020",
     "Name": "水生裂變護甲",
     "Rank": 5,
     "Price": -1,
@@ -231,6 +238,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e77c6cff-7580-4e69-a659-ad283185167a",
     "Name": "水生裂變頸鏈",
     "Rank": 5,
     "Price": 450,
@@ -244,6 +252,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "9c95ed59-5a17-48df-904e-80b88cb44852",
     "Name": "水生裂變護盾",
     "Rank": 5,
     "Price": -1,
@@ -257,6 +266,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "e0e3ea47-369c-4fae-9add-b334fd4745f9",
     "Name": "水生裂變鞋",
     "Rank": 5,
     "Price": -1,
@@ -270,6 +280,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "56600b3f-a02f-4f07-8ed4-06b5b527a005",
     "Name": "核爆導彈搖搖",
     "Rank": 5,
     "Price": -1,
@@ -283,6 +294,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "4dfe95fa-7db2-4671-843e-fe10a3dc887e",
     "Name": "核爆導彈頸鏈",
     "Rank": 5,
     "Price": 450,
@@ -296,6 +308,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "13e42b1c-9900-45e7-a22c-f8850baf64a7",
     "Name": "核爆導彈裝甲",
     "Rank": 5,
     "Price": -1,
@@ -309,6 +322,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "da35e8a5-f5c0-4b5e-8629-eb11210893f8",
     "Name": "核爆導彈護盾",
     "Rank": 5,
     "Price": -1,
@@ -322,6 +336,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "dcedfbe0-4564-4602-a6f7-6e773616031e",
     "Name": "核爆導彈鞋",
     "Rank": 5,
     "Price": -1,
@@ -335,6 +350,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "cd464a1f-8977-424a-ab28-d742e0d245eb",
     "Name": "美杜莎之眼搖搖",
     "Rank": 5,
     "Price": -1,
@@ -348,6 +364,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "7ea694ba-de39-400d-829f-180d8e6c368b",
     "Name": "美杜莎之眼頸鏈",
     "Rank": 5,
     "Price": 450,
@@ -361,6 +378,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "69a5082a-232e-42c6-9b7f-8fe86f75e13e",
     "Name": "美杜莎之眼護甲",
     "Rank": 5,
     "Price": -1,
@@ -374,6 +392,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "474a3cbf-1376-4a5d-a571-bfe6ea003ec9",
     "Name": "美杜莎之眼護盾",
     "Rank": 5,
     "Price": -1,
@@ -387,6 +406,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "dd7cfc82-4425-4bb9-b075-2266f47b986b",
     "Name": "美杜莎之眼鞋",
     "Rank": 5,
     "Price": -1,
@@ -400,20 +420,22 @@
     "DropRate": 0.3
   },
   {
-    "Name": "狂風雷暴撕裂搖搖", //風屬性武器
+    "Id": "238de87f-205b-4905-8745-68e3fecd44d5",
+    "Name": "狂風雷暴撕裂搖搖",
     "Rank": 5,
     "Price": 1000,
     "Atk": 14,
     "Def": 4,
     "UseTimes": -1,
-    "Element": 1,
+    "Element": 3,
     "Type": 1,
     "HP": 0,
     "Ability": 0,
     "DropRate": 0.3
   },
   {
-    "Name": "狂風雷暴撕裂護甲", //風屬性護甲
+    "Id": "431e3550-2e7c-43fb-a888-0bec47e3721f",
+    "Name": "狂風雷暴撕裂護甲",
     "Rank": 5,
     "Price": 800,
     "Atk": 3,
@@ -426,19 +448,21 @@
     "DropRate": 0.3
   },
   {
+    "Id": "09550f80-27ba-4f00-99a5-79ba70b23d8d",
     "Name": "狂風雷暴撕裂頸鏈",
     "Rank": 5,
     "Price": 1200,
     "Atk": 2,
     "Def": 3,
     "UseTimes": -1,
-    "Element": 1,
+    "Element": 3,
     "Type": 4,
     "HP": 5,
     "Ability": 0,
     "DropRate": 0.3
   },
   {
+    "Id": "f55ac404-2d8b-4ba6-9681-4bab34e95f07",
     "Name": "狂風雷暴撕裂護盾",
     "Rank": 5,
     "Price": 900,
@@ -452,6 +476,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "862fda92-f4a6-44f0-9e14-71ef31b4f3e3",
     "Name": "狂風雷暴撕裂鞋",
     "Rank": 5,
     "Price": 700,
@@ -465,7 +490,8 @@
     "DropRate": 0.3
   },
   {
-    "Name": "水流飛沫搖搖", //水屬性
+    "Id": "1865c7ff-6f22-44f6-9b2d-25f6af118d39",
+    "Name": "水流飛沫搖搖",
     "Rank": 5,
     "Price": 1000,
     "Atk": 14,
@@ -478,6 +504,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "5666d829-6c52-4a08-a47b-bde1d020e62b",
     "Name": "水流飛沫護甲",
     "Rank": 5,
     "Price": 800,
@@ -491,6 +518,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "6f9b7673-af3e-4e45-b807-776289eb3561",
     "Name": "水流飛沫頸鏈",
     "Rank": 5,
     "Price": 1200,
@@ -504,6 +532,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "75b55b94-0366-4f50-afe3-866b6ca9cffc",
     "Name": "水流飛沫護盾",
     "Rank": 5,
     "Price": 900,
@@ -517,6 +546,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "51308904-b034-43d1-9b28-1c662f3aef96",
     "Name": "水流飛沫鞋",
     "Rank": 5,
     "Price": 700,
@@ -530,7 +560,8 @@
     "DropRate": 0.3
   },
   {
-    "Name": "核子分裂搖搖", //火屬性
+    "Id": "1aa37e01-c2c1-40f1-8aeb-e754962d98ec",
+    "Name": "核子分裂搖搖",
     "Rank": 5,
     "Price": 1000,
     "Atk": 20,
@@ -543,6 +574,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "2eacd253-3614-4d94-8b3e-bc524aebb2be",
     "Name": "核子分裂頸鏈",
     "Rank": 5,
     "Price": 1200,
@@ -556,6 +588,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "0a38f4b9-edb2-4116-bab6-e096a95fcd21",
     "Name": "核子分裂裝甲",
     "Rank": 5,
     "Price": 800,
@@ -569,6 +602,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "cafba8e5-96c7-427d-b66c-9a0cc1401a6f",
     "Name": "核子分裂護盾",
     "Rank": 5,
     "Price": 900,
@@ -582,6 +616,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "b5ff6e34-b18b-4ab1-9677-2727c9cb74ae",
     "Name": "核子分裂鞋",
     "Rank": 5,
     "Price": 700,
@@ -595,7 +630,8 @@
     "DropRate": 0.3
   },
   {
-    "Name": "美杜莎之心搖搖", //土屬性
+    "Id": "e1ed1739-1eea-4482-96c7-ef83d05a600a",
+    "Name": "美杜莎之心搖搖",
     "Rank": 5,
     "Price": 1000,
     "Atk": 13,
@@ -608,6 +644,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "36d362f4-b17e-4497-89c5-e4d732dd4b52",
     "Name": "美杜莎之心頸鏈",
     "Rank": 5,
     "Price": 1200,
@@ -621,6 +658,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "c2bb53b8-4672-46f1-861d-7c99df6a3d60",
     "Name": "美杜莎之心護甲",
     "Rank": 5,
     "Price": 800,
@@ -634,6 +672,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "c1fb83ec-dab2-4ee3-b915-6b824773f415",
     "Name": "美杜莎之心護盾",
     "Rank": 5,
     "Price": 900,
@@ -647,6 +686,7 @@
     "DropRate": 0.3
   },
   {
+    "Id": "3a2950f2-f52e-4a98-a141-7189aec9f22f",
     "Name": "美杜莎之心鞋",
     "Rank": 5,
     "Price": 700,
