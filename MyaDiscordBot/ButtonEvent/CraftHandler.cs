@@ -57,7 +57,7 @@ namespace MyaDiscordBot.ButtonEvent
                 }
                 else
                 {
-                    //craftable = false;
+                    craftable = false;
                     var r = resources.FirstOrDefault(x => x.Id == i.Id);
                     eb.AddField(r.Name, i.Amount);
                 }
