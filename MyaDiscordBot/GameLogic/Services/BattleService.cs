@@ -6,15 +6,10 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         BattleResult Battle(Player enemy, Player player);
         BattleResult Battle(Enemy enemy, Player player);
-        Item GetReward(Enemy enemy, Player player);
     }
     public class BattleService : IBattleService
     {
-        private readonly Items items;
-        public BattleService(Items items)
-        {
-            this.items = items;
-        }
+        private Random rnd = new Random();
         public BattleResult Battle(Enemy enemy, Player player)
         {
             var result = new BattleResult();
@@ -35,10 +30,31 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk / 1.5);
                 }
+                if(player.Bag.Count > 0)
+                {
+                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                    if (item != null)
+                    {
+                        var rate = rnd.NextDouble();
+                        if (item.AbilityRate >= rate)
+                        {
+                            //critical!
+                            atk = (int)Math.Round(atk * 1.5);
+                        }
+                    }
+                }
                 atk -= enemy.Def;
                 if (atk < 0)
                 {
                     atk = 0;
+                }
+                if(player.Bag.Count > 0)
+                {
+                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                    if (item != null)
+                    {
+                        player.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
+                    }
                 }
                 enemy.HP -= atk;
                 result.DamageDealt += atk;
@@ -58,6 +74,16 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         atk = 0;
                     }
+                    if (player.Bag.Count > 0)
+                    {
+                        var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                        var rate = rnd.NextDouble();
+                        if (item.AbilityRate >= rate)
+                        {
+                            //immune
+                            atk = 0;
+                        }
+                    }
                     player.CurrentHP -= atk;
                     result.DamageReceived += atk;
                 }
@@ -65,7 +91,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 if (player.CurrentHP > 0)
                 {
                     var items = player.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
-                    if (items.Count() > 0)
+                    if (items.Any())
                     {
                         //use items
                         while ((player.CurrentHP <= enemy.Atk || player.CurrentHP < 5) && player.CurrentHP < player.HP && items.Any(x => x.HP > 0))
@@ -132,10 +158,6 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk * 1.5);
                 }
-                else if (elementWin == -1)
-                {
-                    atk = (int)Math.Round(atk / 1.5);
-                }
                 atk -= enemy.Def;
                 if (atk < 0)
                 {
@@ -149,10 +171,6 @@ namespace MyaDiscordBot.GameLogic.Services
                     if (elementWin == -1 || elementWin == -2)
                     {
                         atk = (int)Math.Round(atk * 1.5);
-                    }
-                    else if (elementWin > 0)
-                    {
-                        atk = (int)Math.Round(atk / 1.5);
                     }
                     atk -= player.Def;
                     if (atk < 0)
@@ -227,47 +245,7 @@ namespace MyaDiscordBot.GameLogic.Services
             return result;
         }
 
-        public Item GetReward(Enemy enemy, Player player)
-        {
-            Random rnd = new Random();
-            decimal i = (decimal)rnd.NextDouble();
-            if (i <= enemy.ItemDropRate)
-            {
-                if (!enemy.IsBoss)
-                {
-                    var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id)).ToList();
-                    if (reward.Any())
-                    {
-                        double cumulSum = 0;
-                        int cnt = reward.Count();
-                        for (int slot = 0; slot < cnt; slot++)
-                        {
-                            cumulSum += items[slot].DropRate;
-                            reward[slot].DropRate = cumulSum;
-                        }
-                        double divSpot = rnd.NextDouble() * cumulSum;
-                        return reward.FirstOrDefault(i => i.DropRate >= divSpot);
-                    }
-                }
-                else
-                {
-                    var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && (x.Element == Element.Light || x.Element == Element.Dark) && !player.Bag.Any(y => y.Id == x.Id)).ToList();
-                    if (reward.Any())
-                    {
-                        double cumulSum = 0;
-                        int cnt = reward.Count();
-                        for (int slot = 0; slot < cnt; slot++)
-                        {
-                            cumulSum += items[slot].DropRate;
-                            reward[slot].DropRate = cumulSum;
-                        }
-                        double divSpot = rnd.NextDouble() * cumulSum;
-                        return reward.FirstOrDefault(i => i.DropRate >= divSpot);
-                    }
-                }
-            }
-            return null;
-        }
+        
         /// <summary>
         /// > 0 means player win, 0 means no extra dmg and nothing happens, < 0 means player lose, but for light & dark will return -2
         /// </summary>

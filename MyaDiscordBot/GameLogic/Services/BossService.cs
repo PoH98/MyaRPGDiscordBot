@@ -20,37 +20,46 @@ namespace MyaDiscordBot.GameLogic.Services
                 foreach (var file in Directory.GetFiles("save", "*.db"))
                 {
                     //get joined servers
-                    var guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
-                    if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                    try
                     {
-                        bossService.AddBoss(guild.Id, new Enemy
+                        var guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
+                        bossService.RemoveExpired(guild.Id);
+                        if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                         {
-                            Name = "米講粗口亞",
-                            Atk = 999,
-                            Def = 0,
-                            HP = 9999,
-                            Element = Element.God,
-                            IsBoss = true,
-                            Stage = -1
-                        });
-                        var setting = settingService.GetSettings(guild.Id);
-                        if (setting != null)
-                        {
-                            await guild.GetTextChannel(setting.ChannelId).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
-                        }
-                        else
-                        {
-                            try
+
+                            bossService.AddBoss(guild.Id, new Enemy
                             {
-                                await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
+                                Name = "米講粗口亞",
+                                Atk = 999,
+                                Def = 0,
+                                HP = 99999,
+                                Element = Element.God,
+                                IsBoss = true,
+                                Stage = -1
+                            });
+                            var setting = settingService.GetSettings(guild.Id);
+                            if (setting != null)
+                            {
+                                await guild.GetTextChannel(setting.ChannelId).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
                             }
-                            catch
+                            else
                             {
-                                //any error will ignored
+                                try
+                                {
+                                    await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
+                                }
+                                catch
+                                {
+                                    //any error will ignored
+                                }
                             }
                         }
                     }
-                    bossService.RemoveExpired(guild.Id);
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    
                 }
             }
         }
@@ -86,7 +95,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     col.Insert(new BossSpawned
                     {
                         Enemy = enemy,
-                        ExpiredTime = DateTime.Now.AddDays(6),
+                        ExpiredTime = DateTime.Now.AddDays(5),
                         GuildId = serverId
                     });
                 }

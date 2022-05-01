@@ -474,5 +474,53 @@
     "HP": 5,
     "Ability": 0,
     "DropRate": 0.3
+  },
+  {
+    "Id": "d2f86402-8905-4c57-bc89-37c04f8baa38",
+    "Name": "變質芝士戒指",
+    "Rank": 1,
+    "Price": -1,
+    "Atk": -5,
+    "Def": -5,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 1,
+    "AbilityRate": 0.03,
+    "Craft": true,
+    "DropRate": 0
+  },
+  {
+    "Id": "20b90e7d-ef60-453f-8c73-628c8a9bd621",
+    "Name": "重金屬戒指",
+    "Rank": 1,
+    "Price": -1,
+    "Atk": 0,
+    "Def": -10,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 2,
+    "AbilityRate": 0.1,
+    "Craft": true,
+    "DropRate": 0
+  },
+  {
+    "Id": "f7737727-e8d2-436d-bf2f-7bf99c3289cf",
+    "Name": "防護能量波戒指",
+    "Rank": 1,
+    "Price": -1,
+    "Atk": -10,
+    "Def": 0,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 3,
+    "AbilityRate": 0.02,
+    "Craft": true,
+    "DropRate": 0
   }
 ]

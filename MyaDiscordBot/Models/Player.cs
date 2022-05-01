@@ -59,6 +59,10 @@
         /// </summary>
         public List<ItemEquip> Bag { get; set; }
         /// <summary>
+        /// 資源背包
+        /// </summary>
+        public List<HoldedResource> ResourceBag { get; set; }
+        /// <summary>
         /// 防止Spam
         /// </summary>
         public DateTime NextCommand { get; set; }

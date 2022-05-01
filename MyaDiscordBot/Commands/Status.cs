@@ -6,11 +6,11 @@ using System.Text;
 
 namespace MyaDiscordBot.Commands
 {
-    public class Me : ICommand
+    public class Status : ICommand
     {
         private readonly IPlayerService playerService;
         private readonly IConfiguration configuration;
-        public Me(IPlayerService playerService, IConfiguration configuration)
+        public Status(IPlayerService playerService, IConfiguration configuration)
         {
             this.playerService = playerService;
             this.configuration = configuration;

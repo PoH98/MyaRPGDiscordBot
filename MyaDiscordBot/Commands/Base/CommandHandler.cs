@@ -96,7 +96,7 @@ namespace MyaDiscordBot.Commands
                     await message.AddReactionAsync(what);
                 }
             }
-            else if (message.Content.StartsWith("$refreshCommands") && message.Author.Id == 294835963442757632)
+            else if (message.Content.StartsWith("$refreshCommand") && message.Author.Id == 294835963442757632)
             {
                 await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
                 _ = Task.Run(async () =>

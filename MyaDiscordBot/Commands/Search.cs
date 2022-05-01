@@ -12,13 +12,15 @@ namespace MyaDiscordBot.Commands
         private readonly IMapService _mapService;
         private readonly IEventService _eventService;
         private readonly IBossService _bossService;
-        public Search(IPlayerService playerService, IBattleService battleService, IMapService mapService, IBossService bossService, IEventService eventService)
+        private readonly IItemService _itemService;
+        public Search(IPlayerService playerService, IBattleService battleService, IMapService mapService, IBossService bossService, IEventService eventService, IItemService itemService)
         {
             _playerService = playerService;
             _battleService = battleService;
             _mapService = mapService;
             _eventService = eventService;
             _bossService = bossService;
+            _itemService = itemService;
         }
         public string Name => "search";
 
@@ -68,7 +70,7 @@ namespace MyaDiscordBot.Commands
                     var gain = Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
                     player.Coin += gain;
                     _playerService.AddExp(player, 1);
-                    var item = _battleService.GetReward(enemy, player);
+                    var item = _itemService.GetReward(enemy, player);
                     if (item == null)
                     {
                         await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$！", ephemeral: true);

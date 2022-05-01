@@ -53,12 +53,12 @@ namespace MyaDiscordBot.ButtonEvent
                 if (!item.IsEquiped)
                 {
                     StringBuilder sb = new StringBuilder();
-                    if (item.UseTimes == -1 && item.Type != Models.ItemType.道具)
+                    if (item.UseTimes == -1 && item.Type != Models.ItemType.道具 && item.Type != Models.ItemType.指環)
                     {
-                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
+                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具 && x.Type != Models.ItemType.指環))
                         {
                             //not allow to equip different elements
-                            foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具))
+                            foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具 && x.Type != Models.ItemType.指環))
                             {
                                 i.IsEquiped = false;
                                 if (i.UseTimes == -1)
@@ -70,6 +70,27 @@ namespace MyaDiscordBot.ButtonEvent
                                 sb.AppendLine(i.Name + "已經因屬性唔同而自動被解除裝備！");
                             }
                         }
+                        if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
+                        {
+                            //not allow to equip same type equipments
+                            foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
+                            {
+                                i.IsEquiped = false;
+                                if (i.UseTimes == -1)
+                                {
+                                    player.HP -= i.HP;
+                                    player.Atk -= i.Atk;
+                                    player.Def -= i.Def;
+                                }
+                                sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
+                            }
+                        }
+                        player.HP += item.HP;
+                        player.Atk += item.Atk;
+                        player.Def += item.Def;
+                    }
+                    else if(item.UseTimes == -1 && item.Type == Models.ItemType.指環)
+                    {
                         if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
                         {
                             //not allow to equip same type equipments

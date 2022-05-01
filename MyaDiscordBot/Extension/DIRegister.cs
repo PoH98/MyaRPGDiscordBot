@@ -39,11 +39,17 @@ namespace MyaDiscordBot.Extension
                 var its = JsonConvert.DeserializeObject<Items>(File.ReadAllText(i));
                 items.AddRange(its);
             }
-            builder.RegisterInstance<Items>(items);
+            builder.RegisterInstance(items);
             var enemy = JsonConvert.DeserializeObject<Enemies>(File.ReadAllText("config\\enemy.json"));
-            builder.RegisterInstance<Enemies>(enemy);
+            builder.RegisterInstance(enemy);
+            var craft = JsonConvert.DeserializeObject<CraftTableList>(File.ReadAllText("config\\crafttable.json"));
+            builder.RegisterInstance(craft);
+            var resource = JsonConvert.DeserializeObject<Resources>(File.ReadAllText("config\\resource.json"));
+            builder.RegisterInstance(resource);
             Console.WriteLine("Loaded " + items.Count + " items");
             Console.WriteLine("Loaded " + enemy.Count + " enemies");
+            Console.WriteLine("Loaded " + craft.Count + " crafttable");
+            Console.WriteLine("Loaded " + resource.Count + " resource");
             return builder;
         }
 

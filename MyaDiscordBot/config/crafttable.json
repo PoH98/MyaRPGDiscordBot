@@ -1,0 +1,53 @@
+﻿[
+  {
+    "Resources": [
+      {
+        "Id": "00e89a10-8262-4f31-8cf7-31a723bb7bd3",
+        "Amount": 50
+      },
+      {
+        "Id": "d140fbb3-56a1-48c2-b5c6-609fda7547ae",
+        "Amount": 25
+      },
+      {
+        "Id": "83f20fba-59f2-4e47-9a27-51c88b17b595",
+        "Amount": 10
+      }
+    ],
+    "Item": "d2f86402-8905-4c57-bc89-37c04f8baa38"
+  },
+  {
+    "Resources": [
+      {
+        "Id": "fc00ff11-2105-41b5-a0b4-aa1907026d9a",
+        "Amount": 50
+      },
+      {
+        "Id": "841f7103-cc65-4e8f-a581-fbb2557081e9",
+        "Amount": 25
+      },
+      {
+        "Id": "b15a9b94-3b61-4129-b953-1b57da8d82bd",
+        "Amount": 10
+      }
+    ],
+    "Item": "20b90e7d-ef60-453f-8c73-628c8a9bd621"
+  },
+  {
+    "Resources": [
+      {
+        "Id": "98839c41-08b6-48b4-8f35-1d5a2d863707",
+        "Amount": 50
+      },
+      {
+        "Id": "e777a929-ba08-4898-85db-3ddc095a3f44",
+        "Amount": 25
+      },
+      {
+        "Id": "392d421f-44ec-461f-ac0a-0c6ae5d0571a",
+        "Amount": 10
+      }
+    ],
+    "Item": "f7737727-e8d2-436d-bf2f-7bf99c3289cf"
+  }
+]

@@ -11,6 +11,7 @@ namespace MyaDiscordBot.GameLogic.Services
         Enemy Walk(Player player, Element direction);
         void SavePlayer(Player player);
         bool AddItem(Player player, Item item);
+        bool AddResource(Player player, Resource item);
         void AddExp(Player player, int exp);
         List<Player> GetPlayers(ulong serverId);
     }
@@ -136,6 +137,27 @@ namespace MyaDiscordBot.GameLogic.Services
                 var col = db.GetCollection<Player>("player");
                 return col.Find(x => x.ServerId == serverId).ToList();
             }
+        }
+
+        public bool AddResource(Player player, Resource item)
+        {
+            if(item == null)
+            {
+                return false;
+            }
+            if(player.ResourceBag == null)
+            {
+                player.ResourceBag = new List<HoldedResource>();
+            }
+            if(!player.ResourceBag.Any(x => x.Id == item.Id))
+            {
+                player.ResourceBag.Add(new HoldedResource(item));
+            }
+            else
+            {
+                player.ResourceBag.FirstOrDefault(x => x.Id == item.Id).Amount++;
+            }
+            return true;
         }
     }
 }

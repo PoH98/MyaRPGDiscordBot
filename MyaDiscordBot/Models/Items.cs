@@ -30,9 +30,12 @@ namespace MyaDiscordBot.Models
         public int HP { get; set; }
         //特別技能
         public Ability Ability { get; set; }
+        //技能發動幾率
+        public double AbilityRate { get; set; } = 0;
         //如果係跌落裝備，咁跌落幾率
         public double DropRate { get; set; } = 0.5;
-
+        //物品只可以craft
+        public bool Craft { get; set; } = false;
         public object Clone()
         {
             var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
@@ -61,6 +64,9 @@ namespace MyaDiscordBot.Models
             HP = item.HP;
             Ability = item.Ability;
             ItemLeft = item.UseTimes;
+            AbilityRate = item.AbilityRate;
+            DropRate = item.DropRate;
+            Craft = item.Craft;
         }
 
         public int ItemLeft { get; set; }
@@ -91,6 +97,9 @@ namespace MyaDiscordBot.Models
 
     public enum Ability
     {
-        None = 0
+        None = 0,
+        Heal = 1,
+        Critical = 2,
+        Immune = 3
     }
 }
