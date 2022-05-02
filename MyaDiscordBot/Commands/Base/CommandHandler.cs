@@ -142,27 +142,33 @@ namespace MyaDiscordBot.Commands
 
         private Task _client_ButtonExecuted(SocketMessageComponent arg)
         {
-            foreach (var command in buttons)
+            _ = Task.Run(async () =>
             {
-                if (arg.Data.Value != null)
+                try
                 {
-                    if (command.CheckUsage(arg.Data.Value))
+                    foreach (var command in buttons)
                     {
-                        _ = command.Handle(arg, _client);
-                        //already handled, no need do any more thing
-                        return Task.CompletedTask;
+                        if (arg.Data.Value != null)
+                        {
+                            if (command.CheckUsage(arg.Data.Value))
+                            {
+                                await command.Handle(arg, _client);
+                            }
+                        }
+                        else if (arg.Data.CustomId != null)
+                        {
+                            if (command.CheckUsage(arg.Data.CustomId))
+                            {
+                                await command.Handle(arg, _client);
+                            }
+                        }
                     }
                 }
-                else if (arg.Data.CustomId != null)
+                catch (Exception ex)
                 {
-                    if (command.CheckUsage(arg.Data.CustomId))
-                    {
-                        _ = command.Handle(arg, _client);
-                        //already handled, no need do any more thing
-                        return Task.CompletedTask;
-                    }
+                    await arg.RespondAsync(ex.ToString());
                 }
-            }
+            });
             return Task.CompletedTask;
         }
 

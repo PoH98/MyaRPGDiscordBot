@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "Id": "21d26273-afa0-4a0f-9f78-da86c04490dd",
     "Name": "神聖龍甲搖搖",
@@ -11,7 +11,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "749b8931-59aa-4d42-b7b8-628e25cb6298",
@@ -25,13 +27,15 @@
     "Type": 2,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "bbcd50e1-94d8-4312-bf03-a8223221b748",
     "Name": "神聖龍甲頸鏈",
     "Rank": 5,
-    "Price": 1500,
+    "Price": 500,
     "Atk": 2,
     "Def": 2,
     "UseTimes": -1,
@@ -39,7 +43,9 @@
     "Type": 4,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "cbe6bfee-53b4-4448-9bef-e1e5ecd65836",
@@ -53,7 +59,9 @@
     "Type": 6,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "daaaabb0-12c7-4412-8dac-add6ab969949",
@@ -67,7 +75,9 @@
     "Type": 5,
     "HP": 50,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "5e28285b-921f-402f-b818-5c5925690304",
@@ -81,7 +91,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "1eef6c85-857a-409a-893a-782b4788697d",
@@ -95,13 +107,15 @@
     "Type": 2,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "58a4c950-d766-4024-9af2-f195a4002b8c",
     "Name": "暗影爆裂頸鏈",
     "Rank": 5,
-    "Price": 1500,
+    "Price": 500,
     "Atk": 2,
     "Def": 2,
     "UseTimes": -1,
@@ -109,7 +123,9 @@
     "Type": 4,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "161276ab-2916-4694-bcc0-ce25f2db2b15",
@@ -123,7 +139,9 @@
     "Type": 6,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "8d5fad68-16ec-4375-9d3e-f3c7767343ed",
@@ -137,7 +155,9 @@
     "Type": 5,
     "HP": 50,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d38299ce-c595-4b1d-b4df-4fe0377c5b71",
@@ -151,7 +171,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "6ae98482-e250-4f29-aad9-3fb6e64437b9",
@@ -165,13 +187,15 @@
     "Type": 2,
     "HP": 15,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "58537940-f013-4638-a6dc-62887cbc320e",
     "Name": "風暴撕裂頸鏈",
     "Rank": 5,
-    "Price": -1,
+    "Price": 450,
     "Atk": 2,
     "Def": 2,
     "UseTimes": -1,
@@ -179,7 +203,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "cf144aa0-4227-472a-a355-87473d28b744",
@@ -193,7 +219,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "f7afc0a4-67d8-43bb-ad65-a42dd9fa3d22",
@@ -207,7 +235,9 @@
     "Type": 5,
     "HP": 30,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "0a6c37fd-a47e-4c22-9a80-b20d0d6dd0f3",
@@ -221,7 +251,9 @@
     "Type": 1,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "5b84efc6-9008-48c7-8e3d-643c6f258020",
@@ -235,13 +267,15 @@
     "Type": 2,
     "HP": 20,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "e77c6cff-7580-4e69-a659-ad283185167a",
     "Name": "水生裂變頸鏈",
     "Rank": 5,
-    "Price": -1,
+    "Price": 450,
     "Atk": 1,
     "Def": 1,
     "UseTimes": -1,
@@ -249,7 +283,9 @@
     "Type": 4,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "9c95ed59-5a17-48df-904e-80b88cb44852",
@@ -263,7 +299,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "e0e3ea47-369c-4fae-9add-b334fd4745f9",
@@ -277,7 +315,9 @@
     "Type": 5,
     "HP": 35,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "56600b3f-a02f-4f07-8ed4-06b5b527a005",
@@ -291,13 +331,15 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "4dfe95fa-7db2-4671-843e-fe10a3dc887e",
     "Name": "核爆導彈頸鏈",
     "Rank": 5,
-    "Price": -1,
+    "Price": 450,
     "Atk": 3,
     "Def": 1,
     "UseTimes": -1,
@@ -305,7 +347,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "13e42b1c-9900-45e7-a22c-f8850baf64a7",
@@ -319,7 +363,9 @@
     "Type": 2,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "da35e8a5-f5c0-4b5e-8629-eb11210893f8",
@@ -333,7 +379,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "dcedfbe0-4564-4602-a6f7-6e773616031e",
@@ -347,7 +395,9 @@
     "Type": 5,
     "HP": 30,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "cd464a1f-8977-424a-ab28-d742e0d245eb",
@@ -361,13 +411,15 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "7ea694ba-de39-400d-829f-180d8e6c368b",
     "Name": "美杜莎之眼頸鏈",
     "Rank": 5,
-    "Price": -1,
+    "Price": 450,
     "Atk": 0,
     "Def": 2,
     "UseTimes": -1,
@@ -375,7 +427,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "69a5082a-232e-42c6-9b7f-8fe86f75e13e",
@@ -389,7 +443,9 @@
     "Type": 2,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "474a3cbf-1376-4a5d-a571-bfe6ea003ec9",
@@ -403,7 +459,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "dd7cfc82-4425-4bb9-b075-2266f47b986b",
@@ -417,7 +475,9 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "238de87f-205b-4905-8745-68e3fecd44d5",
@@ -431,7 +491,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "431e3550-2e7c-43fb-a888-0bec47e3721f",
@@ -445,7 +507,9 @@
     "Type": 2,
     "HP": 15,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "09550f80-27ba-4f00-99a5-79ba70b23d8d",
@@ -459,7 +523,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "f55ac404-2d8b-4ba6-9681-4bab34e95f07",
@@ -473,7 +539,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "862fda92-f4a6-44f0-9e14-71ef31b4f3e3",
@@ -487,7 +555,9 @@
     "Type": 5,
     "HP": 30,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "1865c7ff-6f22-44f6-9b2d-25f6af118d39",
@@ -501,7 +571,9 @@
     "Type": 1,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "5666d829-6c52-4a08-a47b-bde1d020e62b",
@@ -515,7 +587,9 @@
     "Type": 2,
     "HP": 20,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "6f9b7673-af3e-4e45-b807-776289eb3561",
@@ -529,7 +603,9 @@
     "Type": 4,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "75b55b94-0366-4f50-afe3-866b6ca9cffc",
@@ -543,7 +619,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "51308904-b034-43d1-9b28-1c662f3aef96",
@@ -557,7 +635,9 @@
     "Type": 5,
     "HP": 35,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "1aa37e01-c2c1-40f1-8aeb-e754962d98ec",
@@ -571,7 +651,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "2eacd253-3614-4d94-8b3e-bc524aebb2be",
@@ -585,7 +667,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "0a38f4b9-edb2-4116-bab6-e096a95fcd21",
@@ -599,7 +683,9 @@
     "Type": 2,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "cafba8e5-96c7-427d-b66c-9a0cc1401a6f",
@@ -613,7 +699,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "b5ff6e34-b18b-4ab1-9677-2727c9cb74ae",
@@ -627,7 +715,9 @@
     "Type": 5,
     "HP": 30,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "e1ed1739-1eea-4482-96c7-ef83d05a600a",
@@ -641,7 +731,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "36d362f4-b17e-4497-89c5-e4d732dd4b52",
@@ -655,7 +747,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "c2bb53b8-4672-46f1-861d-7c99df6a3d60",
@@ -669,7 +763,9 @@
     "Type": 2,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "c1fb83ec-dab2-4ee3-b915-6b824773f415",
@@ -683,7 +779,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "3a2950f2-f52e-4a98-a141-7189aec9f22f",
@@ -697,6 +795,8 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   }
 ]

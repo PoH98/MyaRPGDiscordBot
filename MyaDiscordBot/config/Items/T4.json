@@ -1,5 +1,4 @@
-﻿[
-
+[
   {
     "Id": "7a83f9b7-f821-458a-94cb-1a3123014be0",
     "Name": "時空神扭曲炮",
@@ -12,7 +11,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "60fb697b-1624-4d3a-8076-bba990ad53e6",
@@ -26,7 +27,9 @@
     "Type": 2,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d9589c4b-0be9-40c5-a6bf-a9046c15df6e",
@@ -40,7 +43,9 @@
     "Type": 4,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "327b51e5-6d42-424a-884e-f1cb5c8e56fb",
@@ -54,7 +59,9 @@
     "Type": 6,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "28962f02-90a7-4e08-97fc-88f9351d3d28",
@@ -68,7 +75,9 @@
     "Type": 5,
     "HP": 40,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "158ead56-66c1-464b-a81e-1bc2f44ffc60",
@@ -82,7 +91,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d2812074-3191-42fe-af25-5b2b95067649",
@@ -96,7 +107,9 @@
     "Type": 2,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "6cc99d77-2ed2-4f20-ab89-cc69193feb9c",
@@ -110,7 +123,9 @@
     "Type": 4,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "b1f84cdf-4d61-4366-ac2b-1a736243ce58",
@@ -124,7 +139,9 @@
     "Type": 6,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "262a1660-92bc-44af-b793-7d870c595170",
@@ -138,7 +155,9 @@
     "Type": 5,
     "HP": 40,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d8104517-cf91-48aa-a685-753bb24aaa0a",
@@ -152,7 +171,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d40b1c40-c95d-45b3-b046-b00cedb45863",
@@ -166,7 +187,9 @@
     "Type": 2,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d91df726-4de3-4c78-a0de-50e65fc38682",
@@ -180,7 +203,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "b00cc5dc-9f0d-44d0-8d76-d5c77e46166b",
@@ -194,7 +219,9 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "246d5947-d27d-4153-9565-81b5554d9748",
@@ -208,7 +235,9 @@
     "Type": 1,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "980ea9d3-a57f-48a6-8f6d-1d86b9dff61c",
@@ -222,7 +251,9 @@
     "Type": 2,
     "HP": 15,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "ba9e84fb-fcfa-4759-aaa1-0b2edaf7c353",
@@ -236,7 +267,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "a7ee73c4-3c39-4719-83a6-6ff4957df606",
@@ -250,7 +283,9 @@
     "Type": 5,
     "HP": 30,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "e7d04942-25a7-468f-abae-ace65c238ef5",
@@ -264,7 +299,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "53edf28c-7a64-4acb-b6c8-e132175bf2e7",
@@ -278,7 +315,9 @@
     "Type": 2,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "67abce31-f4e2-4019-8c75-2071e9c6951a",
@@ -292,7 +331,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "67e46d09-0d4d-4057-910c-5e450d13ae17",
@@ -306,7 +347,9 @@
     "Type": 5,
     "HP": 20,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "14e28062-5dca-43f1-8b73-51248de1c8d1",
@@ -320,7 +363,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "e8845bc0-440a-4442-bf5d-83aa643a5ead",
@@ -334,7 +379,9 @@
     "Type": 2,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "1c99875d-c9da-4555-aaec-e604d60dfb7f",
@@ -348,7 +395,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "c64e3697-34dd-425c-89b7-b94139913873",
@@ -362,7 +411,9 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "86fb4420-e24e-4467-9a68-8ad761ad0385",
@@ -376,7 +427,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "37b4cd7d-4b12-40c2-af4f-e7a53cd16ec7",
@@ -390,7 +443,9 @@
     "Type": 2,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "24b54e57-5cfe-4916-968d-c2a9b5a46005",
@@ -404,7 +459,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "e2dbc53a-bb11-44b2-9ba5-3ca78f5e12fc",
@@ -418,7 +475,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "40afe1a2-726b-47ee-b695-cb1ea3569e5b",
@@ -432,7 +491,9 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "5cff06aa-716d-43cc-896b-0d9ef894d21a",
@@ -446,7 +507,9 @@
     "Type": 1,
     "HP": 15,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "8c48f789-eac2-434e-a9ab-7028bc1a8bb3",
@@ -460,7 +523,9 @@
     "Type": 2,
     "HP": 15,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "cfde6368-1d48-4ad3-9359-f20eb2fc2c7a",
@@ -474,7 +539,9 @@
     "Type": 4,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "95086bff-71f0-4fda-9a80-16adf6af3e1b",
@@ -488,7 +555,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "2ecbd129-9c1c-4c62-af1a-88123212ffe3",
@@ -502,7 +571,9 @@
     "Type": 5,
     "HP": 35,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "9e677bfd-a374-4505-b50f-a4fb8a06d7e5",
@@ -516,7 +587,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "a7ee1348-3055-4e6c-a6a9-f518d20d64d4",
@@ -530,7 +603,9 @@
     "Type": 2,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "932a6f6f-e8af-4576-9e0f-a20658dbb948",
@@ -544,7 +619,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "13e04f2c-c57e-43a1-bfce-3221d9e0a78a",
@@ -558,7 +635,9 @@
     "Type": 6,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "d839e292-c34d-455d-b2b4-0673a13f0926",
@@ -572,7 +651,9 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "6e8ee874-8df3-4b31-83e6-352c70a48570",
@@ -586,7 +667,9 @@
     "Type": 1,
     "HP": 0,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "5924a0d7-32fd-4bb8-bbae-e75d6b29f455",
@@ -600,7 +683,9 @@
     "Type": 2,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "a5653bde-8c23-47c7-aa76-9c3aaf5e69fa",
@@ -614,7 +699,9 @@
     "Type": 4,
     "HP": 5,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "2e2b5ca8-f684-4f6f-90bd-8495231c20e8",
@@ -628,7 +715,9 @@
     "Type": 6,
     "HP": 10,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   },
   {
     "Id": "80b67539-8af0-4b45-8daa-d4327160c819",
@@ -642,6 +731,8 @@
     "Type": 5,
     "HP": 25,
     "Ability": 0,
-    "DropRate": 0.3
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   }
 ]
