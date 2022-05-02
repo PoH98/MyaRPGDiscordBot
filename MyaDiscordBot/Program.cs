@@ -13,7 +13,7 @@ using Quartz.Logging;
 //Create DC Bot Client//
 var _client = new DiscordSocketClient(new DiscordSocketConfig
 {
-    GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds
+    GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds | GatewayIntents.GuildIntegrations
 });
 _client.Log += Log;
 //==============================================================================//

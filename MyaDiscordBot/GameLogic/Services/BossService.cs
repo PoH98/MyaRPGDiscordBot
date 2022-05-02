@@ -130,9 +130,21 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
             {
                 var col = db.GetCollection<BossSpawned>("boss");
-                foreach (var i in col.Find(x => x.GuildId == serverId).ToList().Where(x => DateTime.Compare(x.ExpiredTime, DateTime.Now) < 0))
+                var data = col.Find(x => x.GuildId == serverId);
+                if(data == null)
                 {
-                    col.Delete(i.Id);
+                    return;
+                }
+                foreach (var i in data.Where(x => DateTime.Compare(x.ExpiredTime, DateTime.Now) < 0))
+                {
+                    try
+                    {
+                        col.Delete(i.Id);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
         }

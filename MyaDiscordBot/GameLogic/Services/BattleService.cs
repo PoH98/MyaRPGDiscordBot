@@ -77,11 +77,14 @@ namespace MyaDiscordBot.GameLogic.Services
                     if (player.Bag.Count > 0)
                     {
                         var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
-                        var rate = rnd.NextDouble();
-                        if (item.AbilityRate >= rate)
+                        if(item != null)
                         {
-                            //immune
-                            atk = 0;
+                            var rate = rnd.NextDouble();
+                            if (item.AbilityRate >= rate)
+                            {
+                                //immune
+                                atk = 0;
+                            }
                         }
                     }
                     player.CurrentHP -= atk;

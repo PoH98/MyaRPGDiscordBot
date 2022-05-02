@@ -20,12 +20,17 @@ namespace MyaDiscordBot.Models
 
     public class HoldedResource : Resource
     {
+        public HoldedResource()
+        {
+
+        }
         public HoldedResource(Resource resource)
         {
             var r = (Resource)resource.Clone();
             Id = r.Id;
             Name = r.Name;
             DropRate = r.DropRate;
+            Amount = 1;
         }
         public int Amount { get; set; }
 

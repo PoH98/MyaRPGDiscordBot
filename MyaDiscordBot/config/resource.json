@@ -2,7 +2,7 @@
   {
     "Id": "00e89a10-8262-4f31-8cf7-31a723bb7bd3",
     "Name": "有鞋印的磚頭",
-    "DropRate": 0.4
+    "DropRate": 0.6
   },
   {
     "Id": "d140fbb3-56a1-48c2-b5c6-609fda7547ae",
@@ -12,12 +12,12 @@
   {
     "Id": "83f20fba-59f2-4e47-9a27-51c88b17b595",
     "Name": "三文魚的骨頭",
-    "DropRate": 0.2
+    "DropRate": 0.1
   },
   {
     "Id": "fc00ff11-2105-41b5-a0b4-aa1907026d9a",
     "Name": "全熟的和牛肉",
-    "DropRate": 0.4
+    "DropRate": 0.6
   },
   {
     "Id": "841f7103-cc65-4e8f-a581-fbb2557081e9",
@@ -27,12 +27,12 @@
   {
     "Id": "b15a9b94-3b61-4129-b953-1b57da8d82bd",
     "Name": "有屎的電擊棒",
-    "DropRate": 0.2
+    "DropRate": 0.1
   },
   {
     "Id": "98839c41-08b6-48b4-8f35-1d5a2d863707",
     "Name": "食過並且充滿口水的蘋果",
-    "DropRate": 0.4
+    "DropRate": 0.6
   },
   {
     "Id": "e777a929-ba08-4898-85db-3ddc095a3f44",
@@ -42,6 +42,6 @@
   {
     "Id": "392d421f-44ec-461f-ac0a-0c6ae5d0571a",
     "Name": "彩虹棒",
-    "DropRate": 0.2
+    "DropRate": 0.1
   }
 ]

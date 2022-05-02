@@ -8,6 +8,7 @@ namespace MyaDiscordBot.GameLogic.Services
     public interface IPlayerService
     {
         Player LoadPlayer(ulong id, ulong serverId);
+        Player LoadPlayer(string id, ulong serverId);
         Enemy Walk(Player player, Element direction);
         void SavePlayer(Player player);
         bool AddItem(Player player, Item item);
@@ -158,6 +159,38 @@ namespace MyaDiscordBot.GameLogic.Services
                 player.ResourceBag.FirstOrDefault(x => x.Id == item.Id).Amount++;
             }
             return true;
+        }
+
+        public Player LoadPlayer(string id, ulong serverId)
+        {
+            if (!Directory.Exists("save"))
+            {
+                Directory.CreateDirectory("save");
+            }
+            using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
+            {
+                // Get a collection (or create, if doesn't exist)
+                var col = db.GetCollection<Player>("player");
+                if (!col.Exists((data) => data.Id == id && serverId == data.ServerId))
+                {
+                    col.Insert(new Player
+                    {
+                        Id = id,
+                        Coin = 0,
+                        HP = 20,
+                        Atk = 5,
+                        Def = 2,
+                        Bag = new List<ItemEquip>(),
+                        CurrentHP = 20,
+                        Exp = 0,
+                        Lv = 1,
+                        Title = new List<string>(),
+                        ServerId = serverId,
+                    });
+                }
+                var player = col.FindOne((data) => data.Id == id && serverId == data.ServerId);
+                return player;
+            }
         }
     }
 }

@@ -773,7 +773,7 @@
     "def": 10,
     "element": 0,
     "itemDropRate": 1,
-    "stage": 6,
+    "stage": 5,
     "dropRank": [ 6 ],
     "isBoss": true
   },
@@ -784,7 +784,7 @@
     "def": 10,
     "element": 1,
     "itemDropRate": 1,
-    "stage": 6,
+    "stage": 5,
     "dropRank": [ 6 ],
     "isBoss": true
   },
@@ -795,8 +795,206 @@
     "def": 10,
     "element": 5,
     "itemDropRate": 1,
-    "stage": 6,
+    "stage": 5,
     "dropRank": [ 6 ],
+    "isBoss": true
+  },
+  {
+    "name": "踩屎觀察號-颱風導彈",
+    "hp": 60,
+    "atk": 35,
+    "def": 10,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "踩屎觀察號-光束炙熱發射器",
+    "hp": 60,
+    "atk": 40,
+    "def": 5,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "踩屎觀察號-重力扭曲炮",
+    "hp": 60,
+    "atk": 30,
+    "def": 15,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "踩屎觀察號-木馬病毒",
+    "hp": 85,
+    "atk": 35,
+    "def": 10,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "DRAFTSMAN巡洋艦-暴風高射砲",
+    "hp": 60,
+    "atk": 37,
+    "def": 8,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "DRAFTSMAN巡洋艦-暴君連射炮",
+    "hp": 60,
+    "atk": 42,
+    "def": 3,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "DRAFTSMAN巡洋艦-多重投擲器",
+    "hp": 60,
+    "atk": 32,
+    "def": 13,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "DRAFTSMAN巡洋艦-勒索加密",
+    "hp": 85,
+    "atk": 38,
+    "def": 8,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+
+  {
+    "name": "藥JC航母-風暴艦載機",
+    "hp": 70,
+    "atk": 37,
+    "def": 8,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "藥JC航母-導彈艦載機",
+    "hp": 70,
+    "atk": 42,
+    "def": 3,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "藥JC航母-重力扭曲艦載機",
+    "hp": 70,
+    "atk": 32,
+    "def": 13,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 6 ]
+  },
+  {
+    "name": "藥JC航母-代理入侵艦載機",
+    "hp": 95,
+    "atk": 38,
+    "def": 8,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 6,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "中醫無畏號-針形穿透彈",
+    "hp": 1200,
+    "atk": 85,
+    "def": 10,
+    "element": 2,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
+    "isBoss": true
+  },
+  {
+    "name": "神秘無畏號-隱匿艦載中隊",
+    "hp": 1200,
+    "atk": 80,
+    "def": 15,
+    "element": 3,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-地之窒息",
+    "hp": 1200,
+    "atk": 75,
+    "def": 20,
+    "element": 4,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-水之窒息",
+    "hp": 1400,
+    "atk": 75,
+    "def": 15,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-快叫白車",
+    "hp": 1200,
+    "atk": 100,
+    "def": 10,
+    "element": 0,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-快叫黑車",
+    "hp": 1200,
+    "atk": 115,
+    "def": 5,
+    "element": 1,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
+    "isBoss": true
+  },
+  {
+    "name": "呼吸困難-送入醫院",
+    "hp": 1200,
+    "atk": 115,
+    "def": 5,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 6,
+    "dropRank": [ 7 ],
     "isBoss": true
   }
 ]

@@ -37,7 +37,7 @@ namespace MyaDiscordBot.ButtonEvent
             }
             else
             {
-                return message.RespondAsync("製作失敗！", ephemeral: true);
+                return message.RespondAsync("製作失敗！所使用的原料已經全數消失！", ephemeral: true);
             }
         }
     }

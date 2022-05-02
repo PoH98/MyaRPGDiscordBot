@@ -16,6 +16,9 @@ namespace MyaDiscordBot.GameLogic.Services
         }
         public Enemy Spawn(Element mapType, int lv)
         {
+#if DEBUG
+            return SpawnBoss(lv);
+#endif
             Random rnd = new Random();
             var probability = rnd.NextDouble();
             if (probability < 0.01)
@@ -47,9 +50,9 @@ namespace MyaDiscordBot.GameLogic.Services
                 //no boss, lets create one default boss
                 return new Enemy
                 {
-                    Atk = 20 * stage,
-                    Def = 0,
-                    HP = 1 * stage,
+                    Atk = 999,
+                    Def = 999,
+                    HP = 1000 * stage,
                     Element = Element.God,
                     IsBoss = true,
                     Stage = stage,

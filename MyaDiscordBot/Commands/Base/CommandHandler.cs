@@ -6,6 +6,7 @@ using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using MyaDiscordBot.Models.SpamDetection;
+using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
@@ -16,6 +17,7 @@ namespace MyaDiscordBot.Commands
         private readonly DiscordSocketClient _client;
         private IEnumerable<ICommand> commands;
         private IEnumerable<IButtonHandler> buttons;
+        private IEnumerable<ISelectHandler> selects;
         private HttpClient hc = new HttpClient();
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
@@ -34,6 +36,33 @@ namespace MyaDiscordBot.Commands
             _client.ButtonExecuted += _client_ButtonExecuted;
             _client.MessageReceived += _client_MessageReceived;
             _client.Disconnected += _client_Disconnected;
+            _client.SelectMenuExecuted += _client_SelectMenuExecuted;
+        }
+
+        private Task _client_SelectMenuExecuted(SocketMessageComponent arg)
+        {
+            foreach (var command in selects)
+            {
+                if (arg.Data.Values != null)
+                {
+                    if (command.CheckUsage(arg.Data.Values.First()))
+                    {
+                        _ = command.Handle(arg, _client);
+                        //already handled, no need do any more thing
+                        return Task.CompletedTask;
+                    }
+                }
+                else if (arg.Data.CustomId != null)
+                {
+                    if (command.CheckUsage(arg.Data.CustomId))
+                    {
+                        _ = command.Handle(arg, _client);
+                        //already handled, no need do any more thing
+                        return Task.CompletedTask;
+                    }
+                }
+            }
+            return Task.CompletedTask;
         }
 
         private Task _client_Disconnected(Exception arg)
@@ -173,6 +202,7 @@ namespace MyaDiscordBot.Commands
             }
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
             buttons = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(IButtonHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as IButtonHandler);
+            selects = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ISelectHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ISelectHandler);
             await _client.SetGameAsync("頂米亞與甘米大冒險", type: ActivityType.Playing);
             var i = Data.Instance.Container.Resolve<IItemService>();
             await i.SaveData();

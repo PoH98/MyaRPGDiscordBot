@@ -5,6 +5,7 @@ using MyaDiscordBot.Commands;
 using MyaDiscordBot.GameLogic.Events;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
+using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
 using System.Reflection;
 
@@ -23,6 +24,7 @@ namespace MyaDiscordBot.Extension
             builder.RegisterType<SettingService>().As<ISettingService>();
             builder.RegisterType<BossService>().As<IBossService>();
             builder.RegisterType<AntiSpamService>().As<IAntiSpamService>();
+            builder.RegisterType<MarketService>().As<IMarketService>();
             return builder;
         }
 
@@ -57,7 +59,14 @@ namespace MyaDiscordBot.Extension
         {
             var commands = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(ICommand).IsAssignableFrom(p) && !p.IsInterface);
             var buttons = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(IButtonHandler).IsAssignableFrom(p) && !p.IsInterface);
+            var selects = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(ISelectHandler).IsAssignableFrom(p) && !p.IsInterface);
             var rndEvents = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(IRandomEvent).IsAssignableFrom(p) && !p.IsInterface);
+            foreach (var select in selects)
+            {
+                MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();
+                method = method.MakeGenericMethod(select);
+                method.Invoke(builder, new object[1] { builder });
+            }
             foreach (var command in commands)
             {
                 MethodInfo method = typeof(RegistrationExtensions).GetMethods().Where(x => x.Name == "RegisterType" && x.IsGenericMethod).Last();

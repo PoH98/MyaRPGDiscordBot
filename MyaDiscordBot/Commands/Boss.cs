@@ -8,9 +8,11 @@ namespace MyaDiscordBot.Commands
     public class Boss : ICommand
     {
         private readonly IBossService bossService;
-        public Boss(IBossService bossService)
+        private readonly IPlayerService playerService;
+        public Boss(IBossService bossService, IPlayerService playerService)
         {
             this.bossService = bossService;
+            this.playerService = playerService;
         }
         public string Name => "boss";
 
@@ -23,8 +25,9 @@ namespace MyaDiscordBot.Commands
             var enemies = bossService.GetEnemy((command.Channel as SocketGuildChannel).Guild.Id);
             if (enemies.Count() > 0)
             {
+                var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
                 ComponentBuilder cb = new ComponentBuilder();
-                foreach (var x in enemies)
+                foreach (var x in enemies.Where(x => Enumerable.Range((player.Lv / 10) - 1, 3).Contains(x.Enemy.Stage)))
                 {
                     string el;
                     switch (x.Enemy.Element)

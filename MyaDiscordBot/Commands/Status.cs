@@ -34,7 +34,9 @@ namespace MyaDiscordBot.Commands
             eb.AddField("等級", player.Lv);
             EmbedBuilder bag = new EmbedBuilder() { Color = Color.Green };
             EmbedBuilder bag2 = new EmbedBuilder() { Color = Color.Red };
+            EmbedBuilder resourceBag = new EmbedBuilder() { Color = Color.Teal };
             bag.WithTitle("我的背包 (已裝備)");
+            resourceBag.WithTitle("原料背包");
             var items = player.Bag.OrderByDescending(x => x.Rank);
             if (items.Count() < 1)
             {
@@ -73,13 +75,28 @@ namespace MyaDiscordBot.Commands
                 }
                 bag2.WithDescription(sb.ToString());
             }
-
+            if(player.ResourceBag == null)
+            {
+                player.ResourceBag = new List<HoldedResource>();
+            }
+            var resource = player.ResourceBag.Where(x => x.Amount > 0).OrderBy(x => x.DropRate);
+            if(resource.Count() > 0)
+            {
+                foreach (var item in resource)
+                {
+                    resourceBag.AddField(item.Name, item.Amount);
+                }
+            }
+            else
+            {
+                resourceBag.WithDescription("你無任何原料哦！");
+            }
             string desc = "";
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
                 desc = "**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**";
             }
-            return command.RespondAsync(desc, embeds: new Embed[] { eb.Build(), bag.Build(), bag2.Build() }, ephemeral: true);
+            return command.RespondAsync(desc, embeds: new Embed[] { eb.Build(), bag.Build(), bag2.Build(), resourceBag.Build() }, ephemeral: true);
         }
     }
 }
