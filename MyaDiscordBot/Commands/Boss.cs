@@ -27,7 +27,7 @@ namespace MyaDiscordBot.Commands
             {
                 var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
                 ComponentBuilder cb = new ComponentBuilder();
-                foreach (var x in enemies.Where(x => Enumerable.Range((player.Lv / 10) - 1, 3).Contains(x.Enemy.Stage)))
+                foreach (var x in enemies.Where(x => x.Enemy.Stage >= ((player.Lv / 10) - 1)))
                 {
                     string el;
                     switch (x.Enemy.Element)

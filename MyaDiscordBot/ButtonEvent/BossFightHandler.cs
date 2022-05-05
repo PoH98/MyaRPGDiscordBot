@@ -41,6 +41,11 @@ namespace MyaDiscordBot.ButtonEvent
                 return;
             }
             var boss = bosses.FirstOrDefault(x => x.Id.ToString() == message.Data.CustomId.Replace("boss-", ""));
+            if(boss == null)
+            {
+                await message.RespondAsync("此Boss已經唔存在！無法展開戰鬥！", ephemeral: true);
+                return;
+            }
             var result = battleService.Battle(boss.Enemy, player);
             bossService.UpdateEnemy((message.Channel as SocketGuildChannel).Guild.Id, boss);
             var coin = result.DamageDealt / 10;
