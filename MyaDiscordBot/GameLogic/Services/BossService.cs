@@ -35,7 +35,7 @@ namespace MyaDiscordBot.GameLogic.Services
                                 HP = 99999,
                                 Element = Element.God,
                                 IsBoss = true,
-                                Stage = -1
+                                Stage = 999
                             });
                             var setting = settingService.GetSettings(guild.Id);
                             if (setting != null)
