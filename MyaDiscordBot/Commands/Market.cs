@@ -23,7 +23,7 @@ namespace MyaDiscordBot.Commands
         }
         public string Name => "market";
 
-        public string Description => "Market place for selling or purchasing resource between players";
+        public string Description => "Market place for selling or purchasing resource between players, will tax 6% on sold price";
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
         {

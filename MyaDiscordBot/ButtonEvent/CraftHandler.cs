@@ -38,7 +38,7 @@ namespace MyaDiscordBot.ButtonEvent
             var item = itemService.GetCraftItem().First(x => x.Id.ToString() == id);
             EmbedBuilder eb = new EmbedBuilder();
             eb.WithColor(Color.Magenta);
-            eb.WithTitle(item.Name + "所需要的合成材料：");
+            eb.WithTitle(item.Name + "所缺少的合成材料：");
             var craftable = true;
             foreach(var i in craft.Resources)
             {
@@ -46,7 +46,7 @@ namespace MyaDiscordBot.ButtonEvent
                 {
                     player.ResourceBag = new List<HoldedResource>();
                 }
-                var res = player.ResourceBag.FirstOrDefault(x => x.Id == i.Id && x.Amount >= i.Amount);
+                var res = player.ResourceBag.FirstOrDefault(x => x.Id == i.Id);
                 if (res != null)
                 {
                     if((i.Amount - res.Amount) > 0)

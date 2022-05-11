@@ -47,7 +47,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     player.Coin -= market.Price;
                     var seller = _playerService.LoadPlayer(market.PlayerId, player.ServerId);
-                    seller.Coin += market.Price;
+                    seller.Coin += (market.Price - (market.Price * 3 / 100));
                     var dm = await client.GetUser(market.DiscordSellerId).CreateDMChannelAsync();
                     await dm.SendMessageAsync("你已上架的出售ID " + market.Id + "已經出售！");
                     _playerService.SavePlayer(seller);

@@ -18,11 +18,17 @@ namespace MyaDiscordBot.SelectEvent
                 SelectMenuBuilder sb = new SelectMenuBuilder();
                 sb.WithCustomId(Guid.NewGuid().ToString());
                 sb.WithPlaceholder("Select an option");
-                for (int x = 25; x > 1; x--)
+                List<double> price = new List<double>();
+                for(int x = 1; x <= 25; x++)
+                {
+                    price.Add(x * 5);
+                }
+                price.Reverse();
+                foreach(var i in price)
                 {
                     SelectMenuOptionBuilder smob = new SelectMenuOptionBuilder();
-                    smob.WithLabel("單個賣價: " + x + "$");
-                    smob.WithValue(customId + "-" + x);
+                    smob.WithLabel("單個賣價: " + i + "$");
+                    smob.WithValue(customId + "-" + i);
                     sb.AddOption(smob);
                 }
                 sb.WithMinValues(1);

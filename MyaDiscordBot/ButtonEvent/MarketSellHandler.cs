@@ -35,7 +35,7 @@ namespace MyaDiscordBot.ButtonEvent
                 sb.WithCustomId(Guid.NewGuid().ToString());
                 sb.WithMaxValues(1);
                 List<SelectMenuOptionBuilder> smo = new List<SelectMenuOptionBuilder>();
-                for (int x = 1; x <= r.Amount; x++)
+                for (int x = 1; x <= Math.Min(r.Amount, 25); x++)
                 {
                     SelectMenuOptionBuilder smob = new SelectMenuOptionBuilder();
                     smob.WithLabel(x + "個");

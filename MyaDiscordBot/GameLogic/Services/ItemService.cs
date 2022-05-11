@@ -37,10 +37,10 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             foreach (var c in craftTable.Resources)
             {
-                var i = player.Bag.FirstOrDefault(x => x.Id == c.Id);
+                var i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
                 if(i != null)
                 {
-                    i.ItemLeft -= c.Amount;
+                    i.Amount -= c.Amount;
                 }
             }
             return items.First(x => x.Id == craftTable.Item);

@@ -446,5 +446,53 @@
     "AbilityRate": 0.0,
     "DropRate": 0.3,
     "Craft": false
+  },
+  {
+    "Id": "70ca48d6-551f-451d-a5eb-fe08640dba28",
+    "Name": "散發屎味的戒指",
+    "Rank": 2,
+    "Price": -1,
+    "Atk": 0,
+    "Def": 0,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": -10,
+    "Ability": 1,
+    "AbilityRate": 0.035,
+    "Craft": true,
+    "DropRate": 0
+  },
+  {
+    "Id": "fd0aa82d-cd3f-4ddd-9eac-18ac25860423",
+    "Name": "發臭蘋果皮戒指",
+    "Rank": 2,
+    "Price": -1,
+    "Atk": 0,
+    "Def": -8,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 2,
+    "AbilityRate": 0.12,
+    "Craft": true,
+    "DropRate": 0
+  },
+  {
+    "Id": "3d475327-6a54-491d-94bc-ce7073b4e106",
+    "Name": "彩虹必斷戒指",
+    "Rank": 2,
+    "Price": -1,
+    "Atk": -8,
+    "Def": 0,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 3,
+    "AbilityRate": 0.025,
+    "Craft": true,
+    "DropRate": 0
   }
 ]
