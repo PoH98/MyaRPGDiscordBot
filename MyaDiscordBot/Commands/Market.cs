@@ -41,7 +41,7 @@ namespace MyaDiscordBot.Commands
                     sb.WithMinValues(1);
                     sb.WithMaxValues(1);
                     sb.WithCustomId(Guid.NewGuid().ToString());
-                    foreach (var d in data)
+                    foreach (var d in data.OrderBy(x => x.Price / x.Amount).Take(25))
                     {
                         var r = resources.First(x => x.Id.ToString() == d.ResourceId);
                         sb.AddOption(r.Name, "market-" + d.Id.ToString(), "數量：" + d.Amount + " 價錢：" + d.Price);
