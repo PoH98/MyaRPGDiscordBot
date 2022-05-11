@@ -556,12 +556,12 @@
     "HP": -15,
     "Ability": 1,
     "AbilityRate": 0.03,
-    "Craft": true,
-    "DropRate": 0
+    "DropRate": 0.0,
+    "Craft": true
   },
   {
     "Id": "20b90e7d-ef60-453f-8c73-628c8a9bd621",
-    "Name": "重金屬戒指",
+    "Name": "邪惡毛筆毛戒指",
     "Rank": 1,
     "Price": -1,
     "Atk": 0,
@@ -572,12 +572,12 @@
     "HP": 0,
     "Ability": 2,
     "AbilityRate": 0.1,
-    "Craft": true,
-    "DropRate": 0
+    "DropRate": 0.0,
+    "Craft": true
   },
   {
     "Id": "f7737727-e8d2-436d-bf2f-7bf99c3289cf",
-    "Name": "防護能量波戒指",
+    "Name": "Myabe的戒指",
     "Rank": 1,
     "Price": -1,
     "Atk": -10,
@@ -588,7 +588,7 @@
     "HP": 0,
     "Ability": 3,
     "AbilityRate": 0.02,
-    "Craft": true,
-    "DropRate": 0
+    "DropRate": 0.0,
+    "Craft": true
   }
 ]

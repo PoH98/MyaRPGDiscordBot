@@ -460,8 +460,8 @@
     "HP": -10,
     "Ability": 1,
     "AbilityRate": 0.035,
-    "Craft": true,
-    "DropRate": 0
+    "DropRate": 0.0,
+    "Craft": true
   },
   {
     "Id": "fd0aa82d-cd3f-4ddd-9eac-18ac25860423",
@@ -476,8 +476,8 @@
     "HP": 0,
     "Ability": 2,
     "AbilityRate": 0.12,
-    "Craft": true,
-    "DropRate": 0
+    "DropRate": 0.0,
+    "Craft": true
   },
   {
     "Id": "3d475327-6a54-491d-94bc-ce7073b4e106",
@@ -492,7 +492,7 @@
     "HP": 0,
     "Ability": 3,
     "AbilityRate": 0.025,
-    "Craft": true,
-    "DropRate": 0
+    "DropRate": 0.0,
+    "Craft": true
   }
 ]
