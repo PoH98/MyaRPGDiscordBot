@@ -85,6 +85,21 @@ namespace MyaDiscordBot.Commands
             {
                 eb.AddField("血量", item.HP);
             }
+            if(item.Ability != Ability.None)
+            {
+                switch (item.Ability)
+                {
+                    case Ability.Critical:
+                        eb.AddField("技能", "暴擊: 發動幾率" + (item.AbilityRate * 100) + "%");
+                        break;
+                    case Ability.Heal:
+                        eb.AddField("技能", "吸血: 每次攻擊恢復" + (item.AbilityRate * 100) + "% 攻擊的血量");
+                        break;
+                    case Ability.Immune:
+                        eb.AddField("技能", "無敵: 發動幾率" + (item.AbilityRate * 100) + "%");
+                        break;
+                }
+            }
             eb.WithColor(Color.Teal);
             return command.RespondAsync("", embed: eb.Build(), ephemeral: true);
         }

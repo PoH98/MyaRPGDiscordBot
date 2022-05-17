@@ -165,10 +165,44 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk * 0.5);
                 }
+                if (player.Bag.Count > 0)
+                {
+                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                    if (item != null)
+                    {
+                        var rate = rnd.NextDouble();
+                        if (item.AbilityRate >= rate)
+                        {
+                            //critical!
+                            atk = (int)Math.Round(atk * 1.5);
+                        }
+                    }
+                }
                 atk -= enemy.Def;
                 if (atk < 0)
                 {
                     atk = 0;
+                }
+                if (player.Bag.Count > 0)
+                {
+                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                    if (item != null)
+                    {
+                        player.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
+                    }
+                }
+                if (enemy.Bag.Count > 0)
+                {
+                    var item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                    if (item != null)
+                    {
+                        var rate = rnd.NextDouble();
+                        if (item.AbilityRate >= rate)
+                        {
+                            //immune
+                            atk = 0;
+                        }
+                    }
                 }
                 enemy.CurrentHP -= atk;
                 if (enemy.HP > 0)
@@ -182,10 +216,44 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         atk = (int)Math.Round(atk * 0.5);
                     }
+                    if (enemy.Bag.Count > 0)
+                    {
+                        var item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                        if (item != null)
+                        {
+                            var rate = rnd.NextDouble();
+                            if (item.AbilityRate >= rate)
+                            {
+                                //critical!
+                                atk = (int)Math.Round(atk * 1.5);
+                            }
+                        }
+                    }
                     atk -= player.Def;
                     if (atk < 0)
                     {
                         atk = 0;
+                    }
+                    if (enemy.Bag.Count > 0)
+                    {
+                        var item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                        if (item != null)
+                        {
+                            enemy.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
+                        }
+                    }
+                    if (player.Bag.Count > 0)
+                    {
+                        var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                        if (item != null)
+                        {
+                            var rate = rnd.NextDouble();
+                            if (item.AbilityRate >= rate)
+                            {
+                                //immune
+                                atk = 0;
+                            }
+                        }
                     }
                     player.CurrentHP -= atk;
                 }
@@ -352,7 +420,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 //enemy nothing equiped
                 return 0;
             }
-            switch (enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具).First().Element)
+            switch (enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Type != ItemType.指環).First().Element)
             {
                 case Element.Fire:
                     if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
