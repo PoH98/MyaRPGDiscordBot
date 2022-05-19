@@ -19,12 +19,12 @@ namespace MyaDiscordBot.SelectEvent
                 sb.WithCustomId(Guid.NewGuid().ToString());
                 sb.WithPlaceholder("Select an option");
                 List<double> price = new List<double>();
-                for(int x = 1; x <= 25; x++)
+                for (int x = 1; x <= 25; x++)
                 {
                     price.Add(x * 5);
                 }
                 price.Reverse();
-                foreach(var i in price)
+                foreach (var i in price)
                 {
                     SelectMenuOptionBuilder smob = new SelectMenuOptionBuilder();
                     smob.WithLabel("單個賣價: " + i + "$");
@@ -37,7 +37,7 @@ namespace MyaDiscordBot.SelectEvent
                 cb.WithSelectMenu(sb);
                 await message.RespondAsync("請選擇你要賣的價錢：", components: cb.Build(), ephemeral: true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await message.RespondAsync(ex.ToString());
             }

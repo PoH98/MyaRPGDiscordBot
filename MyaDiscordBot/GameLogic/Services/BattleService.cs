@@ -30,7 +30,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk / 1.5);
                 }
-                if(player.Bag.Count > 0)
+                if (player.Bag.Count > 0)
                 {
                     var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
                     if (item != null)
@@ -48,7 +48,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = 0;
                 }
-                if(player.Bag.Count > 0)
+                if (player.Bag.Count > 0)
                 {
                     var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
                     if (item != null)
@@ -77,7 +77,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     if (player.Bag.Count > 0)
                     {
                         var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
-                        if(item != null)
+                        if (item != null)
                         {
                             var rate = rnd.NextDouble();
                             if (item.AbilityRate >= rate)
@@ -161,7 +161,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk * 1.5);
                 }
-                else if(elementWin < 0)
+                else if (elementWin < 0)
                 {
                     atk = (int)Math.Round(atk * 0.5);
                 }
@@ -322,7 +322,7 @@ namespace MyaDiscordBot.GameLogic.Services
             return result;
         }
 
-        
+
         /// <summary>
         /// > 0 means player win, 0 means no extra dmg and nothing happens, < 0 means player lose, but for light & dark will return -2
         /// </summary>
@@ -334,72 +334,72 @@ namespace MyaDiscordBot.GameLogic.Services
             switch (enemy.Element)
             {
                 case Element.Fire:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Wind:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Water:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Earth:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Dark:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
                     {
                         //player win, but special case
                         return -2;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
                     {
                         //player GG
                         return 0;
                     }
                     return -1;
                 case Element.Light:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
                     {
                         //player win, but special case
                         return -2;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
                     {
                         //player GG
                         return 0;
@@ -423,72 +423,72 @@ namespace MyaDiscordBot.GameLogic.Services
             switch (enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Type != ItemType.指環).First().Element)
             {
                 case Element.Fire:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Wind:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Water:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Earth).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Fire).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Earth:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Wind).Count() > 0)
                     {
                         //player win
                         return 1;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
                     {
                         //player GG
                         return -1;
                     }
                     return 0;
                 case Element.Dark:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
                     {
                         //player win, but special case
                         return -2;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
                     {
                         //player GG
                         return 0;
                     }
                     return -1;
                 case Element.Light:
-                    if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Dark).Count() > 0)
                     {
                         //player win, but special case
                         return -2;
                     }
-                    else if (player.Bag.Where(x => x.IsEquiped  && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
+                    else if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Light).Count() > 0)
                     {
                         //player GG
                         return 0;

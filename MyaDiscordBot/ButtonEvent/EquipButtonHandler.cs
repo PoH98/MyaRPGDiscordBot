@@ -26,7 +26,7 @@ namespace MyaDiscordBot.ButtonEvent
             if (message.Data.CustomId.StartsWith("unequip-"))
             {
                 var items = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("unequip-", "").ToLower());
-                if(items.Count() > 0)
+                if (items.Count() > 0)
                 {
                     var item = items.First();
                     if (item.IsEquiped)
@@ -58,7 +58,7 @@ namespace MyaDiscordBot.ButtonEvent
             {
                 //equip
                 var items = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("equip-", "").ToLower());
-                if(items.Count() > 0)
+                if (items.Count() > 0)
                 {
                     var item = items.First();
                     if (!item.IsEquiped)

@@ -27,7 +27,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public Item CraftItem(Player player, string id)
         {
             var craftTable = craftTables.FirstOrDefault(x => x.Item.ToString() == id);
-            if(player.Bag == null)
+            if (player.Bag == null)
             {
                 player.Bag = new List<ItemEquip>();
             }
@@ -38,7 +38,7 @@ namespace MyaDiscordBot.GameLogic.Services
             foreach (var c in craftTable.Resources)
             {
                 var i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
-                if(i != null)
+                if (i != null)
                 {
                     i.Amount -= c.Amount;
                 }
@@ -53,7 +53,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Resource GetResource(Player player)
         {
-            if(player.ResourceBag == null)
+            if (player.ResourceBag == null)
             {
                 player.ResourceBag = new List<HoldedResource>();
             }
@@ -71,7 +71,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Item GetReward(Enemy enemy, Player player)
         {
-            if(enemy.Name== "米講粗口亞")
+            if (enemy.Name == "米講粗口亞")
             {
                 return null;
             }

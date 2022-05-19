@@ -5,7 +5,6 @@ using MyaDiscordBot.ButtonEvent;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
-using MyaDiscordBot.Models.SpamDetection;
 using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -180,7 +179,7 @@ namespace MyaDiscordBot.Commands
         private async Task UpdateCommands(SocketGuild arg = null)
         {
             await arg.DeleteApplicationCommandsAsync();
-            foreach(var command in commands)
+            foreach (var command in commands)
             {
                 try
                 {

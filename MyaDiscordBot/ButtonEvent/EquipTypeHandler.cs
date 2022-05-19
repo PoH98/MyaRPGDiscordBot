@@ -57,15 +57,15 @@ namespace MyaDiscordBot.ButtonEvent
                     items = player.Bag.Where(x => x.Type == ItemType.道具);
                     break;
             }
-            foreach(var i in items.Where(x => x.IsEquiped))
+            foreach (var i in items.Where(x => x.IsEquiped))
             {
-                builder.WithButton("("+ i.Element +")"+i.Name, "unequip-" + i.Name.ToLower(), ButtonStyle.Danger);
+                builder.WithButton("(" + i.Element + ")" + i.Name, "unequip-" + i.Name.ToLower(), ButtonStyle.Danger);
             }
             foreach (var i in items.Where(x => !x.IsEquiped))
             {
                 builder.WithButton("(" + i.Element + ")" + i.Name, "equip-" + i.Name.ToLower(), ButtonStyle.Success);
             }
-            return message.RespondAsync("你背包內相關的道具：",components: builder.Build(), ephemeral: true);
+            return message.RespondAsync("你背包內相關的道具：", components: builder.Build(), ephemeral: true);
         }
     }
 }

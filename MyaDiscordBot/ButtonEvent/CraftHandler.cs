@@ -2,7 +2,6 @@
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
-using System.Text;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -29,7 +28,7 @@ namespace MyaDiscordBot.ButtonEvent
             var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             var id = message.Data.CustomId.Replace("craft-", "");
             var craft = craftTableList.FirstOrDefault(x => x.Item.ToString() == id);
-            if(craft == null)
+            if (craft == null)
             {
                 //???
                 await message.RespondAsync("完全唔知道你想craft咩？", ephemeral: true);
@@ -40,7 +39,7 @@ namespace MyaDiscordBot.ButtonEvent
             eb.WithColor(Color.Magenta);
             eb.WithTitle(item.Name + "所缺少的合成材料：");
             var craftable = true;
-            foreach(var i in craft.Resources)
+            foreach (var i in craft.Resources)
             {
                 if (player.ResourceBag == null)
                 {
@@ -49,7 +48,7 @@ namespace MyaDiscordBot.ButtonEvent
                 var res = player.ResourceBag.FirstOrDefault(x => x.Id == i.Id);
                 if (res != null)
                 {
-                    if((i.Amount - res.Amount) > 0)
+                    if ((i.Amount - res.Amount) > 0)
                     {
                         craftable = false;
                         eb.AddField(res.Name, (i.Amount - res.Amount));

@@ -1,10 +1,5 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -26,11 +21,11 @@ namespace MyaDiscordBot.ButtonEvent
         {
             var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             var item = itemService.CraftItem(player, message.Data.CustomId.Replace("craftConfirm-", ""));
-            if(item == null)
+            if (item == null)
             {
                 return message.RespondAsync("你已經存在依個道具！", ephemeral: true);
             }
-            if(playerService.AddItem(player, item))
+            if (playerService.AddItem(player, item))
             {
                 playerService.SavePlayer(player);
                 return message.RespondAsync("已成功製作" + item.Name, ephemeral: true);

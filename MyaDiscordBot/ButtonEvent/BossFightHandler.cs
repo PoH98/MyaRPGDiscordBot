@@ -41,7 +41,7 @@ namespace MyaDiscordBot.ButtonEvent
                 return;
             }
             var boss = bosses.FirstOrDefault(x => x.Id.ToString() == message.Data.CustomId.Replace("boss-", ""));
-            if(boss == null)
+            if (boss == null)
             {
                 await message.RespondAsync("此Boss已經唔存在！無法展開戰鬥！", ephemeral: true);
                 return;
@@ -59,7 +59,7 @@ namespace MyaDiscordBot.ButtonEvent
             }
             player.Coin += coin;
             playerService.AddExp(player, coin / 5);
-            if(boss.Enemy.Name == "米講粗口亞")
+            if (boss.Enemy.Name == "米講粗口亞")
             {
                 //recover 70% HP directly
                 if (player.CurrentHP < (player.HP * 70 / 100))
@@ -162,7 +162,7 @@ namespace MyaDiscordBot.ButtonEvent
                     {
                         await message.RespondAsync("你對Boss造成左" + result.DamageDealt + "傷害，獲得" + coin + "$! 不過由於Boss實在太強大，你已經陣亡而且被米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
                     }
-                    
+
                 }
             }
 

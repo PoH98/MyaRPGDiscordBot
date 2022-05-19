@@ -1,12 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -29,7 +23,7 @@ namespace MyaDiscordBot.ButtonEvent
                 var id = message.Data.CustomId.Replace("marketSell-", "");
                 var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
                 var r = player.ResourceBag.First(x => x.Id.ToString() == id);
-                if(r.Amount > 0)
+                if (r.Amount > 0)
                 {
                     SelectMenuBuilder sb = new SelectMenuBuilder();
                     sb.WithPlaceholder("Select an option");
@@ -55,7 +49,7 @@ namespace MyaDiscordBot.ButtonEvent
                     await message.RespondAsync("你出售左空氣，獲得 0$", ephemeral: true);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await message.RespondAsync(ex.ToString());
             }

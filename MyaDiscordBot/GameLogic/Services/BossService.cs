@@ -55,11 +55,11 @@ namespace MyaDiscordBot.GameLogic.Services
                             }
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Console.WriteLine(ex.ToString());
                     }
-                    
+
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 var col = db.GetCollection<BossSpawned>("boss");
                 var data = col.Find(x => x.GuildId == serverId);
-                if(data == null)
+                if (data == null)
                 {
                     return;
                 }

@@ -2,11 +2,6 @@
 using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -35,7 +30,7 @@ namespace MyaDiscordBot.Commands
             if (command.Data.Options.First().Value.ToString() == "2")
             {
                 var data = marketService.GetMarketData((command.Channel as SocketGuildChannel).Guild.Id);
-                if(data.Count() > 0)
+                if (data.Count() > 0)
                 {
                     SelectMenuBuilder sb = new SelectMenuBuilder();
                     sb.WithMinValues(1);
@@ -58,14 +53,14 @@ namespace MyaDiscordBot.Commands
             else
             {
                 var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-                if(player.ResourceBag == null)
+                if (player.ResourceBag == null)
                 {
                     player.ResourceBag = new List<HoldedResource>();
                 }
-                if(player.ResourceBag.Count() > 0 && player.ResourceBag.Any(x => x.Amount > 0))
+                if (player.ResourceBag.Count() > 0 && player.ResourceBag.Any(x => x.Amount > 0))
                 {
                     ComponentBuilder cb = new ComponentBuilder();
-                    foreach(var b in player.ResourceBag.Where(x => x.Amount > 0))
+                    foreach (var b in player.ResourceBag.Where(x => x.Amount > 0))
                     {
                         cb.WithButton(b.Name, "marketSell-" + b.Id);
                     }

@@ -29,7 +29,7 @@ namespace MyaDiscordBot.Commands
                 var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
                 player.CurrentHP = 1;
                 _playerService.SavePlayer(player);
-                return command.RespondAsync("米亞發火用電擊棒治療左"+ command.User.Mention + "一餐！");
+                return command.RespondAsync("米亞發火用電擊棒治療左" + command.User.Mention + "一餐！");
             }
 
             return command.RespondAsync(command.User.Mention + "啊~唔好掂我呀！米亞大叫一聲之後整個樓層的玩家都聽到嗮");

@@ -1,10 +1,5 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.SelectEvent
 {
@@ -38,11 +33,11 @@ namespace MyaDiscordBot.SelectEvent
                     await message.RespondAsync("你冇錢買依樣野！", ephemeral: true);
                 }
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 await message.RespondAsync("你對著空氣買野，其他市集裡的人都覺得你奇奇怪怪", ephemeral: true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await message.RespondAsync(ex.ToString());
             }

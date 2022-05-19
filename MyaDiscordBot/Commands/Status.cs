@@ -75,12 +75,12 @@ namespace MyaDiscordBot.Commands
                 }
                 bag2.WithDescription(sb.ToString());
             }
-            if(player.ResourceBag == null)
+            if (player.ResourceBag == null)
             {
                 player.ResourceBag = new List<HoldedResource>();
             }
             var resource = player.ResourceBag.Where(x => x.Amount > 0).OrderBy(x => x.DropRate);
-            if(resource.Count() > 0)
+            if (resource.Count() > 0)
             {
                 foreach (var item in resource)
                 {

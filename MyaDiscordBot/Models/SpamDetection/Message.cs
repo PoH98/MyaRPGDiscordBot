@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyaDiscordBot.Models.SpamDetection
+﻿namespace MyaDiscordBot.Models.SpamDetection
 {
     public class Message
     {

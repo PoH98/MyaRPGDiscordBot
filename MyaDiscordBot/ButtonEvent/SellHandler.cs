@@ -33,7 +33,7 @@ namespace MyaDiscordBot.ButtonEvent
                 player.Atk -= item.Atk;
                 player.Def -= item.Def;
                 player.HP -= item.HP;
-                if(player.CurrentHP > player.HP)
+                if (player.CurrentHP > player.HP)
                 {
                     player.CurrentHP = player.HP;
                 }

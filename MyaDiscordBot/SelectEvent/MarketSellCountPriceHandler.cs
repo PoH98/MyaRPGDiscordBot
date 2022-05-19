@@ -1,10 +1,5 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.SelectEvent
 {
@@ -30,7 +25,7 @@ namespace MyaDiscordBot.SelectEvent
             var price = Convert.ToInt32(split[7]) * amount;
             var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             var sellid = marketService.Sell(player, id, amount, price);
-            if(sellid != Guid.Empty)
+            if (sellid != Guid.Empty)
             {
                 playerService.SavePlayer(player);
                 return message.RespondAsync("你的出售訂單ID為" + sellid + "。上架成功！當前價格：" + price + "$", ephemeral: true);

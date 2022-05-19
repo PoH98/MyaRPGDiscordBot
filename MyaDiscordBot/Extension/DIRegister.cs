@@ -36,7 +36,7 @@ namespace MyaDiscordBot.Extension
             var commandHandler = new CommandHandler(_client, settings);
             commandHandler.InstallCommands();
             var items = new Items();
-            foreach(var i in Directory.GetFiles("config\\Items", "*.json"))
+            foreach (var i in Directory.GetFiles("config\\Items", "*.json"))
             {
                 var its = JsonConvert.DeserializeObject<Items>(File.ReadAllText(i));
                 items.AddRange(its);

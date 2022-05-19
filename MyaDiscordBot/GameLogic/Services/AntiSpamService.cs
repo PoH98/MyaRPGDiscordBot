@@ -1,11 +1,6 @@
 ﻿using Discord.WebSocket;
 using LiteDB;
 using MyaDiscordBot.Models.SpamDetection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.GameLogic.Services
 {

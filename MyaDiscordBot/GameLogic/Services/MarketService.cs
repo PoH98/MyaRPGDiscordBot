@@ -36,22 +36,22 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var db = new LiteDatabase("Filename=save\\" + player.ServerId + ".db;connection=shared"))
             {
                 var col = db.GetCollection<MarketData>("market");
-                var market = col.FindOne(x => x.Id == Guid.Parse(sellId.Replace("market-","")));
-                if(market == null)
+                var market = col.FindOne(x => x.Id == Guid.Parse(sellId.Replace("market-", "")));
+                if (market == null)
                 {
                     throw new ArgumentException();
                 }
-                if(player.Coin <= market.Price && player.Id != market.PlayerId)
+                if (player.Coin <= market.Price && player.Id != market.PlayerId)
                 {
                     return null;
                 }
-                if(player.Id != market.PlayerId)
+                if (player.Id != market.PlayerId)
                 {
                     player.Coin -= market.Price;
                     var seller = _playerService.LoadPlayer(market.PlayerId, player.ServerId);
                     seller.Coin += (market.Price - (market.Price * 3 / 100));
                     IUser user = client.GetUser(market.DiscordSellerId);
-                    if(user == null)
+                    if (user == null)
                     {
                         user = (RestUser)await client.GetUserAsync(market.DiscordSellerId);
                     }
@@ -65,7 +65,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     await dm.SendMessageAsync("你已上架的出售ID " + market.Id + "已經下架！");
                 }
                 var resource = _resource.First(x => x.Id.ToString() == market.ResourceId);
-                for(int x = 0; x < market.Amount; x++)
+                for (int x = 0; x < market.Amount; x++)
                 {
                     _playerService.AddResource(player, resource);
                 }
@@ -77,7 +77,7 @@ namespace MyaDiscordBot.GameLogic.Services
         public Guid Sell(Player player, string id, int amount, int price)
         {
             var res = _resource.FirstOrDefault(x => x.Id.ToString() == id);
-            if(!player.ResourceBag.Any(x => x.Id == res.Id && x.Amount >= amount))
+            if (!player.ResourceBag.Any(x => x.Id == res.Id && x.Amount >= amount))
             {
                 return Guid.Empty;
             }

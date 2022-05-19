@@ -142,15 +142,15 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public bool AddResource(Player player, Resource item)
         {
-            if(item == null)
+            if (item == null)
             {
                 return false;
             }
-            if(player.ResourceBag == null)
+            if (player.ResourceBag == null)
             {
                 player.ResourceBag = new List<HoldedResource>();
             }
-            if(!player.ResourceBag.Any(x => x.Id == item.Id))
+            if (!player.ResourceBag.Any(x => x.Id == item.Id))
             {
                 player.ResourceBag.Add(new HoldedResource(item));
             }

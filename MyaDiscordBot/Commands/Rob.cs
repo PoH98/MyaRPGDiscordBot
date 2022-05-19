@@ -99,7 +99,7 @@ namespace MyaDiscordBot.Commands
                     player.CurrentHP = player.HP;
                     victim.RobShield = DateTime.Now.AddHours(12);
                     player.NextRob = DateTime.Now.AddHours(8);
-                    if(player.NextCommand > DateTime.Now)
+                    if (player.NextCommand > DateTime.Now)
                     {
                         player.NextCommand = player.NextCommand.AddMinutes(30);
                     }
@@ -107,7 +107,7 @@ namespace MyaDiscordBot.Commands
                     {
                         player.NextCommand = DateTime.Now.AddMinutes(30);
                     }
-                    if(victim.NextCommand > DateTime.Now)
+                    if (victim.NextCommand > DateTime.Now)
                     {
                         victim.NextCommand = victim.NextCommand.AddMinutes(30);
                     }

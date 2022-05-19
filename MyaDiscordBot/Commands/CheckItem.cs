@@ -85,7 +85,7 @@ namespace MyaDiscordBot.Commands
             {
                 eb.AddField("血量", item.HP);
             }
-            if(item.Ability != Ability.None)
+            if (item.Ability != Ability.None)
             {
                 switch (item.Ability)
                 {

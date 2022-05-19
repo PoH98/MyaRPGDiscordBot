@@ -14,7 +14,7 @@ namespace MyaDiscordBot.Commands
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             Random random = new Random();
-            return command.RespondAsync("獲得"+random.Next(1, 6));
+            return command.RespondAsync("獲得" + random.Next(1, 6));
         }
     }
 }
