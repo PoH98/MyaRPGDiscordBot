@@ -26,15 +26,34 @@ namespace MyaDiscordBot.Commands
             switch ((double)command.Data.Options.First().Value)
             {
                 case 1:
-                    var maxRank = player.Bag.Where(x => x.IsEquiped).Min(x => x.Rank);
-                    foreach (var i in player.Bag)
+                    //check if have any equiped
+                    if(player.Bag.Where(x => x.IsEquiped).Count() > 0)
                     {
-                        //not equip and rank is lower than current rank, except golden AK
-                        if (!i.IsEquiped && i.Rank < maxRank && i.Id != Guid.Empty && i.UseTimes == -1 && i.Ability == Ability.None)
+                        var maxRank = player.Bag.Where(x => x.IsEquiped).Min(x => x.Rank);
+                        foreach (var i in player.Bag)
                         {
-                            dump.Add(i);
+                            //not equip and rank is lower than current rank, except golden AK
+                            if (!i.IsEquiped && i.Rank < maxRank && i.Id != Guid.Empty && i.UseTimes == -1 && i.Ability == Ability.None)
+                            {
+                                dump.Add(i);
+                            }
                         }
                     }
+                    //else we can only detect not equiped
+                    else if(player.Bag.Count > 0)
+                    {
+                        //retain max lv and lower 1 lv items
+                        var maxRank = player.Bag.Max(x => x.Rank) - 1;
+                        foreach (var i in player.Bag)
+                        {
+                            //not equip and rank is lower than current rank, except golden AK
+                            if (!i.IsEquiped && i.Rank < maxRank && i.Id != Guid.Empty && i.UseTimes == -1 && i.Ability == Ability.None)
+                            {
+                                dump.Add(i);
+                            }
+                        }
+                    }
+                    //else nothing to sell, since player bag is empty
                     break;
                 case 2:
                     foreach (var i in player.Bag)
