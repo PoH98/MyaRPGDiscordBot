@@ -90,13 +90,13 @@ namespace MyaDiscordBot.Commands
                 switch (item.Ability)
                 {
                     case Ability.Critical:
-                        eb.AddField("技能", "暴擊: 發動幾率" + (item.AbilityRate * 100) + "%");
+                        eb.AddField("技能", "暴擊: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
                         break;
                     case Ability.Heal:
-                        eb.AddField("技能", "吸血: 每次攻擊恢復" + (item.AbilityRate * 100) + "% 攻擊的血量");
+                        eb.AddField("技能", "吸血: 每次攻擊恢復" + (item.AbilityRate * 100).ToString("#0.00") + "% 攻擊的血量");
                         break;
                     case Ability.Immune:
-                        eb.AddField("技能", "無敵: 發動幾率" + (item.AbilityRate * 100) + "%");
+                        eb.AddField("技能", "無敵: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
                         break;
                 }
             }
