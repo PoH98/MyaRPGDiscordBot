@@ -165,7 +165,7 @@ namespace MyaDiscordBot.ButtonEvent
 
                 }
             }
-
+            player.LastCommand = DateTime.Now.AddHours(1);
             player.BossDamage += result.DamageDealt;
             playerService.SavePlayer(player);
         }

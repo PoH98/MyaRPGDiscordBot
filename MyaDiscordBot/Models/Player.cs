@@ -67,6 +67,10 @@
         /// </summary>
         public DateTime NextCommand { get; set; }
         /// <summary>
+        /// 上次Send Command的時間，用來計算線下獎勵
+        /// </summary>
+        public DateTime LastCommand { get; set; }
+        /// <summary>
         /// 統計對Boss造成幾多傷害
         /// </summary>
         public int BossDamage { get; set; }

@@ -92,6 +92,7 @@ namespace MyaDiscordBot.Commands
                     player.CurrentHP = player.HP;
                     await command.RespondWithFileAsync("Assets\\wasted.png", "wasted.png", "你已死亡，請等待米亞呼叫來的醫護熊貓搬你返基地！復活時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>", ephemeral: true);
                 }
+                player.LastCommand = DateTime.Now;
             }
             else
             {

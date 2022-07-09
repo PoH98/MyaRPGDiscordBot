@@ -16,9 +16,6 @@ namespace MyaDiscordBot.GameLogic.Services
         }
         public Enemy Spawn(Element mapType, int lv)
         {
-#if DEBUG
-            return SpawnBoss(lv);
-#endif
             Random rnd = new Random();
             var probability = rnd.NextDouble();
             if (probability < 0.01)
