@@ -27,12 +27,6 @@ ITrigger trigger = TriggerBuilder.Create()
     .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<OfflineRewardJob>()
-    .Build();
-trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
-    .Build();
-await scheduler.ScheduleJob(job, trigger);
 job = JobBuilder.Create<KeepAliveJob>()
     .Build();
 trigger = TriggerBuilder.Create()

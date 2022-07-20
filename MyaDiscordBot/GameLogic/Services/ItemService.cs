@@ -83,34 +83,52 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     if (!enemy.IsBoss)
                     {
-                        var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
-                        if (reward.Any())
+                        var rewards = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
+                        if (rewards.Any())
                         {
                             double cumulSum = 0;
-                            int cnt = reward.Count();
+                            int cnt = rewards.Count();
                             for (int slot = 0; slot < cnt; slot++)
                             {
                                 cumulSum += items[slot].DropRate;
-                                reward[slot].DropRate = cumulSum;
+                                rewards[slot].DropRate = cumulSum;
                             }
                             double divSpot = rnd.NextDouble() * cumulSum;
-                            return reward.FirstOrDefault(i => i.DropRate >= divSpot);
+                            var r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
+                            if(r != null && enemy.Stage > 10)
+                            {
+                                //infinite loop
+                                r.Atk *= enemy.Stage / 10;
+                                r.Def *= enemy.Stage / 10;
+                                r.HP *= enemy.Stage / 10;
+                                r.Name += " EX" + enemy.Stage / 10;
+                            }
+                            return r;
                         }
                     }
                     else
                     {
-                        var reward = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && (x.Element == Element.Light || x.Element == Element.Dark) && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
-                        if (reward.Any())
+                        var rewards = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && (x.Element == Element.Light || x.Element == Element.Dark) && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
+                        if (rewards.Any())
                         {
                             double cumulSum = 0;
-                            int cnt = reward.Count();
+                            int cnt = rewards.Count();
                             for (int slot = 0; slot < cnt; slot++)
                             {
                                 cumulSum += items[slot].DropRate;
-                                reward[slot].DropRate = cumulSum;
+                                rewards[slot].DropRate = cumulSum;
                             }
                             double divSpot = rnd.NextDouble() * cumulSum;
-                            return reward.FirstOrDefault(i => i.DropRate >= divSpot);
+                            var r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
+                            if (r != null && enemy.Stage > 10)
+                            {
+                                //infinite loop
+                                r.Atk *= enemy.Stage / 10;
+                                r.Def *= enemy.Stage / 10;
+                                r.HP *= enemy.Stage / 10;
+                                r.Name += " EX" + enemy.Stage / 10;
+                            }
+                            return r;
                         }
                     }
                 }

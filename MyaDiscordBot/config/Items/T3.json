@@ -670,5 +670,53 @@
     "AbilityRate": 0.0,
     "DropRate": 0.3,
     "Craft": false
+  },
+  {
+    "Id": "1b02d237-fe33-41bd-a8bc-03c34da47e5a",
+    "Name": "黃金戒指",
+    "Rank": 3,
+    "Price": -1,
+    "Atk": 0,
+    "Def": 0,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": -5,
+    "Ability": 1,
+    "AbilityRate": 0.05,
+    "DropRate": 0.0,
+    "Craft": true
+  },
+  {
+    "Id": "2f590e8f-029f-4299-9a75-ff016b976f2f",
+    "Name": "M&Ms朱古力戒指",
+    "Rank": 3,
+    "Price": -1,
+    "Atk": 0,
+    "Def": -4,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 2,
+    "AbilityRate": 0.2,
+    "DropRate": 0.0,
+    "Craft": true
+  },
+  {
+    "Id": "67b4c4d0-b6df-4f05-be23-0530ca6a7952",
+    "Name": "(つ´ω`)つ戒指",
+    "Rank": 3,
+    "Price": -1,
+    "Atk": -4,
+    "Def": 0,
+    "UseTimes": -1,
+    "Element": 6,
+    "Type": 3,
+    "HP": 0,
+    "Ability": 3,
+    "AbilityRate": 0.05,
+    "DropRate": 0.0,
+    "Craft": true
   }
 ]

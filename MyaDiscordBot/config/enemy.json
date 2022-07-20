@@ -963,5 +963,350 @@
     "stage": 6,
     "dropRank": [ 7 ],
     "isBoss": true
+  },
+
+  {
+    "name": "自動人偶-殺戮",
+    "hp": 100,
+    "atk": 40,
+    "def": 10,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "自動人偶-嗜血",
+    "hp": 95,
+    "atk": 45,
+    "def": 5,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "自動人偶-貪婪",
+    "hp": 100,
+    "atk": 35,
+    "def": 15,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "自動人偶-狂怒",
+    "hp": 145,
+    "atk": 35,
+    "def": 10,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "人偶操縱師-超自然",
+    "hp": 100,
+    "atk": 45,
+    "def": 10,
+    "element": 3,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "人偶操縱師-神隱者",
+    "hp": 100,
+    "atk": 55,
+    "def": 5,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "人偶操縱師-約束",
+    "hp": 100,
+    "atk": 35,
+    "def": 25,
+    "element": 4,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "人偶操縱師-扭曲",
+    "hp": 135,
+    "atk": 40,
+    "def": 10,
+    "element": 5,
+    "itemDropRate": 0.2,
+    "stage": 7,
+    "dropRank": [ 7 ]
+  },
+  {
+    "name": "戰神人偶-行星操縱者",
+    "hp": 1500,
+    "atk": 85,
+    "def": 15,
+    "element": 2,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "戰神人偶-風暴毀滅者",
+    "hp": 1500,
+    "atk": 75,
+    "def": 20,
+    "element": 3,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "戰神人偶-要塞守護者",
+    "hp": 1500,
+    "atk": 75,
+    "def": 30,
+    "element": 4,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "戰神人偶-冰霜封印者",
+    "hp": 2000,
+    "atk": 75,
+    "def": 20,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "戰神人偶-閃光穿梭者",
+    "hp": 1500,
+    "atk": 110,
+    "def": 15,
+    "element": 0,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "戰神人偶-影子刺殺者",
+    "hp": 1500,
+    "atk": 110,
+    "def": 15,
+    "element": 1,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "戰神人偶-超載弒神者",
+    "hp": 1500,
+    "atk": 110,
+    "def": 15,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 7,
+    "dropRank": [ 8 ],
+    "isBoss": true
+  },
+  {
+    "name": "勇者-風暴屠龍者",
+    "hp": 120,
+    "atk": 38,
+    "def": 12,
+    "element": 3,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "勇者-炎龍騎士",
+    "hp": 120,
+    "atk": 45,
+    "def": 9,
+    "element": 2,
+    "itemDropRate": 0.2,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "勇者-首都保護者",
+    "hp": 120,
+    "atk": 32,
+    "def": 17,
+    "element": 4,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "勇者-河流控制者",
+    "hp": 180,
+    "atk": 38,
+    "def": 12,
+    "element": 5,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "村莊-精靈村",
+    "hp": 140,
+    "atk": 40,
+    "def": 10,
+    "element": 3,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "村莊-獸人村",
+    "hp": 140,
+    "atk": 47,
+    "def": 4,
+    "element": 2,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "村莊-矮人村",
+    "hp": 140,
+    "atk": 37,
+    "def": 16,
+    "element": 4,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "村莊-人魚村",
+    "hp": 200,
+    "atk": 40,
+    "def": 9,
+    "element": 5,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+
+  {
+    "name": "要塞-精靈之城",
+    "hp": 160,
+    "atk": 37,
+    "def": 8,
+    "element": 3,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "要塞-獸人之城",
+    "hp": 160,
+    "atk": 42,
+    "def": 3,
+    "element": 2,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "要塞-矮人之城",
+    "hp": 160,
+    "atk": 32,
+    "def": 13,
+    "element": 4,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "要塞-人魚之城",
+    "hp": 240,
+    "atk": 38,
+    "def": 8,
+    "element": 5,
+    "itemDropRate": 0.05,
+    "stage": 8,
+    "dropRank": [ 8 ]
+  },
+  {
+    "name": "精靈之森-精靈樂園",
+    "hp": 2000,
+    "atk": 85,
+    "def": 10,
+    "element": 2,
+    "itemDropRate": 1,
+    "stage": 8,
+    "dropRank": [ 9 ],
+    "isBoss": true
+  },
+  {
+    "name": "獸人之城-獸娘之都",
+    "hp": 2000,
+    "atk": 95,
+    "def": 15,
+    "element": 3,
+    "itemDropRate": 1,
+    "stage": 8,
+    "dropRank": [ 9 ],
+    "isBoss": true
+  },
+  {
+    "name": "矮人之城-蒸汽城寨",
+    "hp": 2000,
+    "atk": 80,
+    "def": 20,
+    "element": 4,
+    "itemDropRate": 1,
+    "stage": 8,
+    "dropRank": [ 9 ],
+    "isBoss": true
+  },
+  {
+    "name": "人魚之城-海底龍宮",
+    "hp": 2500,
+    "atk": 80,
+    "def": 15,
+    "element": 5,
+    "itemDropRate": 1,
+    "stage": 8,
+    "dropRank": [ 9 ],
+    "isBoss": true
+  },
+  {
+    "name": "天使之都-神聖神殿",
+    "hp": 2000,
+    "atk": 110,
+    "def": 15,
+    "element": 0,
+    "itemDropRate": 1,
+    "stage": 8,
+    "dropRank": [ 9 ],
+    "isBoss": true
+  },
+  {
+    "name": "世界守護龍-夜龍",
+    "hp": 2000,
+    "atk": 110,
+    "def": 15,
+    "element": 1,
+    "itemDropRate": 1,
+    "stage": 8,
+    "dropRank": [ 9 ],
+    "isBoss": true
   }
 ]

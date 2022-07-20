@@ -82,6 +82,10 @@
         /// Robbed Shield
         /// </summary>
         public DateTime RobShield { get; set; }
+        /// <summary>
+        /// Pets
+        /// </summary>
+        public List<Pet> Pets { get; set; }
     }
 
     public class Coordinate

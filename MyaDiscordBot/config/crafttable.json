@@ -100,5 +100,56 @@
       }
     ],
     "Item": "3d475327-6a54-491d-94bc-ce7073b4e106"
+  },
+  {
+    "Resources": [
+      {
+        "Id": "98839c41-08b6-48b4-8f35-1d5a2d863707",
+        "Amount": 50
+      },
+      {
+        "Id": "e777a929-ba08-4898-85db-3ddc095a3f44",
+        "Amount": 35
+      },
+      {
+        "Id": "392d421f-44ec-461f-ac0a-0c6ae5d0571a",
+        "Amount": 20
+      }
+    ],
+    "Item": "1b02d237-fe33-41bd-a8bc-03c34da47e5a"
+  },
+  {
+    "Resources": [
+      {
+        "Id": "98839c41-08b6-48b4-8f35-1d5a2d863707",
+        "Amount": 50
+      },
+      {
+        "Id": "e777a929-ba08-4898-85db-3ddc095a3f44",
+        "Amount": 35
+      },
+      {
+        "Id": "392d421f-44ec-461f-ac0a-0c6ae5d0571a",
+        "Amount": 20
+      }
+    ],
+    "Item": "2f590e8f-029f-4299-9a75-ff016b976f2f"
+  },
+  {
+    "Resources": [
+      {
+        "Id": "98839c41-08b6-48b4-8f35-1d5a2d863707",
+        "Amount": 50
+      },
+      {
+        "Id": "e777a929-ba08-4898-85db-3ddc095a3f44",
+        "Amount": 35
+      },
+      {
+        "Id": "392d421f-44ec-461f-ac0a-0c6ae5d0571a",
+        "Amount": 20
+      }
+    ],
+    "Item": "67b4c4d0-b6df-4f05-be23-0530ca6a7952"
   }
 ]

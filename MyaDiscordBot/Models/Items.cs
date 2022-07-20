@@ -98,8 +98,11 @@ namespace MyaDiscordBot.Models
     public enum Ability
     {
         None = 0,
-        Heal = 1,
-        Critical = 2,
-        Immune = 3
+        Heal = 1, //恢復HP
+        Critical = 2, //暴擊
+        Immune = 3, //概率無敵
+        Reflect = 4, //概率反射受到的傷害
+        DebuffStates = 5, //降低對方數值
+        DebuffSkill = 6 //封鎖對方技能
     }
 }

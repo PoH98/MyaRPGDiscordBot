@@ -27,9 +27,27 @@ namespace MyaDiscordBot.GameLogic.Services
                 //no spawn
                 return null;
             }
-            var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == (lv / 10) && !x.IsBoss).ToList();
-            var enemySelected = rnd.Next(enemies.Count());
-            return (Enemy)enemies[enemySelected].Clone();
+            var rank = lv / 10;
+            if (rank >= 10)
+            {
+                //player 100lv, infinite loop now
+                var loopCount = (rank / 10) + 1;
+                rank = rank % 10;
+                var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == rank && !x.IsBoss).ToList();
+                var enemySelected = rnd.Next(enemies.Count());
+                var enemy = (Enemy)enemies[enemySelected].Clone();
+                enemy.Def *= loopCount * 8;
+                enemy.Atk *= loopCount * 8;
+                enemy.HP *= loopCount * 10;
+                enemy.Stage = loopCount * 10 + rank;
+                return enemy;
+            }
+            else
+            {
+                var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == rank && !x.IsBoss).ToList();
+                var enemySelected = rnd.Next(enemies.Count());
+                return (Enemy)enemies[enemySelected].Clone();
+            }
         }
 
         public Enemy SpawnBoss(int lv)
