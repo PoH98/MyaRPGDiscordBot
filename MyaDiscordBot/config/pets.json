@@ -1,5 +1,6 @@
 ﻿[
   {
+    "Id": "",
     "Name": "大便怪",
     "Atk": 0,
     "Def": 0,
@@ -9,6 +10,7 @@
     "AbilityRate": 0
   },
   {
+    "Id": "",
     "Name": "DD怪",
     "Atk": 0,
     "Def": 0,
@@ -18,6 +20,7 @@
     "AbilityRate": 0
   },
   {
+    "Id": "",
     "Name": "飛天奶茶",
     "Atk": 0,
     "Def": 0,
@@ -27,6 +30,7 @@
     "AbilityRate": 0
   },
   {
+    "Id": "",
     "Name": "熊貓怪",
     "Atk": 0,
     "Def": 0,

@@ -89,7 +89,7 @@ namespace MyaDiscordBot.GameLogic.Services
                                 var coinLost = (int)Math.Round((random.NextDouble() * ((awaitTime * 3.5) - (awaitTime * 1.5))) + (awaitTime * 1.5));
                                 coinGet -= coinLost;
                                 player.Coin += coinGet;
-                                player.Exp += (int)Math.Round(coinGet * 0.5);
+                                player.Exp += (int)Math.Round(coinGet * 0.2);
                                 player.LastCommand = DateTime.Now;
                                 playerService.SavePlayer(player);
                             }

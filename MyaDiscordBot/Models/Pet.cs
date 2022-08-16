@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 namespace MyaDiscordBot.Models
 {
+    public class Pets : IEnumerable<Pet>
+    {
+        private readonly List<Pet> _pets;
+        public IEnumerator<Pet> GetEnumerator()
+        {
+            return _pets.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _pets.GetEnumerator();
+        }
+    }
     public class Pet
     {
         public Guid Id { get; set; }

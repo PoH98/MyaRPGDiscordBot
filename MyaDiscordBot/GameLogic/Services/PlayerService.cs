@@ -136,7 +136,7 @@ namespace MyaDiscordBot.GameLogic.Services
             using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
             {
                 var col = db.GetCollection<Player>("player");
-                return col.Find(x => x.ServerId == serverId).ToList();
+                return col.FindAll().ToList();
             }
         }
 
