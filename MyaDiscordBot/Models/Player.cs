@@ -83,6 +83,14 @@
         /// </summary>
         public DateTime RobShield { get; set; }
         /// <summary>
+        /// Time limit for gambling
+        /// </summary>
+        public DateTime GamblingDelay { get; set; }
+        /// <summary>
+        /// Gambling times
+        /// </summary>
+        public int GamblingTimes { get; set; }
+        /// <summary>
         /// Pets
         /// </summary>
         public List<Pet> Pets { get; set; }

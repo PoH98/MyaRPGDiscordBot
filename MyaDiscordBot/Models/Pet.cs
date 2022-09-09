@@ -2,18 +2,9 @@
 
 namespace MyaDiscordBot.Models
 {
-    public class Pets : IEnumerable<Pet>
+    public class Pets : List<Pet>
     {
-        private readonly List<Pet> _pets;
-        public IEnumerator<Pet> GetEnumerator()
-        {
-            return _pets.GetEnumerator();
-        }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _pets.GetEnumerator();
-        }
     }
     public class Pet
     {

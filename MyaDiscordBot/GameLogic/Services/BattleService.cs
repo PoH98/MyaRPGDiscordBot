@@ -276,8 +276,8 @@ namespace MyaDiscordBot.GameLogic.Services
                             {
                                 player.HP += item.HP / 10;
                             }
-                            //add max HP forever
-                            player.HP += item.HP / 5;
+                            //heal
+                            player.CurrentHP += item.HP;
                             if (player.CurrentHP > player.HP)
                             {
                                 player.CurrentHP = player.HP;
@@ -303,8 +303,8 @@ namespace MyaDiscordBot.GameLogic.Services
                             {
                                 enemy.HP += item.HP / 10;
                             }
-                            //add max HP forever
-                            enemy.HP += item.HP / 5;
+                            //heal
+                            enemy.CurrentHP += item.HP;
                             if (enemy.CurrentHP > enemy.HP)
                             {
                                 enemy.CurrentHP = enemy.HP;

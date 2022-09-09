@@ -90,11 +90,20 @@ namespace MyaDiscordBot.Commands
         {
             var message = arg as SocketUserMessage;
             if (message == null) return;
+            Console.WriteLine("["+ message.Channel.Name + "]" +message.Author.Id + ":" + message.Content);
             using (var scope = Data.Instance.Container.BeginLifetimeScope())
             {
                 var antiSpam = scope.Resolve<IAntiSpamService>();
                 if (antiSpam.IsSpam(message))
                 {
+                    await message.DeleteAsync();
+                    return;
+                }
+                if (await antiSpam.IsScam(message))
+                {
+                    Console.WriteLine("Detected scam!");
+                    var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
+                    await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
                     await message.DeleteAsync();
                     return;
                 }
