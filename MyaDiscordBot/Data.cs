@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using MyaDiscordBot.Models;
+using MyaDiscordBot.Models.Antiscam;
 using Timer = System.Timers.Timer;
 
 namespace MyaDiscordBot
@@ -22,6 +23,7 @@ namespace MyaDiscordBot
         public ExpirableList<Tuple<ulong, Enemy>> Boss { get; set; } = new ExpirableList<Tuple<ulong, Enemy>>(604800000);
         public ExpirableList<ulong> CacheDisableResponse { get; set; } = new ExpirableList<ulong>(5000);
         public int LastRnd { get; set; }
+        public ExpirableList<AntiscamData> ScamList { get; set; } = new ExpirableList<AntiscamData>(3600000);
     }
 
     public class ExpirableList<T> : IList<T>

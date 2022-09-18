@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using Newtonsoft.Json;
 using MyaDiscordBot.Models;
+using MyaDiscordBot.Models.Antiscam;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -29,6 +30,19 @@ namespace MyaDiscordBot.GameLogic.Services
                     var pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
                     return pg.Match;
                 }
+            }
+            if(Data.Instance.ScamList.Count < 1)
+            {
+                //fetch scamlist
+                HttpClient client = new HttpClient();
+                var result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
+                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+                result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
+                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+            }
+            if(Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
+            {
+                return true;
             }
             match = Regex.Match(message.Content, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
             return match.Success;
