@@ -42,6 +42,11 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             if(Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
             {
+                if (message.Content.Contains("https://cdn.discordapp.com/"))
+                {
+                    //cdn, not scam lol
+                    return false;
+                }
                 return true;
             }
             match = Regex.Match(message.Content, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
