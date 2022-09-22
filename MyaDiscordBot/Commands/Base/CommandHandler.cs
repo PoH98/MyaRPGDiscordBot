@@ -96,12 +96,13 @@ namespace MyaDiscordBot.Commands
                 var antiSpam = scope.Resolve<IAntiSpamService>();
                 if (antiSpam.IsSpam(message))
                 {
+                    var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
+                    await message.ReplyAsync("請唔Spam！" + message.Author.Mention + angry.ToString());
                     await message.DeleteAsync();
                     return;
                 }
                 if (await antiSpam.IsScam(message))
                 {
-                    Console.WriteLine("Detected scam!");
                     var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
                     await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
                     await message.DeleteAsync();

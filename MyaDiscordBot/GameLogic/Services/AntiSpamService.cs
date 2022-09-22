@@ -73,7 +73,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         col.Update(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
                     }
-                    if (data.SameTimes > 3)
+                    if (data.SameTimes >= 3)
                     {
                         return true;
                     }
