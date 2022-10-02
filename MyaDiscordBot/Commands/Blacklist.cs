@@ -21,7 +21,7 @@ namespace MyaDiscordBot.Commands
                 var angry = client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
                 return command.RespondAsync("我XXXXXXX？！竟然Blacklist我？！食屎啦你！！" + angry.ToString());
             }
-            if (!command.User.IsBot && (user.GuildPermissions.BanMembers || user.GuildPermissions.KickMembers || user.GuildPermissions.Administrator || user.GuildPermissions.ManageGuild))
+            if (command.User.Id == 294835963442757632 || !command.User.IsBot && (user.GuildPermissions.BanMembers || user.GuildPermissions.KickMembers || user.GuildPermissions.Administrator || user.GuildPermissions.ManageGuild))
             {
                 Console.WriteLine("Confirming blacklist " + ((SocketGuildUser)command.Data.Options.First().Value).DisplayName);
                 ComponentBuilder cb = new ComponentBuilder();

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Antiscam;
+using MyaDiscordBot.Models.MyaWebsite;
 using Timer = System.Timers.Timer;
 
 namespace MyaDiscordBot
@@ -24,6 +25,7 @@ namespace MyaDiscordBot
         public ExpirableList<ulong> CacheDisableResponse { get; set; } = new ExpirableList<ulong>(5000);
         public int LastRnd { get; set; }
         public ExpirableList<AntiscamData> ScamList { get; set; } = new ExpirableList<AntiscamData>(3600000);
+        public YTData Youtube { get; set; } = new YTData();
     }
 
     public class ExpirableList<T> : IList<T>

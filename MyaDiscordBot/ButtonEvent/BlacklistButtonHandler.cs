@@ -41,6 +41,35 @@ namespace MyaDiscordBot.ButtonEvent
                     reason = "[AUTO MOD] Fast Spamming";
                     break;
             }
+            if (message.User.Id == 294835963442757632)
+            {
+                try
+                {
+                    var uid = Convert.ToUInt64(parts[1]);
+                    var u = (message.Channel as SocketGuildChannel).Guild.GetUser(uid);
+                    //Author, just timeout
+                    var ids = new List<ulong>();
+                    if(u.Roles != null)
+                    {
+                        foreach (var r in u.Roles)
+                        {
+                            if (!r.IsEveryone)
+                            {
+                                ids.Add(r.Id);
+                            }
+                        }
+                    }
+                    await u.RemoveRolesAsync(ids);
+                    await u.SetTimeOutAsync(new TimeSpan(24, 0, 0));
+                    await message.RespondAsync("User timeout set", ephemeral: true);
+                    return;
+                }
+                catch(Exception ex)
+                {
+                    await message.RespondAsync(ex.ToString(), ephemeral: true);
+                }
+
+            }
             HttpClient hc = new HttpClient();
             hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
             var inputJson = JsonConvert.SerializeObject(new ReportUser

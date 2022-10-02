@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using LiteDB;
 using MyaDiscordBot.Models;
 
@@ -6,9 +7,10 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     public interface ISettingService
     {
-        bool CorrectChannel(SocketSlashCommand command, out ulong correctChannel);
+        bool CorrectChannel(SocketCommandBase interaction, out ulong correctChannel);
         void SetChannel(SocketSlashCommand command);
         ServerSettings GetSettings(ulong serverId);
+        void SaveSettings(ulong serverId, ServerSettings settings);
     }
     public class SettingService : ISettingService
     {
@@ -17,22 +19,22 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             this.configuration = configuration;
         }
-        public bool CorrectChannel(SocketSlashCommand command, out ulong correctChannel)
+        public bool CorrectChannel(SocketCommandBase interaction, out ulong correctChannel)
         {
-            using (var db = new LiteDatabase("Filename=save\\" + (command.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
+            using (var db = new LiteDatabase("Filename=save\\" + (interaction.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
             {
                 var guild = db.GetCollection<ServerSettings>("settings");
-                if (!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
+                if (!guild.Exists(x => x.GuildId == (interaction.Channel as SocketGuildChannel).Guild.Id))
                 {
                     //not set
-                    correctChannel = (command.Channel as SocketGuildChannel).Guild.DefaultChannel.Id;
+                    correctChannel = (interaction.Channel as SocketGuildChannel).Guild.DefaultChannel.Id;
                     return true;
                 }
                 else
                 {
-                    var setting = guild.FindOne(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id);
+                    var setting = guild.FindOne(x => x.GuildId == (interaction.Channel as SocketGuildChannel).Guild.Id);
                     correctChannel = setting.ChannelId;
-                    if ((command.Channel as SocketGuildChannel).Id == setting.ChannelId)
+                    if ((interaction.Channel as SocketGuildChannel).Id == setting.ChannelId)
                     {
                         return true;
                     }
@@ -47,6 +49,15 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 var guild = db.GetCollection<ServerSettings>("settings");
                 return guild.FindOne(x => x.GuildId == serverId);
+            }
+        }
+
+        public void SaveSettings(ulong serverId, ServerSettings settings)
+        {
+            using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
+            {
+                var guild = db.GetCollection<ServerSettings>("settings");
+                guild.Update(settings);
             }
         }
 

@@ -7,6 +7,7 @@ using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 
 namespace MyaDiscordBot.Commands
@@ -18,6 +19,8 @@ namespace MyaDiscordBot.Commands
         private IEnumerable<IButtonHandler> buttons;
         private IEnumerable<ISelectHandler> selects;
         private HttpClient hc = new HttpClient();
+        private DateTime lastEntered = DateTime.MinValue;
+        private int raidAlert = 0;
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
@@ -80,8 +83,72 @@ namespace MyaDiscordBot.Commands
                 var result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
                 if (result.Blacklisted)
                 {
-                    Console.WriteLine(arg.Id + " is evil!! Kick him!!");
-                    await arg.KickAsync(result.Reason + " in other server on " + result.Date);
+                    using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                    {
+                        Console.WriteLine(arg.Id + " is evil!! Kick him!!");
+                        var setting = scope.Resolve<ISettingService>();
+                        var settings = setting.GetSettings(arg.Guild.Id);
+                        if (settings.ChannelId != 0)
+                        {
+                            var channel = await _client.GetChannelAsync(settings.ChannelId);
+                            await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，嘗試自動踢出");
+                        }
+                        try
+                        {
+                            await arg.KickAsync(result.Reason + " in other server on " + result.Date);
+                        }
+                        catch(Exception ex)
+                        {
+                            if (settings.ChannelId != 0)
+                            {
+                                var channel = await _client.GetChannelAsync(settings.ChannelId);
+                                await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，踢出失敗！");
+                            }
+                        }
+                    }
+                }
+                if((DateTime.Now - lastEntered).TotalMinutes < 1 && (DateTime.Now - arg.CreatedAt).TotalDays < 1)
+                {
+                    raidAlert++;
+                }
+                else
+                {
+                    raidAlert = 0;
+                }
+                lastEntered = DateTime.Now;
+                if(raidAlert >= 5)
+                {
+                    using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                    {
+                        var setting = scope.Resolve<ISettingService>();
+                        var settings = setting.GetSettings(arg.Guild.Id);
+                        if(Data.Instance.Youtube.Videos.Count >= 0)
+                        {
+                            if(Data.Instance.Youtube.Videos.Any(x => DateTime.Now.Date == x.ScheduledStartTime.ToLocalTime().Date && DateTime.Now >= x.ScheduledStartTime.ToLocalTime() && x.ScheduledStartTime.TimeOfDay <= new TimeSpan(23, 0, 0)))
+                            {
+                                //in Live, ignore server raid now
+                                return;
+                            }
+                        }
+                        if (settings.RaidKiller)
+                        {
+                            if (settings.ChannelId != 0)
+                            {
+                                var channel = await _client.GetChannelAsync(settings.ChannelId);
+                                var guild = _client.GetGuild(arg.Guild.Id);
+                                try
+                                {
+                                    await ((IMessageChannel)channel).SendMessageAsync("清理系統正在嘗試禁言" + arg.Mention);
+                                    await arg.SetTimeOutAsync(new TimeSpan(1, 0, 0));
+                                    await arg.SendMessageAsync("你的行動疑似Server Raid, 已經被自動禁言！一小時後會自動解禁！");
+                                }
+                                catch (Exception)
+                                {
+                                    await ((IMessageChannel)channel).SendMessageAsync("清理系統無法踢出" + arg.Mention + "! 請確保有足夠權限！");
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -89,7 +156,7 @@ namespace MyaDiscordBot.Commands
         private async Task _client_MessageReceived(SocketMessage arg)
         {
             var message = arg as SocketUserMessage;
-            if (message == null) return;
+            if (message == null || string.IsNullOrEmpty(message.Content)) return;
             Console.WriteLine("["+ message.Channel.Name + "]" +message.Author.Id + ":" + message.Content);
             using (var scope = Data.Instance.Container.BeginLifetimeScope())
             {
@@ -204,7 +271,7 @@ namespace MyaDiscordBot.Commands
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine("Error while creating command " + command.Name + "\n"+ex.Message);
                 }
             }
         }
