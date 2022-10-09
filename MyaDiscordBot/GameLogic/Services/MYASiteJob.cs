@@ -14,6 +14,7 @@ namespace MyaDiscordBot.GameLogic.Services
         }
         public async Task Execute(IJobExecutionContext context)
         {
+            Console.WriteLine("["+DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "]: Updating MYA video list...");
             var r = await _httpClient.GetAsync("getfuturevid");
             var json = JsonConvert.DeserializeObject<YTData>(await r.Content.ReadAsStringAsync());
             Data.Instance.Youtube = json;
