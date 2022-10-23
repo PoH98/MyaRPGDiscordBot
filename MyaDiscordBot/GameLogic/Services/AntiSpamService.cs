@@ -2,7 +2,6 @@
 using LiteDB;
 using MyaDiscordBot.Models.SpamDetection;
 using System.Text.RegularExpressions;
-using System.Linq;
 using Newtonsoft.Json;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Antiscam;

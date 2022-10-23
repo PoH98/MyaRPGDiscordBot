@@ -7,8 +7,10 @@ using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.Commands
 {
@@ -107,7 +109,13 @@ namespace MyaDiscordBot.Commands
                         }
                     }
                 }
-                if((DateTime.Now - lastEntered).TotalMinutes < 1 && (DateTime.Now - arg.CreatedAt).TotalDays < 1)
+                if(await KickInvalidName(arg))
+                {
+                    await arg.SendMessageAsync("請改善你的名字後先再加入我哋哦！");
+                    await arg.KickAsync();
+                    return;
+                }
+                if ((DateTime.Now - lastEntered).TotalMinutes < 1 && (DateTime.Now - arg.CreatedAt).TotalDays < 1)
                 {
                     raidAlert++;
                 }
@@ -315,6 +323,52 @@ namespace MyaDiscordBot.Commands
                 await arg.RespondAsync(string.Join('\n', ex.ToString().Split("\n").Take(5)));
             }
 
+        }
+
+        private async Task<bool> KickInvalidName(IGuildUser arg)
+        {
+            if ((DateTime.Now - arg.CreatedAt).TotalDays < 7)
+            {
+                //scan for name
+                //load blacklisted texts
+                if(Data.Instance.BannedRegex.Count < 1)
+                {
+                    var response = await hc.GetAsync("https://raw.githubusercontent.com/mogade/badwords/master/en.txt");
+                    foreach (var i in (await response.Content.ReadAsStringAsync()).Split("\n"))
+                    {
+                        Data.Instance.BannedRegex.Add(i);
+                    }
+                }
+                foreach (var item in Data.Instance.BannedRegex)
+                {
+                    try
+                    {
+                        Regex r = new Regex(item);
+                        if (r.Match(arg.DisplayName).Success)
+                        {
+                            //auto kick when detected bad words in name and created less that 7 day
+                            return true;
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        //do nothing
+                        Console.WriteLine(ex.Message);
+                        Console.WriteLine(ex.ToString());
+                    }
+
+                }
+                var customBlacklist = new string[] { "diueveryone" };
+                foreach (var item in customBlacklist)
+                {
+                    if (arg.DisplayName == item)
+                    {
+                        //match bad word dictionary
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
