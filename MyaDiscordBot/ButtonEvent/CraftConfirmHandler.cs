@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -14,25 +15,33 @@ namespace MyaDiscordBot.ButtonEvent
         }
         public bool CheckUsage(string command)
         {
-            return command.StartsWith("craftConfirm");
+            return command.StartsWith("craftConfirm") || command.StartsWith("craftSkillConfirm");
         }
 
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            var item = itemService.CraftItem(player, message.Data.CustomId.Replace("craftConfirm-", ""));
-            if (item == null)
+            if(message.Data.CustomId == "craftSkillConfirm")
             {
-                return message.RespondAsync("你已經存在依個道具！", ephemeral: true);
-            }
-            if (playerService.AddItem(player, item))
-            {
-                playerService.SavePlayer(player);
-                return message.RespondAsync("已成功製作" + item.Name, ephemeral: true);
+                itemService.CraftSkill(player);
+                return message.RespondAsync("已成功製作技能點！", ephemeral: true);
             }
             else
             {
-                return message.RespondAsync("製作失敗！所使用的原料已經全數消失！", ephemeral: true);
+                var item = itemService.CraftItem(player, message.Data.CustomId.Replace("craftConfirm-", ""));
+                if (item == null)
+                {
+                    return message.RespondAsync("你已經存在依個道具！", ephemeral: true);
+                }
+                if (playerService.AddItem(player, item))
+                {
+                    playerService.SavePlayer(player);
+                    return message.RespondAsync("已成功製作" + item.Name, ephemeral: true);
+                }
+                else
+                {
+                    return message.RespondAsync("製作失敗！所使用的原料已經全數消失！", ephemeral: true);
+                }
             }
         }
     }

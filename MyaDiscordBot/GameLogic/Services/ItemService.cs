@@ -11,6 +11,7 @@ namespace MyaDiscordBot.GameLogic.Services
         Item GetReward(Enemy enemy, Player player);
         Resource GetResource(Player player);
         Item CraftItem(Player player, string id);
+        void CraftSkill(Player player);
     }
     public class ItemService : IItemService
     {
@@ -44,6 +45,34 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
             }
             return items.First(x => x.Id == craftTable.Item);
+        }
+
+        public void CraftSkill(Player player)
+        {
+            var craftTable = new CraftTable
+            {
+                Resources = new List<RequiredResource>
+                {
+                    { new RequiredResource{ Id = Guid.Parse("00e89a10-8262-4f31-8cf7-31a723bb7bd3"), Amount = 100 } },
+                    { new RequiredResource{ Id = Guid.Parse("d140fbb3-56a1-48c2-b5c6-609fda7547ae"), Amount = 50 } },
+                    { new RequiredResource{ Id = Guid.Parse("83f20fba-59f2-4e47-9a27-51c88b17b595"), Amount = 25 } },
+                    { new RequiredResource{ Id = Guid.Parse("fc00ff11-2105-41b5-a0b4-aa1907026d9a"), Amount = 100 } },
+                    { new RequiredResource{ Id = Guid.Parse("841f7103-cc65-4e8f-a581-fbb2557081e9"), Amount = 50 } },
+                    { new RequiredResource{ Id = Guid.Parse("b15a9b94-3b61-4129-b953-1b57da8d82bd"), Amount = 25 } },
+                    { new RequiredResource{ Id = Guid.Parse("98839c41-08b6-48b4-8f35-1d5a2d863707"), Amount = 100 } },
+                    { new RequiredResource{ Id = Guid.Parse("e777a929-ba08-4898-85db-3ddc095a3f44"), Amount = 50 } },
+                    { new RequiredResource{ Id = Guid.Parse("392d421f-44ec-461f-ac0a-0c6ae5d0571a"), Amount = 25 } }
+                }
+            };
+            foreach (var c in craftTable.Resources)
+            {
+                var i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
+                if (i != null)
+                {
+                    i.Amount -= c.Amount;
+                }
+            }
+            player.SkillPoint++;
         }
 
         public IEnumerable<Item> GetCraftItem()

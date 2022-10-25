@@ -29,6 +29,7 @@ namespace MyaDiscordBot.Commands
             {
                 cb.WithButton(i.Name, "craft-" + i.Id);
             }
+            cb.WithButton("技能點", "craftSkill");
             return command.RespondAsync("可合成列表：", components: cb.Build(), ephemeral: true);
         }
     }
