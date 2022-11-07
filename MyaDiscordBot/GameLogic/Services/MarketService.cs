@@ -55,8 +55,17 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         user = (RestUser)await client.GetUserAsync(market.DiscordSellerId);
                     }
-                    var dm = await user.CreateDMChannelAsync();
-                    await dm.SendMessageAsync("你已上架的出售ID " + market.Id + "已經出售！");
+                    try
+                    {
+                        var dm = await user.CreateDMChannelAsync();
+                        await dm.SendMessageAsync("你已上架的出售ID " + market.Id + "已經出售！");
+                        //try DM
+                    }
+                    catch
+                    {
+
+                    }
+
                     _playerService.SavePlayer(seller);
                 }
                 else
