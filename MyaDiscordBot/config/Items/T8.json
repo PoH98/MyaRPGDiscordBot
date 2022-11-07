@@ -478,5 +478,21 @@
     "AbilityRate": 0.0,
     "DropRate": 0.3,
     "Craft": false
+  },
+  {
+    "Id": "fd6e84d2-d464-4c33-9c71-a66a1c746e6d",
+    "Name": "恢復藥水（Large）",
+    "Rank": 8,
+    "Price": 200,
+    "Atk": 0,
+    "Def": 0,
+    "UseTimes": 6,
+    "Element": 6,
+    "Type": 0,
+    "HP": 25,
+    "Ability": 0,
+    "AbilityRate": 0.0,
+    "DropRate": 0.3,
+    "Craft": false
   }
 ]
