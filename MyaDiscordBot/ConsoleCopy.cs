@@ -51,7 +51,7 @@ namespace MyaDiscordBot
 
             try
             {
-                fileStream = File.Create(path);
+                fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite, 4096);
 
                 fileWriter = new StreamWriter(fileStream);
                 fileWriter.AutoFlush = true;
