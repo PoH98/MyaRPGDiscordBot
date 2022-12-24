@@ -80,7 +80,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     Def = 0,
                     HP = 100 * stage,
                     Element = Element.God,
-                    IsBoss= true,
+                    IsBoss = true,
                     Stage = stage,
                     Name = "虛無之鬼"
                 };

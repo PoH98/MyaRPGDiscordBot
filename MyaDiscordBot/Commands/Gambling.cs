@@ -21,7 +21,7 @@ namespace MyaDiscordBot.Commands
         {
             var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
-            if(DateTime.Compare(player.GamblingDelay, DateTime.Now) > 0)
+            if (DateTime.Compare(player.GamblingDelay, DateTime.Now) > 0)
             {
                 await command.RespondAsync("米亞唔同你再賭啦！你個死賭鬼！", ephemeral: true);
                 return;

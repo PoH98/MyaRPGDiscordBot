@@ -1,10 +1,10 @@
 ﻿using Discord.WebSocket;
 using LiteDB;
-using MyaDiscordBot.Models.SpamDetection;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Antiscam;
+using MyaDiscordBot.Models.SpamDetection;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -20,7 +20,7 @@ namespace MyaDiscordBot.GameLogic.Services
             var match = Regex.Match(message.Content, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
             if (match.Success)
             {
-                if(match.Groups.TryGetValue("invite", out Group inviteurl))
+                if (match.Groups.TryGetValue("invite", out Group inviteurl))
                 {
                     HttpClient client = new HttpClient();
                     var result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
@@ -30,7 +30,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     return pg.Match;
                 }
             }
-            if(Data.Instance.ScamList.Count < 1)
+            if (Data.Instance.ScamList.Count < 1)
             {
                 //fetch scamlist
                 HttpClient client = new HttpClient();
@@ -39,7 +39,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
                 Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
             }
-            if(Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
+            if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
             {
                 if (message.Content.Contains("https://cdn.discordapp.com/"))
                 {

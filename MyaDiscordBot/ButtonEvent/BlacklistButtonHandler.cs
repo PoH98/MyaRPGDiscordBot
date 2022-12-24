@@ -49,7 +49,7 @@ namespace MyaDiscordBot.ButtonEvent
                     var u = (message.Channel as SocketGuildChannel).Guild.GetUser(uid);
                     //Author, just timeout
                     var ids = new List<ulong>();
-                    if(u.Roles != null)
+                    if (u.Roles != null)
                     {
                         foreach (var r in u.Roles)
                         {
@@ -64,7 +64,7 @@ namespace MyaDiscordBot.ButtonEvent
                     await message.RespondAsync("User timeout set", ephemeral: true);
                     return;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     await message.RespondAsync(ex.ToString(), ephemeral: true);
                 }

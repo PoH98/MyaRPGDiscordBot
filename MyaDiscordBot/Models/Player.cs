@@ -1,4 +1,6 @@
-﻿namespace MyaDiscordBot.Models
+﻿using MyaDiscordBot.Models.Books;
+
+namespace MyaDiscordBot.Models
 {
     public class Player
     {
@@ -94,11 +96,16 @@
         /// Pets
         /// </summary>
         public List<Pet> Pets { get; set; }
+        /// <summary>
+        /// Books
+        /// </summary>
+        public Dictionary<BaseBookInterface, int> Books { get; set; }
     }
 
-    public class Coordinate
+    public enum BattleType
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        Default,
+        Trial
     }
+
 }

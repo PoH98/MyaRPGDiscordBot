@@ -1,4 +1,5 @@
 ﻿using MyaDiscordBot.Models;
+using MyaDiscordBot.Models.Books;
 using Newtonsoft.Json;
 
 namespace MyaDiscordBot.GameLogic.Services
@@ -9,6 +10,7 @@ namespace MyaDiscordBot.GameLogic.Services
         IEnumerable<Item> GetCraftItem();
         Task SaveData();
         Item GetReward(Enemy enemy, Player player);
+        BaseBookInterface GetBook(Player player);
         Resource GetResource(Player player);
         Item CraftItem(Player player, string id);
         void CraftSkill(Player player);
@@ -75,6 +77,39 @@ namespace MyaDiscordBot.GameLogic.Services
             player.SkillPoint++;
         }
 
+        public BaseBookInterface GetBook(Player player)
+        {
+            Random rnd = new Random();
+            BaseBookInterface baseBook;
+            switch(rnd.Next(0, 10)) 
+            {
+                case 0:
+                    baseBook = new AttackBook();
+                    break;
+                case 1:
+                    baseBook = new DefenceBook();
+                    break;
+                case 2:
+                    baseBook = new HPBook();
+                    break;
+                default:
+                    baseBook = null;
+                    break;
+            }
+            if (baseBook != null)
+            {
+                if (player.Books.ContainsKey(baseBook))
+                {
+                    player.Books[baseBook]++;
+                }
+                else
+                {
+                    player.Books.Add(baseBook, 1);
+                }
+            }
+            return baseBook;
+        }
+
         public IEnumerable<Item> GetCraftItem()
         {
             return items.Where(x => x.Craft);
@@ -124,7 +159,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             }
                             double divSpot = rnd.NextDouble() * cumulSum;
                             var r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
-                            if(r != null && enemy.Stage > 10)
+                            if (r != null && enemy.Stage > 10)
                             {
                                 //infinite loop
                                 r.Atk *= enemy.Stage / 10;

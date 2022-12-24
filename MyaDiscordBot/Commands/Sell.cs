@@ -27,7 +27,7 @@ namespace MyaDiscordBot.Commands
             {
                 case 1:
                     //check if have any equiped
-                    if(player.Bag.Where(x => x.IsEquiped).Count() > 0)
+                    if (player.Bag.Where(x => x.IsEquiped).Count() > 0)
                     {
                         var maxRank = player.Bag.Where(x => x.IsEquiped).Min(x => x.Rank);
                         foreach (var i in player.Bag)
@@ -40,7 +40,7 @@ namespace MyaDiscordBot.Commands
                         }
                     }
                     //else we can only detect not equiped
-                    else if(player.Bag.Count > 0)
+                    else if (player.Bag.Count > 0)
                     {
                         //retain max lv and lower 1 lv items
                         var maxRank = player.Bag.Max(x => x.Rank) - 1;

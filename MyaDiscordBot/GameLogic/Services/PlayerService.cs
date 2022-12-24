@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using MyaDiscordBot.Models;
+using MyaDiscordBot.Models.Books;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         Player LoadPlayer(ulong id, ulong serverId);
         Player LoadPlayer(string id, ulong serverId);
-        Enemy Walk(Player player, Element direction);
+        Enemy Walk(Player player, Element direction, BattleType battleType);
         void SavePlayer(Player player);
         bool AddItem(Player player, Item item);
         bool AddResource(Player player, Resource item);
@@ -75,6 +76,10 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     player.DiscordId = userid;
                 }
+                if(player.Books == null)
+                {
+                    player.Books = new Dictionary<BaseBookInterface, int>();
+                }
                 return player;
             }
         }
@@ -88,9 +93,18 @@ namespace MyaDiscordBot.GameLogic.Services
             }
         }
 
-        public Enemy Walk(Player player, Element mapType)
+        public Enemy Walk(Player player, Element mapType, BattleType battleType)
         {
-            return _mapService.SpawnEnemy(mapType, player.Lv);
+            var enemy = _mapService.SpawnEnemy(mapType, player.Lv);
+            if(battleType == BattleType.Trial)
+            {
+                enemy.ItemDropRate = enemy.ItemDropRate / 2;
+                enemy.HP = enemy.HP * 2;
+                enemy.Atk = enemy.Atk * 2;
+                enemy.Def = enemy.Def * 2;
+                enemy.Name = "試煉形態"+enemy.Name;
+            }
+            return enemy;
         }
 
         public bool AddItem(Player player, Item item)

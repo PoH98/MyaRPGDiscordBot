@@ -7,9 +7,8 @@ using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.Commands
@@ -79,6 +78,7 @@ namespace MyaDiscordBot.Commands
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
             Console.WriteLine(arg.Id + " had joined the server.");
+            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " had joined the server.\n", Encoding.UTF8);
             if (!arg.IsBot)
             {
                 var response = await hc.GetAsync(arg.Id.ToString());
@@ -99,7 +99,7 @@ namespace MyaDiscordBot.Commands
                         {
                             await arg.KickAsync(result.Reason + " in other server on " + result.Date);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             if (settings.ChannelId != 0)
                             {
@@ -109,7 +109,7 @@ namespace MyaDiscordBot.Commands
                         }
                     }
                 }
-                if(await KickInvalidName(arg))
+                if (await KickInvalidName(arg))
                 {
                     await arg.SendMessageAsync("請改善你的名字後先再加入我哋哦！");
                     await arg.KickAsync();
@@ -124,15 +124,15 @@ namespace MyaDiscordBot.Commands
                     raidAlert = 0;
                 }
                 lastEntered = DateTime.Now;
-                if(raidAlert >= 5)
+                if (raidAlert >= 5)
                 {
                     using (var scope = Data.Instance.Container.BeginLifetimeScope())
                     {
                         var setting = scope.Resolve<ISettingService>();
                         var settings = setting.GetSettings(arg.Guild.Id);
-                        if(Data.Instance.Youtube.Videos.Count >= 0)
+                        if (Data.Instance.Youtube.Videos.Count >= 0)
                         {
-                            if(Data.Instance.Youtube.Videos.Any(x => DateTime.Now.Date == x.ScheduledStartTime.ToLocalTime().Date && DateTime.Now >= x.ScheduledStartTime.ToLocalTime() && x.ScheduledStartTime.TimeOfDay <= new TimeSpan(23, 0, 0)))
+                            if (Data.Instance.Youtube.Videos.Any(x => DateTime.Now.Date == x.ScheduledStartTime.ToLocalTime().Date && DateTime.Now >= x.ScheduledStartTime.ToLocalTime() && x.ScheduledStartTime.TimeOfDay <= new TimeSpan(23, 0, 0)))
                             {
                                 //in Live, ignore server raid now
                                 return;
@@ -165,14 +165,15 @@ namespace MyaDiscordBot.Commands
         {
             var message = arg as SocketUserMessage;
             if (message == null || string.IsNullOrEmpty(message.Content)) return;
-            Console.WriteLine("["+ message.Channel.Name + "]" +message.Author.Id + ":" + message.Content);
+            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
+            Console.WriteLine("[" + message.Channel.Name + "]" + message.Author.Id + ":" + message.Content);
             using (var scope = Data.Instance.Container.BeginLifetimeScope())
             {
                 var antiSpam = scope.Resolve<IAntiSpamService>();
                 if (antiSpam.IsSpam(message))
                 {
                     var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
-                    await message.ReplyAsync("請唔Spam！" + message.Author.Mention + angry.ToString());
+                    await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
                     await message.DeleteAsync();
                     return;
                 }
@@ -279,7 +280,7 @@ namespace MyaDiscordBot.Commands
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error while creating command " + command.Name + "\n"+ex.Message);
+                    Console.WriteLine("Error while creating command " + command.Name + "\n" + ex.Message);
                 }
             }
         }
@@ -331,7 +332,7 @@ namespace MyaDiscordBot.Commands
             {
                 //scan for name
                 //load blacklisted texts
-                if(Data.Instance.BannedRegex.Count < 1)
+                if (Data.Instance.BannedRegex.Count < 1)
                 {
                     var response = await hc.GetAsync("https://raw.githubusercontent.com/mogade/badwords/master/en.txt");
                     foreach (var i in (await response.Content.ReadAsStringAsync()).Split("\n"))
@@ -350,7 +351,7 @@ namespace MyaDiscordBot.Commands
                             return true;
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         //do nothing
                         Console.WriteLine(ex.Message);

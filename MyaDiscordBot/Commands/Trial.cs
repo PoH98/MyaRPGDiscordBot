@@ -1,43 +1,38 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
-    public class Search : ICommand
+    internal class Trial : ICommand
     {
         private readonly IPlayerService _playerService;
         private readonly IBattleService _battleService;
+        private readonly IMapService _mapService;
         private readonly IEventService _eventService;
         private readonly IBossService _bossService;
         private readonly IItemService _itemService;
-        public Search(IPlayerService playerService, IBattleService battleService, IBossService bossService, IEventService eventService, IItemService itemService)
+        public Trial(IPlayerService playerService, IBattleService battleService, IMapService mapService, IBossService bossService, IEventService eventService, IItemService itemService)
         {
             _playerService = playerService;
             _battleService = battleService;
+            _mapService = mapService;
             _eventService = eventService;
             _bossService = bossService;
             _itemService = itemService;
         }
-        public string Name => "search";
+        public string Name => "trial";
 
-        public string Description => "Search around in your current location";
+        public string Description => "Fight trial stage";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
-        {
-            GetOption()
-        };
-
-        private SlashCommandOptionBuilder GetOption()
-        {
-            var op = new SlashCommandOptionBuilder().WithName("field").WithDescription("The place you want to go").WithRequired(true).WithType(ApplicationCommandOptionType.Integer);
-            foreach (var e in Enum.GetValues(typeof(Element)).Cast<Element>().Except(new List<Element>() { Element.Dark, Element.God, Element.Light }))
-            {
-                op.AddChoice(e.ToString(), (int)e);
-            }
-            return op;
-        }
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
@@ -53,7 +48,7 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！", ephemeral: true);
                 return;
             }
-            var enemy = _playerService.Walk(player, (Element)Convert.ToInt32(command.Data.Options.First().Value), BattleType.Default);
+            var enemy = _playerService.Walk(player, (Element)Convert.ToInt32(command.Data.Options.First().Value), BattleType.Trial);
             if (enemy != null)
             {
                 if (enemy.IsBoss)
@@ -65,24 +60,15 @@ namespace MyaDiscordBot.Commands
                 var br = _battleService.Battle(enemy, player);
                 if (br.IsVictory)
                 {
-                    var gain = Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
-                    player.Coin += gain;
-                    _playerService.AddExp(player, 1);
-                    var item = _itemService.GetReward(enemy, player);
-                    if (item == null)
+                    //get item
+                    var book = _itemService.GetBook(player);
+                    if(book != null)
                     {
-                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$！", ephemeral: true);
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝" + book.Name + "*1！", ephemeral: true);
                     }
                     else
                     {
-                        if (_playerService.AddItem(player, item))
-                        {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$再額外獲得" + item.Name + "*1！", ephemeral: true);
-                        }
-                        else
-                        {
-                            await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$！", ephemeral: true);
-                        }
+                        await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲得咩都冇！", ephemeral: true);
                     }
                 }
                 else

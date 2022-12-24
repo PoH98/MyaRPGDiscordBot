@@ -24,7 +24,7 @@ namespace MyaDiscordBot.Commands
                     var s = setting.GetSettings((command.Channel as SocketGuildChannel).Guild.Id);
                     s.RaidKiller = !s.RaidKiller;
                     setting.SaveSettings((command.Channel as SocketGuildChannel).Guild.Id, s);
-                    command.RespondAsync("已經切換成功！當前狀態：" + (s.RaidKiller?"已經開啟":"已經關閉"), ephemeral: true);
+                    command.RespondAsync("已經切換成功！當前狀態：" + (s.RaidKiller ? "已經開啟" : "已經關閉"), ephemeral: true);
                 }
             }
             else

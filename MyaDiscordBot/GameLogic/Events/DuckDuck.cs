@@ -17,7 +17,7 @@ namespace MyaDiscordBot.GameLogic.Events
                 var selectedItem = items.ToList()[rnd.Next(0, items.Count())];
                 var resource = itemService.GetResource(player);
                 return command.RespondAsync("你在路上見到一隻即將卑人燒的鴨，你同米亞衝上去買低隻鴨救左佢，隻鴨感激你送左你一堆唔知道有咩用的材料！\n獲得左" + resource.Name, ephemeral: true);
-            }   
+            }
         }
     }
 }

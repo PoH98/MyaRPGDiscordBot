@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace MyaDiscordBot.Models
+﻿namespace MyaDiscordBot.Models
 {
     public class Pets : List<Pet>
     {

@@ -93,7 +93,7 @@ namespace MyaDiscordBot.GameLogic.Services
                                 player.LastCommand = DateTime.Now;
                                 playerService.SavePlayer(player);
                             }
-                            catch(Exception ex)
+                            catch (Exception ex)
                             {
                                 Console.WriteLine(ex.ToString());
                                 _ = Task.Run(() =>

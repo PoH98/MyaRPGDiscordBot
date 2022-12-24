@@ -1,6 +1,5 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
-using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -21,7 +20,7 @@ namespace MyaDiscordBot.ButtonEvent
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
             var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            if(message.Data.CustomId == "craftSkillConfirm")
+            if (message.Data.CustomId == "craftSkillConfirm")
             {
                 itemService.CraftSkill(player);
                 return message.RespondAsync("已成功製作技能點！", ephemeral: true);
