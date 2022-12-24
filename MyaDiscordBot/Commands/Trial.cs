@@ -15,15 +15,13 @@ namespace MyaDiscordBot.Commands
     {
         private readonly IPlayerService _playerService;
         private readonly IBattleService _battleService;
-        private readonly IMapService _mapService;
         private readonly IEventService _eventService;
         private readonly IBossService _bossService;
         private readonly IItemService _itemService;
-        public Trial(IPlayerService playerService, IBattleService battleService, IMapService mapService, IBossService bossService, IEventService eventService, IItemService itemService)
+        public Trial(IPlayerService playerService, IBattleService battleService, IBossService bossService, IEventService eventService, IItemService itemService)
         {
             _playerService = playerService;
             _battleService = battleService;
-            _mapService = mapService;
             _eventService = eventService;
             _bossService = bossService;
             _itemService = itemService;
@@ -32,7 +30,20 @@ namespace MyaDiscordBot.Commands
 
         public string Description => "Fight trial stage";
 
-        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
+        public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[1]
+        {
+            GetOption()
+        };
+
+        private SlashCommandOptionBuilder GetOption()
+        {
+            var op = new SlashCommandOptionBuilder().WithName("field").WithDescription("The place you want to go").WithRequired(true).WithType(ApplicationCommandOptionType.Integer);
+            foreach (var e in Enum.GetValues(typeof(Element)).Cast<Element>().Except(new List<Element>() { Element.Dark, Element.God, Element.Light }))
+            {
+                op.AddChoice(e.ToString(), (int)e);
+            }
+            return op;
+        }
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {

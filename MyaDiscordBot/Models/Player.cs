@@ -99,7 +99,7 @@ namespace MyaDiscordBot.Models
         /// <summary>
         /// Books
         /// </summary>
-        public Dictionary<BaseBookInterface, int> Books { get; set; }
+        public List<Book> Books { get; set; }
     }
 
     public enum BattleType

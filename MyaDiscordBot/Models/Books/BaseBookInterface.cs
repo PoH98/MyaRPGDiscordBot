@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Models.Books
 {
-    public interface BaseBookInterface
+    public class Book
     {
-        string Name { get; }
-        BookType BType { get; }
+        public virtual string Name { get; set; }
+        public virtual BookType BType { get; set; }
+        public int Amount { get; set; }
         
     }
 
@@ -18,26 +19,5 @@ namespace MyaDiscordBot.Models.Books
         Atk,
         Def,
         HP
-    }
-
-    public class AttackBook : BaseBookInterface
-    {
-        public string Name => "AV書碎片";
-
-        public BookType BType => BookType.Atk;
-    }
-
-    public class DefenceBook : BaseBookInterface
-    {
-        public string Name => "D Cup書碎片";
-
-        public BookType BType => BookType.Def;
-    }
-
-    public class HPBook : BaseBookInterface
-    {
-        public string Name => "H漫書碎片";
-
-        public BookType BType => BookType.HP;
     }
 }

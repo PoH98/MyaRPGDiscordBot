@@ -78,7 +78,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if(player.Books == null)
                 {
-                    player.Books = new Dictionary<BaseBookInterface, int>();
+                    player.Books = new List<Book>();
                 }
                 return player;
             }
@@ -96,12 +96,12 @@ namespace MyaDiscordBot.GameLogic.Services
         public Enemy Walk(Player player, Element mapType, BattleType battleType)
         {
             var enemy = _mapService.SpawnEnemy(mapType, player.Lv);
-            if(battleType == BattleType.Trial)
+            if(battleType == BattleType.Trial && enemy != null)
             {
                 enemy.ItemDropRate = enemy.ItemDropRate / 2;
-                enemy.HP = enemy.HP * 2;
-                enemy.Atk = enemy.Atk * 2;
-                enemy.Def = enemy.Def * 2;
+                enemy.HP = (int)Math.Round(enemy.HP * 1.5);
+                enemy.Atk = (int)Math.Round(enemy.Atk * 1.5);
+                enemy.Def = (int)Math.Round(enemy.Def * 1.5);
                 enemy.Name = "試煉形態"+enemy.Name;
             }
             return enemy;

@@ -24,11 +24,14 @@ namespace MyaDiscordBot.ButtonEvent
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
             var parts = message.Data.CustomId.Split('-');
-            var book = (BaseBookInterface)Enum.Parse(typeof (BaseBookInterface), parts[1], true);
             var player = _playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            if (player.Books.Any(y => y.Key == book && y.Value >= 10))
+            var book = new Book()
             {
-                player.Books[book] -= 10;
+                BType = (BookType)Convert.ToInt32(parts[1])
+            };
+            if (player.Books.Any(y => y.BType == book.BType && y.Amount >= 10))
+            {
+                player.Books.First(x => x.BType == book.BType).Amount -= 10;
                 switch (book.BType)
                 {
                     case BookType.Atk:
@@ -45,7 +48,7 @@ namespace MyaDiscordBot.ButtonEvent
                 await message.RespondAsync("你睇完本書後，覺得自己變強啦！", ephemeral: true);
                 return;
             }
-            await message.RespondAsync("你的書碎片唔夠！無法合成到一本完整的書！", ephemeral: true);
+            await message.RespondAsync("你的書碎片唔夠！無法合成到任何一本完整的書！", ephemeral: true);
 
         }
     }

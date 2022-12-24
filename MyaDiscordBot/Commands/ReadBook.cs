@@ -13,17 +13,9 @@ namespace MyaDiscordBot.Commands
     internal class ReadBook : ICommand
     {
         private readonly IPlayerService _playerService;
-        private readonly IBattleService _battleService;
-        private readonly IEventService _eventService;
-        private readonly IBossService _bossService;
-        private readonly IItemService _itemService;
-        public ReadBook(IPlayerService playerService, IBattleService battleService, IBossService bossService, IEventService eventService, IItemService itemService)
+        public ReadBook(IPlayerService playerService)
         {
             _playerService = playerService;
-            _battleService = battleService;
-            _eventService = eventService;
-            _bossService = bossService;
-            _itemService = itemService;
         }
         public string Name => "read";
 
@@ -36,11 +28,11 @@ namespace MyaDiscordBot.Commands
             var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
             var cb = new ComponentBuilder();
-            if (player.Books.Where(i => i.Value >= 10).Count() > 0)
+            if (player.Books.Where(i => i.Amount >= 10).Count() > 0)
             {
-                foreach (var i in player.Books.Where(i => i.Value >= 10))
+                foreach (var i in player.Books.Where(i => i.Amount >= 10))
                 {
-                    cb.WithButton(i.Key.Name, "read-" + i.Key);
+                    cb.WithButton(i.Name, "read-" + (int)i.BType);
                 }
                 await command.RespondAsync("你想讀咩書？", components: cb.Build(), ephemeral: true);
             }

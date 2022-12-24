@@ -10,7 +10,7 @@ namespace MyaDiscordBot.GameLogic.Services
         IEnumerable<Item> GetCraftItem();
         Task SaveData();
         Item GetReward(Enemy enemy, Player player);
-        BaseBookInterface GetBook(Player player);
+        Book GetBook(Player player);
         Resource GetResource(Player player);
         Item CraftItem(Player player, string id);
         void CraftSkill(Player player);
@@ -77,20 +77,23 @@ namespace MyaDiscordBot.GameLogic.Services
             player.SkillPoint++;
         }
 
-        public BaseBookInterface GetBook(Player player)
+        public Book GetBook(Player player)
         {
             Random rnd = new Random();
-            BaseBookInterface baseBook;
+            Book baseBook;
             switch(rnd.Next(0, 10)) 
             {
                 case 0:
-                    baseBook = new AttackBook();
-                    break;
                 case 1:
-                    baseBook = new DefenceBook();
+                    baseBook = new Book() { BType = BookType.Atk, Name = "AV書碎片" };
                     break;
                 case 2:
-                    baseBook = new HPBook();
+                case 3:
+                    baseBook = new Book() { BType = BookType.Def, Name = "D Cup書碎片" };
+                    break;
+                case 4:
+                case 5:
+                    baseBook = new Book() { BType = BookType.HP, Name = "H漫畫碎片" };
                     break;
                 default:
                     baseBook = null;
@@ -98,13 +101,14 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             if (baseBook != null)
             {
-                if (player.Books.ContainsKey(baseBook))
+                if (player.Books.Any(x => x.BType == baseBook.BType))
                 {
-                    player.Books[baseBook]++;
+                    player.Books.First(x => x.BType == baseBook.BType).Amount++;
                 }
                 else
                 {
-                    player.Books.Add(baseBook, 1);
+                    baseBook.Amount++;
+                    player.Books.Add(baseBook);
                 }
             }
             return baseBook;
