@@ -49,6 +49,11 @@ namespace MyaDiscordBot.Commands
         {
             var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
+            if(player.Lv < 80)
+            {
+                await command.RespondAsync("你弱爆了！唔建議咁快打試煉！推薦至少80級後先開始挑戰啦！", ephemeral: true);
+                return;
+            }
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
                 await command.RespondAsync("你正在休息！無法進行任何探索或者戰鬥！", ephemeral: true);

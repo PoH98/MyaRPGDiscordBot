@@ -1,4 +1,5 @@
 ﻿using MyaDiscordBot.Models;
+using MyaDiscordBot.Models.SpamDetection;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -14,6 +15,17 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             var result = new BattleResult();
             int battleLoop = 0;
+            //cap max values when fighting between enemy
+            var oriAtk = player.Atk;
+            var oriDef = player.Def;
+            if (player.Atk >= 200)
+            {
+                player.Atk = 200;
+            }
+            if (player.Def >= 50)
+            {
+                player.Def = 50;
+            }
             do
             {
                 var atk = player.Atk;
@@ -129,6 +141,8 @@ namespace MyaDiscordBot.GameLogic.Services
                 battleLoop++;
             }
             while (player.CurrentHP > 0 && enemy.HP > 0 && battleLoop <= 1000);
+            player.Atk = oriAtk;
+            player.Def = oriDef;
             if (player.CurrentHP > 0 && enemy.HP <= 0)
             {
                 result.IsVictory = true;

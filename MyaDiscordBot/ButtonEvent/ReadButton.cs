@@ -44,6 +44,27 @@ namespace MyaDiscordBot.ButtonEvent
                         player.HP += 15;
                         break;
                 }
+                if(player.Atk >= 9999)
+                {
+                    player.Atk = 9999;
+                    _playerService.SavePlayer(player);
+                    await message.RespondAsync("你睇完本書後，發現已經無法再增強自己！無敵的感覺真係爽快！", ephemeral: true);
+                    return;
+                }
+                if(player.Def >= 999)
+                {
+                    player.Def = 999;
+                    _playerService.SavePlayer(player);
+                    await message.RespondAsync("你睇完本書後，發現已經無法再增強自己！無敵的感覺真係爽快！", ephemeral: true);
+                    return;
+                }
+                if(player.HP >= 9999)
+                {
+                    player.HP = 9999;
+                    _playerService.SavePlayer(player);
+                    await message.RespondAsync("你睇完本書後，發現已經無法再增強自己！無敵的感覺真係爽快！", ephemeral: true);
+                    return;
+                }
                 _playerService.SavePlayer(player);
                 await message.RespondAsync("你睇完本書後，覺得自己變強啦！", ephemeral: true);
                 return;

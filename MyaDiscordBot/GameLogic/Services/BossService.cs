@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Discord.WebSocket;
 using LiteDB;
+using MyaDiscordBot.Commands;
 using MyaDiscordBot.Models;
 using Quartz;
 
@@ -24,6 +25,34 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         var guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
                         bossService.RemoveExpired(guild.Id);
+                        try
+                        {
+                            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 1 && DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+                            {
+                                var setting = settingService.GetSettings(guild.Id);
+                                var yeah = client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("yeah")).Last();
+                                if (setting != null)
+                                {
+                                    await guild.GetTextChannel(setting.ChannelId).SendMessageAsync(DateTime.Now.Year + "新年快樂啊大家！" + yeah.ToString());
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync(DateTime.Now.Year + "新年快樂啊大家！" + yeah.ToString());
+                                    }
+                                    catch
+                                    {
+                                        //any error will ignored
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
                         if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                         {
 
