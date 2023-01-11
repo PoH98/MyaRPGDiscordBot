@@ -5,6 +5,7 @@ using MyaDiscordBot.ButtonEvent;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
+using MyaDiscordBot.Models.SpamDetection;
 using MyaDiscordBot.SelectEvent;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -164,64 +165,72 @@ namespace MyaDiscordBot.Commands
         private async Task _client_MessageReceived(SocketMessage arg)
         {
             var message = arg as SocketUserMessage;
-            if (message == null || string.IsNullOrEmpty(message.Content)) return;
-            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
-            Console.WriteLine("[" + message.Channel.Name + "]" + message.Author.Id + ":" + message.Content);
-            using (var scope = Data.Instance.Container.BeginLifetimeScope())
+            try
             {
-                var antiSpam = scope.Resolve<IAntiSpamService>();
-                if (antiSpam.IsSpam(message))
+
+                if (message == null || string.IsNullOrEmpty(message.Content)) return;
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
+                Console.WriteLine("[" + message.Channel.Name + "]" + message.Author.Id + ":" + message.Content);
+                using (var scope = Data.Instance.Container.BeginLifetimeScope())
                 {
-                    var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
-                    await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
-                    await message.DeleteAsync();
-                    return;
+                    var antiSpam = scope.Resolve<IAntiSpamService>();
+                    if (antiSpam.IsSpam(message))
+                    {
+                        var angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                        await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
+                        await message.DeleteAsync();
+                        return;
+                    }
+                    if (await antiSpam.IsScam(message))
+                    {
+                        var angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                        await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
+                        await message.DeleteAsync();
+                        return;
+                    }
                 }
-                if (await antiSpam.IsScam(message))
+                if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))
                 {
-                    var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
-                    await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
-                    await message.DeleteAsync();
-                    return;
+                    if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("是DD") || message.Content.Contains("去死"))
+                    {
+                        var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
+                        var fuck = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("fuck")).Last();
+                        await message.AddReactionAsync(angry);
+                        await message.AddReactionAsync(fuck);
+                    }
+                    else if (message.Content.Contains("屎") || message.Content.Contains("shit") || message.Content.Contains("米田共"))
+                    {
+                        var sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
+                        await message.AddReactionAsync(sssmya);
+                    }
+                    else if ((message.Content.Contains("愛") || message.Content.Contains("萬歲") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && (!message.Content.Contains("甘米")))
+                    {
+                        var kiramya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("kiramya")).Last();
+                        await message.AddReactionAsync(kiramya);
+                    }
+                    else
+                    {
+                        var what = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("what")).Last();
+                        await message.AddReactionAsync(what);
+                    }
+                }
+                else if (message.Content.StartsWith("$refreshCommand") && message.Author.Id == 294835963442757632)
+                {
+                    await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
+                    _ = Task.Run(async () =>
+                    {
+                        await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
+                        await message.ReplyAsync("Job Done");
+                    });
+                }
+                else if (message.Content.StartsWith("$ping"))
+                {
+                    await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
                 }
             }
-            if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))
+            catch(Exception ex)
             {
-                if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("是DD") || message.Content.Contains("去死"))
-                {
-                    var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
-                    var fuck = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("fuck")).Last();
-                    await message.AddReactionAsync(angry);
-                    await message.AddReactionAsync(fuck);
-                }
-                else if (message.Content.Contains("屎") || message.Content.Contains("shit") || message.Content.Contains("米田共"))
-                {
-                    var sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
-                    await message.AddReactionAsync(sssmya);
-                }
-                else if ((message.Content.Contains("愛") || message.Content.Contains("萬歲") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && (!message.Content.Contains("甘米")))
-                {
-                    var kiramya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("kiramya")).Last();
-                    await message.AddReactionAsync(kiramya);
-                }
-                else
-                {
-                    var what = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("what")).Last();
-                    await message.AddReactionAsync(what);
-                }
-            }
-            else if (message.Content.StartsWith("$refreshCommand") && message.Author.Id == 294835963442757632)
-            {
-                await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
-                _ = Task.Run(async () =>
-                {
-                    await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
-                    await message.ReplyAsync("Job Done");
-                });
-            }
-            else if (message.Content.StartsWith("$ping"))
-            {
-                await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][Exception]: " + ex.ToString() + "\n", Encoding.UTF8);
             }
         }
 

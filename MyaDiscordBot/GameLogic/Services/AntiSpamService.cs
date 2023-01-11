@@ -4,6 +4,7 @@ using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Antiscam;
 using MyaDiscordBot.Models.SpamDetection;
 using Newtonsoft.Json;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MyaDiscordBot.GameLogic.Services
@@ -17,39 +18,48 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         public async Task<bool> IsScam(SocketUserMessage message)
         {
-            var match = Regex.Match(message.Content, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
-            if (match.Success)
+            try
             {
-                if (match.Groups.TryGetValue("invite", out Group inviteurl))
+                var match = Regex.Match(message.Content, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
+                if (match.Success)
                 {
+                    if (match.Groups.TryGetValue("invite", out Group inviteurl))
+                    {
+                        HttpClient client = new HttpClient();
+                        var result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
+                        var di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
+                        result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
+                        var pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
+                        return pg.Match;
+                    }
+                }
+                if (Data.Instance.ScamList.Count < 1)
+                {
+                    //fetch scamlist
                     HttpClient client = new HttpClient();
-                    var result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
-                    var di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
-                    result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
-                    var pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
-                    return pg.Match;
+                    var result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
+                    Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+                    result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
+                    Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
                 }
-            }
-            if (Data.Instance.ScamList.Count < 1)
-            {
-                //fetch scamlist
-                HttpClient client = new HttpClient();
-                var result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
-                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
-                result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
-                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
-            }
-            if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
-            {
-                if (message.Content.Contains("https://cdn.discordapp.com/"))
+                if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
                 {
-                    //cdn, not scam lol
-                    return false;
+                    if (message.Content.Contains("https://cdn.discordapp.com/"))
+                    {
+                        //cdn, not scam lol
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
+                match = Regex.Match(message.Content, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
+                return match.Success;
             }
-            match = Regex.Match(message.Content, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
-            return match.Success;
+            catch(Exception ex)
+            {
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][Exception]: " + ex.ToString() + "\n", Encoding.UTF8);
+                return await IsScam(message);
+            }
+
         }
 
         public bool IsSpam(SocketUserMessage message)
