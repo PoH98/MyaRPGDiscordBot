@@ -434,7 +434,12 @@ namespace MyaDiscordBot.GameLogic.Services
                 //enemy nothing equiped
                 return 0;
             }
-            switch (enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Type != ItemType.指環).First().Element)
+            var items = enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Type != ItemType.指環)?.First();
+            if(items == null)
+            {
+                return 1;
+            }
+            switch (items.Element)
             {
                 case Element.Fire:
                     if (player.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Element == Element.Water).Count() > 0)
