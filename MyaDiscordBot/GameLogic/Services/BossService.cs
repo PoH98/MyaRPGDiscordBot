@@ -98,6 +98,12 @@ namespace MyaDiscordBot.GameLogic.Services
                     try
                     {
                         var guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
+                        if(guild == null)
+                        {
+                            //guild is not exist anymore, bot is kicked
+                            File.Delete(file);
+                            continue;
+                        }
                         var players = playerService.GetPlayers(guild.Id);
                         foreach (var player in players)
                         {
@@ -117,6 +123,10 @@ namespace MyaDiscordBot.GameLogic.Services
                                 Random random = new Random();
                                 var coinLost = (int)Math.Round((random.NextDouble() * ((awaitTime * 3.5) - (awaitTime * 1.5))) + (awaitTime * 1.5));
                                 coinGet -= coinLost;
+                                if(coinGet <= 0)
+                                {
+                                    coinGet = 1;
+                                }
                                 player.Coin += coinGet;
                                 player.Exp += (int)Math.Round(coinGet * 0.2);
                                 player.LastCommand = DateTime.Now;
@@ -125,42 +135,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             catch (Exception ex)
                             {
                                 Console.WriteLine(ex.ToString());
-                                _ = Task.Run(() =>
-                                {
-                                    do
-                                    {
-                                        try
-                                        {
-                                            //get last command time
-                                            if (player.LastCommand == DateTime.MinValue)
-                                            {
-                                                player.LastCommand = DateTime.Now;
-                                            }
-                                            var awaitTime = (DateTime.Now - player.LastCommand).Hours;
-                                            if (awaitTime < 1)
-                                            {
-                                                playerService.SavePlayer(player);
-                                                return;
-                                            }
-                                            var coinGet = awaitTime * 10 * (player.Lv / 10);
-                                            Random random = new Random();
-                                            var coinLost = (int)Math.Round((random.NextDouble() * ((awaitTime * 3.5) - (awaitTime * 1.5))) + (awaitTime * 1.5));
-                                            coinGet -= coinLost;
-                                            player.Coin += coinGet;
-                                            player.Exp += (int)Math.Round(coinGet * 0.5);
-                                            player.LastCommand = DateTime.Now;
-                                            playerService.SavePlayer(player);
-                                            return;
-                                        }
-                                        catch
-                                        {
-
-                                        }
-                                    }
-                                    while (true);
-                                });
                             }
-
                         }
                     }
                     catch (Exception ex)
