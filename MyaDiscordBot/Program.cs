@@ -9,10 +9,23 @@ using MyaDiscordBot.Models;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Logging;
-using System.Text;
+using System.Diagnostics;
+using System.Reflection;
+
+var instances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location));
+var procId = Process.GetCurrentProcess().Id;
+if (instances.Length > 1)
+{
+    foreach(var i in instances)
+    {
+        if(i.Id != procId)
+        {
+            i.Kill();
+        }
+    }
+}
 //==============================================================================//
 //Create DC Bot Client//
-Console.OutputEncoding = Encoding.UTF8;
 var _client = new DiscordSocketClient(new DiscordSocketConfig
 {
     GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds | GatewayIntents.GuildIntegrations

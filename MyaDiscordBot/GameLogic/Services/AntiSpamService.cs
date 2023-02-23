@@ -44,7 +44,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
                 {
-                    if (message.Content.Contains("https://cdn.discordapp.com/"))
+                    if (message.Content.Contains("https://cdn.discordapp.com/") || message.Content.Contains("https://discord.com/"))
                     {
                         //cdn, not scam lol
                         return false;
