@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 
 namespace MyaDiscordBot.Commands
 {
@@ -18,14 +19,14 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("米亞搖搖頭表示佢未睇過任何搞笑野，需要大家收集！可以使用```/addjoke```功能添加新joke哦！");
                 return;
             }
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 await command.RespondAsync("zzZZZ (米亞已經訓著，無法回復你哦！)", ephemeral: true);
                 return;
             }
-            var jokes = await File.ReadAllLinesAsync("joke.txt");
-            Random rnd = new Random();
-            var index = rnd.Next(jokes.Length);
+            string[] jokes = await File.ReadAllLinesAsync("joke.txt");
+            Random rnd = new();
+            int index = rnd.Next(jokes.Length);
             while (Data.Instance.LastRnd == index && jokes.Length > 1)
             {
                 //no

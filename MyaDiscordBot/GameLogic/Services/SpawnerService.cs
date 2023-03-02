@@ -16,8 +16,8 @@ namespace MyaDiscordBot.GameLogic.Services
         }
         public Enemy Spawn(Element mapType, int lv)
         {
-            Random rnd = new Random();
-            var probability = rnd.NextDouble();
+            Random rnd = new();
+            double probability = rnd.NextDouble();
             if (probability < 0.01)
             {
                 return SpawnBoss(lv);
@@ -27,34 +27,34 @@ namespace MyaDiscordBot.GameLogic.Services
                 //no spawn
                 return null;
             }
-            var rank = lv / 10;
+            int rank = lv / 10;
             if (rank >= 10)
             {
                 //player 100lv, infinite loop now
-                var loopCount = (rank / 10) + 1;
-                rank = rank % 10;
-                var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == rank && !x.IsBoss).ToList();
-                var enemySelected = rnd.Next(enemies.Count());
-                var enemy = (Enemy)enemies[enemySelected].Clone();
+                int loopCount = (rank / 10) + 1;
+                rank %= 10;
+                List<Enemy> enemies = _enemy.Where(x => x.Element == mapType && x.Stage == rank && !x.IsBoss).ToList();
+                int enemySelected = rnd.Next(enemies.Count());
+                Enemy enemy = (Enemy)enemies[enemySelected].Clone();
                 enemy.Def *= loopCount * 8;
                 enemy.Atk *= loopCount * 8;
                 enemy.HP *= loopCount * 10;
-                enemy.Stage = loopCount * 10 + rank;
+                enemy.Stage = (loopCount * 10) + rank;
                 return enemy;
             }
             else
             {
-                var enemies = _enemy.Where(x => x.Element == mapType && x.Stage == rank && !x.IsBoss).ToList();
-                var enemySelected = rnd.Next(enemies.Count());
+                List<Enemy> enemies = _enemy.Where(x => x.Element == mapType && x.Stage == rank && !x.IsBoss).ToList();
+                int enemySelected = rnd.Next(enemies.Count());
                 return (Enemy)enemies[enemySelected].Clone();
             }
         }
 
         public Enemy SpawnBoss(int lv)
         {
-            Random rnd = new Random();
-            var stage = lv / 10;
-            var bosses = _enemy.Where(x => x.IsBoss && x.Stage == stage).ToArray();
+            Random rnd = new();
+            int stage = lv / 10;
+            Enemy[] bosses = _enemy.Where(x => x.IsBoss && x.Stage == stage).ToArray();
             if (bosses.Length < 1)
             {
                 if (stage < 1)

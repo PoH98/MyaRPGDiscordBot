@@ -1,5 +1,4 @@
 ﻿using MyaDiscordBot.Models;
-using MyaDiscordBot.Models.SpamDetection;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -10,14 +9,14 @@ namespace MyaDiscordBot.GameLogic.Services
     }
     public class BattleService : IBattleService
     {
-        private Random rnd = new Random();
+        private readonly Random rnd = new();
         public BattleResult Battle(Enemy enemy, Player player)
         {
-            var result = new BattleResult();
+            BattleResult result = new();
             int battleLoop = 0;
             //cap max values when fighting between enemy
-            var oriAtk = player.Atk;
-            var oriDef = player.Def;
+            int oriAtk = player.Atk;
+            int oriDef = player.Def;
             if (player.Atk >= 200)
             {
                 player.Atk = 200;
@@ -28,13 +27,13 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             do
             {
-                var atk = player.Atk;
+                int atk = player.Atk;
                 if (atk < 1)
                 {
                     atk = 1;
                 }
-                var elementWin = ElementDmg(player, enemy);
-                if (elementWin > 0 || elementWin == -2)
+                int elementWin = ElementDmg(player, enemy);
+                if (elementWin is > 0 or (-2))
                 {
                     atk = (int)Math.Round(atk * 1.5);
                 }
@@ -44,10 +43,10 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (player.Bag.Count > 0)
                 {
-                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
                     if (item != null)
                     {
-                        var rate = rnd.NextDouble();
+                        double rate = rnd.NextDouble();
                         if (item.AbilityRate >= rate)
                         {
                             //critical!
@@ -62,7 +61,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (player.Bag.Count > 0)
                 {
-                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
                     if (item != null)
                     {
                         player.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
@@ -73,7 +72,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 if (enemy.HP > 0)
                 {
                     atk = enemy.Atk;
-                    if (elementWin == -1 || elementWin == -2)
+                    if (elementWin is (-1) or (-2))
                     {
                         atk = (int)Math.Round(atk * 1.2);
                     }
@@ -88,10 +87,10 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                     if (player.Bag.Count > 0)
                     {
-                        var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                        ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
                         if (item != null)
                         {
-                            var rate = rnd.NextDouble();
+                            double rate = rnd.NextDouble();
                             if (item.AbilityRate >= rate)
                             {
                                 //immune
@@ -105,13 +104,13 @@ namespace MyaDiscordBot.GameLogic.Services
                 //awaiting items function to be done, suppose use itemService to calculate how many Items should be used and add calculation on equipment
                 if (player.CurrentHP > 0)
                 {
-                    var items = player.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
+                    IEnumerable<ItemEquip> items = player.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
                     if (items.Any())
                     {
                         //use items
                         while ((player.CurrentHP <= enemy.Atk || player.CurrentHP < 5) && player.CurrentHP < player.HP && items.Any(x => x.HP > 0))
                         {
-                            var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
+                            ItemEquip item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                             item.ItemLeft--;
                             player.CurrentHP += item.HP;
                             //add max HP forever, but limit a rate
@@ -161,17 +160,17 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public BattleResult Battle(Player enemy, Player player)
         {
-            var result = new BattleResult();
+            BattleResult result = new();
             int battleLoop = 0;
             do
             {
-                var atk = player.Atk;
+                int atk = player.Atk;
                 if (atk < 1)
                 {
                     atk = 1;
                 }
-                var elementWin = ElementDmg(player, enemy);
-                if (elementWin > 0 || elementWin == -2)
+                int elementWin = ElementDmg(player, enemy);
+                if (elementWin is > 0 or (-2))
                 {
                     atk = (int)Math.Round(atk * 1.5);
                 }
@@ -181,10 +180,10 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (player.Bag.Count > 0)
                 {
-                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
                     if (item != null)
                     {
-                        var rate = rnd.NextDouble();
+                        double rate = rnd.NextDouble();
                         if (item.AbilityRate >= rate)
                         {
                             //critical!
@@ -199,7 +198,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (player.Bag.Count > 0)
                 {
-                    var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
                     if (item != null)
                     {
                         player.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
@@ -207,10 +206,10 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (enemy.Bag.Count > 0)
                 {
-                    var item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                    ItemEquip item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
                     if (item != null)
                     {
-                        var rate = rnd.NextDouble();
+                        double rate = rnd.NextDouble();
                         if (item.AbilityRate >= rate)
                         {
                             //immune
@@ -222,7 +221,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 if (enemy.HP > 0)
                 {
                     atk = enemy.Atk;
-                    if (elementWin == -1 || elementWin == -2)
+                    if (elementWin is (-1) or (-2))
                     {
                         atk = (int)Math.Round(atk * 1.5);
                     }
@@ -232,10 +231,10 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                     if (enemy.Bag.Count > 0)
                     {
-                        var item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                        ItemEquip item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
                         if (item != null)
                         {
-                            var rate = rnd.NextDouble();
+                            double rate = rnd.NextDouble();
                             if (item.AbilityRate >= rate)
                             {
                                 //critical!
@@ -250,7 +249,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                     if (enemy.Bag.Count > 0)
                     {
-                        var item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                        ItemEquip item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
                         if (item != null)
                         {
                             enemy.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
@@ -258,10 +257,10 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                     if (player.Bag.Count > 0)
                     {
-                        var item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                        ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
                         if (item != null)
                         {
-                            var rate = rnd.NextDouble();
+                            double rate = rnd.NextDouble();
                             if (item.AbilityRate >= rate)
                             {
                                 //immune
@@ -274,13 +273,13 @@ namespace MyaDiscordBot.GameLogic.Services
                 //awaiting items function to be done, suppose use itemService to calculate how many Items should be used and add calculation on equipment
                 if (player.CurrentHP > 0)
                 {
-                    var items = player.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
+                    IEnumerable<ItemEquip> items = player.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
                     if (items.Count() > 0)
                     {
                         //use items
                         while ((player.CurrentHP <= enemy.Atk || player.CurrentHP < 5) && player.CurrentHP < player.HP && items.Any(x => x.HP > 0))
                         {
-                            var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
+                            ItemEquip item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                             item.ItemLeft--;
                             if (player.HP < 90 && player.Lv < 40)
                             {
@@ -301,13 +300,13 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 if (enemy.CurrentHP > 0)
                 {
-                    var items = enemy.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
+                    IEnumerable<ItemEquip> items = enemy.Bag.Where(x => x.IsEquiped && x.ItemLeft > 0);
                     if (items.Count() > 0)
                     {
                         //use items
                         while ((enemy.CurrentHP <= player.Atk || enemy.CurrentHP < 5) && enemy.CurrentHP < enemy.HP && items.Any(x => x.HP > 0))
                         {
-                            var item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
+                            ItemEquip item = items.First(x => x.ItemLeft > 0 && x.HP > 0);
                             item.ItemLeft--;
                             if (enemy.HP < 90 && enemy.Lv < 40)
                             {
@@ -329,7 +328,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 battleLoop++;
             }
             while (player.CurrentHP > 0 && enemy.CurrentHP > 0 && battleLoop < 1000);
-            if (player.CurrentHP > 0 && enemy.CurrentHP <= 0 || player.CurrentHP > enemy.CurrentHP)
+            if ((player.CurrentHP > 0 && enemy.CurrentHP <= 0) || player.CurrentHP > enemy.CurrentHP)
             {
                 result.IsVictory = true;
             }
@@ -434,8 +433,8 @@ namespace MyaDiscordBot.GameLogic.Services
                 //enemy nothing equiped
                 return 0;
             }
-            var items = enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Type != ItemType.指環)?.First();
-            if(items == null)
+            ItemEquip items = enemy.Bag.Where(x => x.IsEquiped && x.Type != ItemType.道具 && x.Type != ItemType.指環)?.First();
+            if (items == null)
             {
                 return 1;
             }

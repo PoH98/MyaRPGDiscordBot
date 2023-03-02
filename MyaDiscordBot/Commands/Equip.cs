@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 
 namespace MyaDiscordBot.Commands
 {
@@ -13,15 +14,15 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var builder = new ComponentBuilder();
-            builder.WithButton("火", "equipType-fire");
-            builder.WithButton("風", "equipType-wind");
-            builder.WithButton("土", "equipType-earth");
-            builder.WithButton("水", "equipType-water");
-            builder.WithButton("光", "equipType-light");
-            builder.WithButton("暗", "equipType-dark");
-            builder.WithButton("神", "equipType-god");
-            builder.WithButton("道具", "equipType-items");
+            ComponentBuilder builder = new();
+            _ = builder.WithButton("火", "equipType-fire");
+            _ = builder.WithButton("風", "equipType-wind");
+            _ = builder.WithButton("土", "equipType-earth");
+            _ = builder.WithButton("水", "equipType-water");
+            _ = builder.WithButton("光", "equipType-light");
+            _ = builder.WithButton("暗", "equipType-dark");
+            _ = builder.WithButton("神", "equipType-god");
+            _ = builder.WithButton("道具", "equipType-items");
             return command.RespondAsync("選擇背包內道具種類：", ephemeral: true, components: builder.Build());
         }
     }

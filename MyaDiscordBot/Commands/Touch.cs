@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
@@ -19,14 +20,14 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 return command.RespondAsync("zzZZZ (米亞已經訓著，無法回復你哦！)", ephemeral: true);
             }
-            Random rnd = new Random();
+            Random rnd = new();
             if (rnd.NextDouble() < 0.05)
             {
-                var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+                Models.Player player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
                 player.CurrentHP = 1;
                 _playerService.SavePlayer(player);
                 return command.RespondAsync("米亞發火用電擊棒治療左" + command.User.Mention + "一餐！");

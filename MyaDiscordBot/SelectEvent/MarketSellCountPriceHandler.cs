@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.SelectEvent.Base;
 
 namespace MyaDiscordBot.SelectEvent
 {
@@ -19,12 +20,12 @@ namespace MyaDiscordBot.SelectEvent
 
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var split = message.Data.Values.First().Split("-");
-            var amount = Convert.ToInt32(split[1]);
-            var id = string.Join("-", split[2], split[3], split[4], split[5], split[6]);
-            var price = Convert.ToInt32(split[7]) * amount;
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            var sellid = marketService.Sell(player, id, amount, price);
+            string[] split = message.Data.Values.First().Split("-");
+            int amount = Convert.ToInt32(split[1]);
+            string id = string.Join("-", split[2], split[3], split[4], split[5], split[6]);
+            int price = Convert.ToInt32(split[7]) * amount;
+            Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Guid sellid = marketService.Sell(player, id, amount, price);
             if (sellid != Guid.Empty)
             {
                 playerService.SavePlayer(player);

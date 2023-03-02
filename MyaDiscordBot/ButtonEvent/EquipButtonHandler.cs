@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using System.Text;
 
@@ -13,22 +14,18 @@ namespace MyaDiscordBot.ButtonEvent
         }
         public bool CheckUsage(string command)
         {
-            if (command.StartsWith("equip-") || command.StartsWith("unequip-"))
-            {
-                return true;
-            }
-            return false;
+            return command.StartsWith("equip-") || command.StartsWith("unequip-");
         }
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             if (message.Data.CustomId.StartsWith("unequip-"))
             {
-                var items = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("unequip-", "").ToLower());
+                IEnumerable<Models.ItemEquip> items = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("unequip-", "").ToLower());
                 if (items.Count() > 0)
                 {
-                    var item = items.First();
+                    Models.ItemEquip item = items.First();
                     if (item.IsEquiped)
                     {
                         item.IsEquiped = false;
@@ -57,19 +54,19 @@ namespace MyaDiscordBot.ButtonEvent
             else
             {
                 //equip
-                var items = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("equip-", "").ToLower());
+                IEnumerable<Models.ItemEquip> items = player.Bag.Where(x => x.Name.ToLower() == message.Data.CustomId.Replace("equip-", "").ToLower());
                 if (items.Count() > 0)
                 {
-                    var item = items.First();
+                    Models.ItemEquip item = items.First();
                     if (!item.IsEquiped)
                     {
-                        StringBuilder sb = new StringBuilder();
+                        StringBuilder sb = new();
                         if (item.UseTimes == -1 && item.Type != Models.ItemType.道具 && item.Type != Models.ItemType.指環)
                         {
                             if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具 && x.Type != Models.ItemType.指環))
                             {
                                 //not allow to equip different elements
-                                foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具 && x.Type != Models.ItemType.指環))
+                                foreach (Models.ItemEquip i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Element != item.Element && x.Type != Models.ItemType.道具 && x.Type != Models.ItemType.指環))
                                 {
                                     i.IsEquiped = false;
                                     if (i.UseTimes == -1)
@@ -78,13 +75,13 @@ namespace MyaDiscordBot.ButtonEvent
                                         player.Atk -= i.Atk;
                                         player.Def -= i.Def;
                                     }
-                                    sb.AppendLine(i.Name + "已經因屬性唔同而自動被解除裝備！");
+                                    _ = sb.AppendLine(i.Name + "已經因屬性唔同而自動被解除裝備！");
                                 }
                             }
                             if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
                             {
                                 //not allow to equip same type equipments
-                                foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
+                                foreach (Models.ItemEquip i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
                                 {
                                     i.IsEquiped = false;
                                     if (i.UseTimes == -1)
@@ -93,7 +90,7 @@ namespace MyaDiscordBot.ButtonEvent
                                         player.Atk -= i.Atk;
                                         player.Def -= i.Def;
                                     }
-                                    sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
+                                    _ = sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
                                 }
                             }
                             player.HP += item.HP;
@@ -105,7 +102,7 @@ namespace MyaDiscordBot.ButtonEvent
                             if (player.Bag.Any(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
                             {
                                 //not allow to equip same type equipments
-                                foreach (var i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
+                                foreach (Models.ItemEquip i in player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type == item.Type && x.Type != Models.ItemType.道具))
                                 {
                                     i.IsEquiped = false;
                                     if (i.UseTimes == -1)
@@ -114,7 +111,7 @@ namespace MyaDiscordBot.ButtonEvent
                                         player.Atk -= i.Atk;
                                         player.Def -= i.Def;
                                     }
-                                    sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
+                                    _ = sb.AppendLine(i.Name + "已經因有相同類型的裝備而自動被解除裝備！");
                                 }
                             }
                             player.HP += item.HP;

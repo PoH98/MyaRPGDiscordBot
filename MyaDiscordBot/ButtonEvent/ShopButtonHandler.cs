@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -15,25 +16,21 @@ namespace MyaDiscordBot.ButtonEvent
         }
         public bool CheckUsage(string command)
         {
-            if (command.StartsWith("shop-"))
-            {
-                return true;
-            }
-            return false;
+            return command.StartsWith("shop-");
         }
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
             try
             {
-                var data = items.Where(x => x.Id.ToString() == message.Data.CustomId.Replace("shop-", ""));
+                IEnumerable<Item> data = items.Where(x => x.Id.ToString() == message.Data.CustomId.Replace("shop-", ""));
                 if (data.Count() < 1)
                 {
                     await message.RespondAsync("小貓已經唔係到，你對著空氣買野好玩咩？", ephemeral: true);
                     return;
                 }
-                var selected = data.First();
-                var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+                Item selected = data.First();
+                Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
                 if (player.Coin < selected.Price)
                 {
                     await message.RespondAsync("小貓用彩虹棍敲左你個頭後走左，留底一張紙條表示窮鬼唔好煩佢", ephemeral: true);

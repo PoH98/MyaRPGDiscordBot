@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.ButtonEvent
@@ -20,28 +21,28 @@ namespace MyaDiscordBot.ButtonEvent
         {
             try
             {
-                var id = message.Data.CustomId.Replace("marketSell-", "");
-                var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-                var r = player.ResourceBag.First(x => x.Id.ToString() == id);
+                string id = message.Data.CustomId.Replace("marketSell-", "");
+                Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+                Models.HoldedResource r = player.ResourceBag.First(x => x.Id.ToString() == id);
                 if (r.Amount > 0)
                 {
-                    SelectMenuBuilder sb = new SelectMenuBuilder();
-                    sb.WithPlaceholder("Select an option");
-                    sb.WithMinValues(1);
-                    sb.WithCustomId(Guid.NewGuid().ToString());
-                    sb.WithMaxValues(1);
-                    List<SelectMenuOptionBuilder> smo = new List<SelectMenuOptionBuilder>();
+                    SelectMenuBuilder sb = new();
+                    _ = sb.WithPlaceholder("Select an option");
+                    _ = sb.WithMinValues(1);
+                    _ = sb.WithCustomId(Guid.NewGuid().ToString());
+                    _ = sb.WithMaxValues(1);
+                    List<SelectMenuOptionBuilder> smo = new();
                     for (int x = 1; x <= Math.Min(r.Amount, 25); x++)
                     {
-                        SelectMenuOptionBuilder smob = new SelectMenuOptionBuilder();
-                        smob.WithLabel(x + "個");
-                        smob.WithValue("marketSellCount-" + x + "-" + r.Id);
-                        smob.WithDescription("出售的數量");
+                        SelectMenuOptionBuilder smob = new();
+                        _ = smob.WithLabel(x + "個");
+                        _ = smob.WithValue("marketSellCount-" + x + "-" + r.Id);
+                        _ = smob.WithDescription("出售的數量");
                         smo.Add(smob);
                     }
                     sb.Options = smo;
-                    ComponentBuilder cb = new ComponentBuilder();
-                    cb.WithSelectMenu(sb);
+                    ComponentBuilder cb = new();
+                    _ = cb.WithSelectMenu(sb);
                     await message.RespondAsync("請選擇你要賣的數量", ephemeral: true, components: cb.Build());
                 }
                 else

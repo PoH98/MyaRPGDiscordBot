@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 
 namespace MyaDiscordBot.Commands
 {
@@ -18,7 +19,7 @@ namespace MyaDiscordBot.Commands
                 File.WriteAllText("joke.txt", "");
             }
             await File.AppendAllTextAsync("joke.txt", ((string)command.Data.Options.First().Value).Replace("\n", "\\n") + "\n");
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 await command.RespondAsync("zzZZZ (米亞已經訓著，無法回復你哦！不過小熊貓醫護隊已經偷偷幫你記錄底啦！)", ephemeral: true);
                 return;

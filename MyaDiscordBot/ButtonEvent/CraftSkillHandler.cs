@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -24,8 +25,8 @@ namespace MyaDiscordBot.ButtonEvent
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            var craft = new CraftTable
+            Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            CraftTable craft = new()
             {
                 Resources = new List<RequiredResource>
                 {
@@ -40,36 +41,33 @@ namespace MyaDiscordBot.ButtonEvent
                     { new RequiredResource{ Id = Guid.Parse("392d421f-44ec-461f-ac0a-0c6ae5d0571a"), Amount = 25 } }
                 }
             };
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.WithColor(Color.Magenta);
-            eb.WithTitle("合成技能點所缺少的合成材料：");
-            var craftable = true;
-            foreach (var i in craft.Resources)
+            EmbedBuilder eb = new();
+            _ = eb.WithColor(Color.Magenta);
+            _ = eb.WithTitle("合成技能點所缺少的合成材料：");
+            bool craftable = true;
+            foreach (RequiredResource i in craft.Resources)
             {
-                if (player.ResourceBag == null)
-                {
-                    player.ResourceBag = new List<HoldedResource>();
-                }
-                var res = player.ResourceBag.FirstOrDefault(x => x.Id == i.Id);
+                player.ResourceBag ??= new List<HoldedResource>();
+                HoldedResource res = player.ResourceBag.FirstOrDefault(x => x.Id == i.Id);
                 if (res != null)
                 {
                     if ((i.Amount - res.Amount) > 0)
                     {
                         craftable = false;
-                        eb.AddField(res.Name, (i.Amount - res.Amount));
+                        _ = eb.AddField(res.Name, i.Amount - res.Amount);
                     }
                 }
                 else
                 {
                     craftable = false;
-                    var r = resources.FirstOrDefault(x => x.Id == i.Id);
-                    eb.AddField(r.Name, i.Amount);
+                    Resource r = resources.FirstOrDefault(x => x.Id == i.Id);
+                    _ = eb.AddField(r.Name, i.Amount);
                 }
             }
             if (craftable)
             {
-                var c = new ComponentBuilder();
-                c.WithButton("確認", "craftSkillConfirm", ButtonStyle.Success);
+                ComponentBuilder c = new();
+                _ = c.WithButton("確認", "craftSkillConfirm", ButtonStyle.Success);
                 await message.RespondAsync("是否要合成技能點？", ephemeral: true, components: c.Build());
                 return;
             }

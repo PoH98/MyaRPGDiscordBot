@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 
 namespace MyaDiscordBot.Commands
 {
@@ -13,7 +14,7 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            Random random = new Random();
+            Random random = new();
             return command.RespondAsync("獲得" + random.Next(1, 7));
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 
 namespace MyaDiscordBot.Commands
 {
@@ -16,19 +17,14 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            switch (Convert.ToInt32(command.Data.Options.First().Value))
+            return Convert.ToInt32(command.Data.Options.First().Value) switch
             {
-                case 1:
-                    return command.RespondAsync("屬性相剋：\n火 > 風 > 土 > 水 > 火\n光 > 暗 > 光\n神\n屬性相剋會造成1.5倍傷害哦！", ephemeral: true);
-                case 2:
-                    return command.RespondAsync("道具/裝備使用：\n你可以通過/search打怪獲得裝備或者去/shop買！\n裝備獲得後記得用/equip裝備\n裝備不能混合其他屬性，所有裝備必須要同一個屬性！", ephemeral: true);
-                case 3:
-                    return command.RespondAsync("戰鬥：\n戰鬥的時候會通過計算你當前裝備的武器，護甲，護盾等等與對方的相差\n發動指令的人會先攻\n戰鬥途中會自動使用補血道具！", ephemeral: true);
-                case 4:
-                    return command.RespondAsync("升級：\n每10級 = 1 個新rank\n每升級5次會獲得1個Skill Point可以升你當前的防禦/攻擊力\n達到一定數量的經驗值就會自動升級！", ephemeral: true);
-                default:
-                    return command.RespondAsync("???");
-            }
+                1 => command.RespondAsync("屬性相剋：\n火 > 風 > 土 > 水 > 火\n光 > 暗 > 光\n神\n屬性相剋會造成1.5倍傷害哦！", ephemeral: true),
+                2 => command.RespondAsync("道具/裝備使用：\n你可以通過/search打怪獲得裝備或者去/shop買！\n裝備獲得後記得用/equip裝備\n裝備不能混合其他屬性，所有裝備必須要同一個屬性！", ephemeral: true),
+                3 => command.RespondAsync("戰鬥：\n戰鬥的時候會通過計算你當前裝備的武器，護甲，護盾等等與對方的相差\n發動指令的人會先攻\n戰鬥途中會自動使用補血道具！", ephemeral: true),
+                4 => command.RespondAsync("升級：\n每10級 = 1 個新rank\n每升級5次會獲得1個Skill Point可以升你當前的防禦/攻擊力\n達到一定數量的經驗值就會自動升級！", ephemeral: true),
+                _ => command.RespondAsync("???"),
+            };
         }
     }
 }

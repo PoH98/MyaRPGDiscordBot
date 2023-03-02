@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -25,7 +26,7 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
             if (client.CurrentUser.Id == ((SocketGuildUser)command.Data.Options.First().Value).Id)
             {
@@ -54,12 +55,12 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你搞笑咩？空手打劫當自己係成龍或者係李小龍？", ephemeral: true);
                 return;
             }
-            var rank = 0;
+            int rank = 0;
             if (player.Bag.Count > 0 && player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Count() > 0)
             {
                 rank = player.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
             }
-            var victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Player victim = playerService.LoadPlayer(((SocketGuildUser)command.Data.Options.First().Value).Id, (command.Channel as SocketGuildChannel).Guild.Id);
             if (victim.Lv < 10)
             {
                 await command.RespondAsync("你搞笑咩？對個新手咁惡，想搞到依個遊戲無人玩？", ephemeral: true);
@@ -73,7 +74,7 @@ namespace MyaDiscordBot.Commands
                 playerService.SavePlayer(player);
                 return;
             }
-            var victimRank = 0;
+            int victimRank = 0;
             if (victim.Bag.Count > 0 && victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Count() > 0)
             {
                 victimRank = victim.Bag.Where(x => x.IsEquiped && x.UseTimes == -1 && x.Type != ItemType.道具).Max(x => x.Rank);
@@ -86,41 +87,27 @@ namespace MyaDiscordBot.Commands
                     return;
                 }
                 //can fight
-                var result = battleService.Battle(victim, player);
-                Random rnd = new Random();
-                var percentage = rnd.Next(3, 6);
+                BattleResult result = battleService.Battle(victim, player);
+                Random rnd = new();
+                int percentage = rnd.Next(3, 6);
                 if (result.IsVictory)
                 {
                     //player can gain money
-                    var gain = victim.Coin * percentage / 100;
+                    int gain = victim.Coin * percentage / 100;
                     player.Coin += gain;
                     victim.Coin -= gain;
                     victim.CurrentHP = victim.HP;
                     player.CurrentHP = player.HP;
                     victim.RobShield = DateTime.Now.AddHours(12);
                     player.NextRob = DateTime.Now.AddHours(8);
-                    if (player.NextCommand > DateTime.Now)
-                    {
-                        player.NextCommand = player.NextCommand.AddMinutes(30);
-                    }
-                    else
-                    {
-                        player.NextCommand = DateTime.Now.AddMinutes(30);
-                    }
-                    if (victim.NextCommand > DateTime.Now)
-                    {
-                        victim.NextCommand = victim.NextCommand.AddMinutes(30);
-                    }
-                    else
-                    {
-                        victim.NextCommand = DateTime.Now.AddMinutes(30);
-                    }
+                    player.NextCommand = player.NextCommand > DateTime.Now ? player.NextCommand.AddMinutes(30) : DateTime.Now.AddMinutes(30);
+                    victim.NextCommand = victim.NextCommand > DateTime.Now ? victim.NextCommand.AddMinutes(30) : DateTime.Now.AddMinutes(30);
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，獲得左受害者" + gain + "蚊！");
                 }
                 else
                 {
                     //victim can gain money
-                    var gain = player.Coin * percentage / 100;
+                    int gain = player.Coin * percentage / 100;
                     player.Coin -= gain;
                     victim.Coin += gain;
                     player.CurrentHP = player.HP;
@@ -128,22 +115,8 @@ namespace MyaDiscordBot.Commands
                     player.RobShield = DateTime.Now.AddHours(8);
                     player.NextRob = DateTime.Now.AddHours(8);
                     victim.RobShield = DateTime.Now.AddHours(4);
-                    if (player.NextCommand > DateTime.Now)
-                    {
-                        player.NextCommand = player.NextCommand.AddMinutes(30);
-                    }
-                    else
-                    {
-                        player.NextCommand = DateTime.Now.AddMinutes(30);
-                    }
-                    if (victim.NextCommand > DateTime.Now)
-                    {
-                        victim.NextCommand = victim.NextCommand.AddMinutes(30);
-                    }
-                    else
-                    {
-                        victim.NextCommand = DateTime.Now.AddMinutes(30);
-                    }
+                    player.NextCommand = player.NextCommand > DateTime.Now ? player.NextCommand.AddMinutes(30) : DateTime.Now.AddMinutes(30);
+                    victim.NextCommand = victim.NextCommand > DateTime.Now ? victim.NextCommand.AddMinutes(30) : DateTime.Now.AddMinutes(30);
                     await command.RespondAsync("估唔到" + command.User.Mention + "竟然咁心狠手辣，打劫左" + ((SocketGuildUser)command.Data.Options.First().Value).Mention + "，可惜被反殺無左" + gain + "蚊！");
                 }
                 playerService.SavePlayer(player);

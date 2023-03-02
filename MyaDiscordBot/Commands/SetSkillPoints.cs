@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
@@ -19,16 +20,16 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
             if (player.SkillPoint < 1)
             {
                 return command.RespondAsync("你擁有的點數：" + player.SkillPoint, ephemeral: true);
             }
-            ComponentBuilder cb = new ComponentBuilder();
-            cb.WithButton("攻擊力", "skill-atk");
-            cb.WithButton("防御力", "skill-def");
-            cb.WithButton("生命值", "skill-hp");
+            ComponentBuilder cb = new();
+            _ = cb.WithButton("攻擊力", "skill-atk");
+            _ = cb.WithButton("防御力", "skill-def");
+            _ = cb.WithButton("生命值", "skill-hp");
             return command.RespondAsync("你擁有的點數：" + player.SkillPoint + "\n可將點數放落以下數值中：", components: cb.Build(), ephemeral: true);
         }
     }

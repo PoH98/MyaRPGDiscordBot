@@ -12,13 +12,13 @@ using Quartz.Logging;
 using System.Diagnostics;
 using System.Reflection;
 
-var instances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location));
-var procId = Process.GetCurrentProcess().Id;
+Process[] instances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location));
+int procId = Process.GetCurrentProcess().Id;
 if (instances.Length > 1)
 {
-    foreach(var i in instances)
+    foreach (Process i in instances)
     {
-        if(i.Id != procId)
+        if (i.Id != procId)
         {
             i.Kill();
         }
@@ -26,7 +26,7 @@ if (instances.Length > 1)
 }
 //==============================================================================//
 //Create DC Bot Client//
-var _client = new DiscordSocketClient(new DiscordSocketConfig
+DiscordSocketClient _client = new(new DiscordSocketConfig
 {
     GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds | GatewayIntents.GuildIntegrations
 });
@@ -34,7 +34,7 @@ _client.Log += Log;
 //==============================================================================//
 //Scheduller Register//
 LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
-StdSchedulerFactory factory = new StdSchedulerFactory();
+StdSchedulerFactory factory = new();
 IScheduler scheduler = await factory.GetScheduler();
 IJobDetail job = JobBuilder.Create<BossJob>()
     .Build();
@@ -62,7 +62,7 @@ trigger = TriggerBuilder.Create()
 await scheduler.ScheduleJob(job, trigger);
 //==============================================================================//
 //Register DI//
-var builder = new ContainerBuilder();
+ContainerBuilder builder = new();
 //Load all commands
 builder.RegisterInterfaces();
 //Register Socket Client
@@ -74,7 +74,7 @@ builder.RegisterMyaBotService();
 //=============================================================================//
 //Build container//
 Data.Instance.Container = builder.Build();
-var token = Data.Instance.Container.Resolve<IConfiguration>().Token;
+string token = Data.Instance.Container.Resolve<IConfiguration>().Token;
 //==============================================================================//
 //Start bot//
 await _client.LoginAsync(TokenType.Bot, token);
@@ -83,13 +83,13 @@ await _client.StartAsync();
 
 await Task.Delay(-1);
 
-Task Log(LogMessage msg)
+static Task Log(LogMessage msg)
 {
     Console.WriteLine(msg.ToString());
     return Task.CompletedTask;
 }
 
-class ConsoleLogProvider : ILogProvider
+internal class ConsoleLogProvider : ILogProvider
 {
     public Logger GetLogger(string name)
     {

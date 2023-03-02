@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace MyaDiscordBot.Commands
+namespace MyaDiscordBot.Commands.Base
 {
     internal interface ICommand
     {

@@ -13,7 +13,7 @@ namespace MyaDiscordBot.Models
         public double DropRate { get; set; }
         public object Clone()
         {
-            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+            JsonSerializerSettings deserializeSettings = new() { ObjectCreationHandling = ObjectCreationHandling.Replace };
             return JsonConvert.DeserializeObject<Resource>(JsonConvert.SerializeObject(this), deserializeSettings);
         }
     }
@@ -26,7 +26,7 @@ namespace MyaDiscordBot.Models
         }
         public HoldedResource(Resource resource)
         {
-            var r = (Resource)resource.Clone();
+            Resource r = (Resource)resource.Clone();
             Id = r.Id;
             Name = r.Name;
             DropRate = r.DropRate;

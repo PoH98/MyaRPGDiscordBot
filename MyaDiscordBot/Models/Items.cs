@@ -38,7 +38,7 @@ namespace MyaDiscordBot.Models
         public bool Craft { get; set; } = false;
         public object Clone()
         {
-            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+            JsonSerializerSettings deserializeSettings = new() { ObjectCreationHandling = ObjectCreationHandling.Replace };
             return JsonConvert.DeserializeObject<Item>(JsonConvert.SerializeObject(this), deserializeSettings);
         }
     }
@@ -51,7 +51,7 @@ namespace MyaDiscordBot.Models
         }
         public ItemEquip(Item i)
         {
-            var item = (Item)i.Clone();
+            Item item = (Item)i.Clone();
             Id = item.Id;
             Name = item.Name;
             Rank = item.Rank;

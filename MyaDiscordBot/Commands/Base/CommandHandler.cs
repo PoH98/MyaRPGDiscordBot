@@ -1,18 +1,18 @@
 ﻿using Autofac;
 using Discord;
 using Discord.WebSocket;
-using MyaDiscordBot.ButtonEvent;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using MyaDiscordBot.Models.SpamDetection;
-using MyaDiscordBot.SelectEvent;
+using MyaDiscordBot.SelectEvent.Base;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace MyaDiscordBot.Commands
+namespace MyaDiscordBot.Commands.Base
 {
     public class CommandHandler
     {
@@ -20,14 +20,14 @@ namespace MyaDiscordBot.Commands
         private IEnumerable<ICommand> commands;
         private IEnumerable<IButtonHandler> buttons;
         private IEnumerable<ISelectHandler> selects;
-        private HttpClient hc = new HttpClient();
+        private readonly HttpClient hc = new();
         private DateTime lastEntered = DateTime.MinValue;
         private int raidAlert = 0;
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
             hc.BaseAddress = new Uri("https://api.blacklister.xyz");
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
+            _ = hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
         }
 
         public void InstallCommands()
@@ -45,7 +45,7 @@ namespace MyaDiscordBot.Commands
 
         private Task _client_SelectMenuExecuted(SocketMessageComponent arg)
         {
-            foreach (var command in selects)
+            foreach (ISelectHandler command in selects)
             {
                 if (arg.Data.Values != null)
                 {
@@ -71,7 +71,7 @@ namespace MyaDiscordBot.Commands
 
         private Task _client_Disconnected(Exception arg)
         {
-            Process.Start("MyaDiscordBot.exe");
+            _ = Process.Start("MyaDiscordBot.exe");
             Environment.Exit(0);
             return Task.CompletedTask;
         }
@@ -82,37 +82,35 @@ namespace MyaDiscordBot.Commands
             await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " had joined the server.\n", Encoding.UTF8);
             if (!arg.IsBot)
             {
-                var response = await hc.GetAsync(arg.Id.ToString());
-                var result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
+                HttpResponseMessage response = await hc.GetAsync(arg.Id.ToString());
+                CheckUserResponse result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
                 if (result.Blacklisted)
                 {
-                    using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                    using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+                    Console.WriteLine(arg.Id + " is evil!! Kick him!!");
+                    ISettingService setting = scope.Resolve<ISettingService>();
+                    ServerSettings settings = setting.GetSettings(arg.Guild.Id);
+                    if (settings.ChannelId != 0)
                     {
-                        Console.WriteLine(arg.Id + " is evil!! Kick him!!");
-                        var setting = scope.Resolve<ISettingService>();
-                        var settings = setting.GetSettings(arg.Guild.Id);
+                        IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，嘗試自動踢出");
+                    }
+                    try
+                    {
+                        await arg.KickAsync(result.Reason + " in other server on " + result.Date);
+                    }
+                    catch (Exception)
+                    {
                         if (settings.ChannelId != 0)
                         {
-                            var channel = await _client.GetChannelAsync(settings.ChannelId);
-                            await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，嘗試自動踢出");
-                        }
-                        try
-                        {
-                            await arg.KickAsync(result.Reason + " in other server on " + result.Date);
-                        }
-                        catch (Exception ex)
-                        {
-                            if (settings.ChannelId != 0)
-                            {
-                                var channel = await _client.GetChannelAsync(settings.ChannelId);
-                                await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，踢出失敗！");
-                            }
+                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，踢出失敗！");
                         }
                     }
                 }
                 if (await KickInvalidName(arg))
                 {
-                    await arg.SendMessageAsync("請改善你的名字後先再加入我哋哦！");
+                    _ = await arg.SendMessageAsync("請改善你的名字後先再加入我哋哦！");
                     await arg.KickAsync();
                     return;
                 }
@@ -127,34 +125,32 @@ namespace MyaDiscordBot.Commands
                 lastEntered = DateTime.Now;
                 if (raidAlert >= 5)
                 {
-                    using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                    using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+                    ISettingService setting = scope.Resolve<ISettingService>();
+                    ServerSettings settings = setting.GetSettings(arg.Guild.Id);
+                    if (Data.Instance.Youtube.Videos.Count >= 0)
                     {
-                        var setting = scope.Resolve<ISettingService>();
-                        var settings = setting.GetSettings(arg.Guild.Id);
-                        if (Data.Instance.Youtube.Videos.Count >= 0)
+                        if (Data.Instance.Youtube.Videos.Any(x => DateTime.Now.Date == x.ScheduledStartTime.ToLocalTime().Date && DateTime.Now >= x.ScheduledStartTime.ToLocalTime() && x.ScheduledStartTime.TimeOfDay <= new TimeSpan(23, 0, 0)))
                         {
-                            if (Data.Instance.Youtube.Videos.Any(x => DateTime.Now.Date == x.ScheduledStartTime.ToLocalTime().Date && DateTime.Now >= x.ScheduledStartTime.ToLocalTime() && x.ScheduledStartTime.TimeOfDay <= new TimeSpan(23, 0, 0)))
-                            {
-                                //in Live, ignore server raid now
-                                return;
-                            }
+                            //in Live, ignore server raid now
+                            return;
                         }
-                        if (settings.RaidKiller)
+                    }
+                    if (settings.RaidKiller)
+                    {
+                        if (settings.ChannelId != 0)
                         {
-                            if (settings.ChannelId != 0)
+                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                            SocketGuild guild = _client.GetGuild(arg.Guild.Id);
+                            try
                             {
-                                var channel = await _client.GetChannelAsync(settings.ChannelId);
-                                var guild = _client.GetGuild(arg.Guild.Id);
-                                try
-                                {
-                                    await ((IMessageChannel)channel).SendMessageAsync("清理系統正在嘗試禁言" + arg.Mention);
-                                    await arg.SetTimeOutAsync(new TimeSpan(1, 0, 0));
-                                    await arg.SendMessageAsync("你的行動疑似Server Raid, 已經被自動禁言！一小時後會自動解禁！");
-                                }
-                                catch (Exception)
-                                {
-                                    await ((IMessageChannel)channel).SendMessageAsync("清理系統無法踢出" + arg.Mention + "! 請確保有足夠權限！");
-                                }
+                                _ = await ((IMessageChannel)channel).SendMessageAsync("清理系統正在嘗試禁言" + arg.Mention);
+                                await arg.SetTimeOutAsync(new TimeSpan(1, 0, 0));
+                                _ = await arg.SendMessageAsync("你的行動疑似Server Raid, 已經被自動禁言！一小時後會自動解禁！");
+                            }
+                            catch (Exception)
+                            {
+                                _ = await ((IMessageChannel)channel).SendMessageAsync("清理系統無法踢出" + arg.Mention + "! 請確保有足夠權限！");
                             }
                         }
                     }
@@ -164,27 +160,28 @@ namespace MyaDiscordBot.Commands
 
         private async Task _client_MessageReceived(SocketMessage arg)
         {
-            var message = arg as SocketUserMessage;
+            if (arg is not SocketUserMessage message || string.IsNullOrEmpty(message.Content))
+            {
+                return;
+            }
             try
             {
-
-                if (message == null || string.IsNullOrEmpty(message.Content)) return;
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
                 Console.WriteLine("[" + message.Channel.Name + "]" + message.Author.Id + ":" + message.Content);
-                using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())
                 {
-                    var antiSpam = scope.Resolve<IAntiSpamService>();
+                    IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
                     if (antiSpam.IsSpam(message))
                     {
-                        var angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
-                        await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
+                        GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                        _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
                         await message.DeleteAsync();
                         return;
                     }
                     if (await antiSpam.IsScam(message))
                     {
-                        var angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
-                        await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
+                        GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                        _ = await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
                         await message.DeleteAsync();
                         return;
                     }
@@ -193,42 +190,42 @@ namespace MyaDiscordBot.Commands
                 {
                     if (message.Content.Contains("食屎") || message.Content.Contains("fuck") || message.Content.Contains("白癡") || message.Content.Contains("是DD") || message.Content.Contains("去死"))
                     {
-                        var angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
-                        var fuck = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("fuck")).Last();
+                        GuildEmote angry = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("angry")).Last();
+                        GuildEmote fuck = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("fuck")).Last();
                         await message.AddReactionAsync(angry);
                         await message.AddReactionAsync(fuck);
                     }
                     else if (message.Content.Contains("屎") || message.Content.Contains("shit") || message.Content.Contains("米田共"))
                     {
-                        var sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
+                        GuildEmote sssmya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("sssmya")).Last();
                         await message.AddReactionAsync(sssmya);
                     }
-                    else if ((message.Content.Contains("愛") || message.Content.Contains("萬歲") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && (!message.Content.Contains("甘米")))
+                    else if ((message.Content.Contains("愛") || message.Content.Contains("萬歲") || message.Content.Contains("love") || message.Content.Contains("鐘意")) && (message.Content.Contains("你") || message.Content.Contains("you") || message.Content.Contains("米亞") || message.Content.Contains("Mya")) && !message.Content.Contains("甘米"))
                     {
-                        var kiramya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("kiramya")).Last();
+                        GuildEmote kiramya = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("kiramya")).Last();
                         await message.AddReactionAsync(kiramya);
                     }
                     else
                     {
-                        var what = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("what")).Last();
+                        GuildEmote what = _client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("what")).Last();
                         await message.AddReactionAsync(what);
                     }
                 }
                 else if (message.Content.StartsWith("$refreshCommand") && message.Author.Id == 294835963442757632)
                 {
-                    await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
+                    _ = await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
                     _ = Task.Run(async () =>
                     {
                         await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
-                        await message.ReplyAsync("Job Done");
+                        _ = await message.ReplyAsync("Job Done");
                     });
                 }
                 else if (message.Content.StartsWith("$ping"))
                 {
-                    await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
+                    _ = await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][Exception]: " + ex.ToString() + "\n", Encoding.UTF8);
             }
@@ -240,7 +237,7 @@ namespace MyaDiscordBot.Commands
             {
                 try
                 {
-                    foreach (var command in buttons)
+                    foreach (IButtonHandler command in buttons)
                     {
                         if (arg.Data.Value != null)
                         {
@@ -274,18 +271,20 @@ namespace MyaDiscordBot.Commands
         private async Task UpdateCommands(SocketGuild arg = null)
         {
             await arg.DeleteApplicationCommandsAsync();
-            foreach (var command in commands)
+            foreach (ICommand command in commands)
             {
                 try
                 {
-                    var cmd = new SlashCommandBuilder();
-                    cmd.Name = command.Name;
-                    cmd.Description = command.Description;
-                    foreach (var o in command.Option)
+                    SlashCommandBuilder cmd = new()
                     {
-                        cmd.AddOptions(o);
+                        Name = command.Name,
+                        Description = command.Description
+                    };
+                    foreach (SlashCommandOptionBuilder o in command.Option)
+                    {
+                        _ = cmd.AddOptions(o);
                     }
-                    await arg.CreateApplicationCommandAsync(cmd.Build());
+                    _ = await arg.CreateApplicationCommandAsync(cmd.Build());
                 }
                 catch (Exception ex)
                 {
@@ -298,13 +297,13 @@ namespace MyaDiscordBot.Commands
         {
             if (!Directory.Exists("save"))
             {
-                Directory.CreateDirectory("save");
+                _ = Directory.CreateDirectory("save");
             }
             commands = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ICommand).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ICommand);
             buttons = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(IButtonHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as IButtonHandler);
             selects = Data.Instance.Container.ComponentRegistry.Registrations.Where(x => typeof(ISelectHandler).IsAssignableFrom(x.Activator.LimitType)).Select(x => x.Activator.LimitType).Select(t => Data.Instance.Container.Resolve(t) as ISelectHandler);
             await _client.SetGameAsync("頂米亞與甘米大冒險", type: ActivityType.Playing);
-            var i = Data.Instance.Container.Resolve<IItemService>();
+            IItemService i = Data.Instance.Container.Resolve<IItemService>();
             await i.SaveData();
         }
 
@@ -313,17 +312,15 @@ namespace MyaDiscordBot.Commands
             Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + arg.CommandId + " triggered");
             if (arg.CommandName != "setting")
             {
-                using (var scope = Data.Instance.Container.BeginLifetimeScope())
+                using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+                ISettingService setting = scope.Resolve<ISettingService>();
+                if (!setting.CorrectChannel(arg, out ulong correctChannel))
                 {
-                    var setting = scope.Resolve<ISettingService>();
-                    if (!setting.CorrectChannel(arg, out ulong correctChannel))
-                    {
-                        await arg.RespondAsync("請到" + MentionUtils.MentionChannel(correctChannel) + "使用Bot指令哦！", ephemeral: true);
-                        return;
-                    }
+                    await arg.RespondAsync("請到" + MentionUtils.MentionChannel(correctChannel) + "使用Bot指令哦！", ephemeral: true);
+                    return;
                 }
             }
-            var command = commands.First(x => x.Name == arg.CommandName);
+            ICommand command = commands.First(x => x.Name == arg.CommandName);
             try
             {
                 await command.Handler(arg, _client);
@@ -343,17 +340,17 @@ namespace MyaDiscordBot.Commands
                 //load blacklisted texts
                 if (Data.Instance.BannedRegex.Count < 1)
                 {
-                    var response = await hc.GetAsync("https://raw.githubusercontent.com/mogade/badwords/master/en.txt");
-                    foreach (var i in (await response.Content.ReadAsStringAsync()).Split("\n"))
+                    HttpResponseMessage response = await hc.GetAsync("https://raw.githubusercontent.com/mogade/badwords/master/en.txt");
+                    foreach (string i in (await response.Content.ReadAsStringAsync()).Split("\n"))
                     {
                         Data.Instance.BannedRegex.Add(i);
                     }
                 }
-                foreach (var item in Data.Instance.BannedRegex)
+                foreach (string item in Data.Instance.BannedRegex)
                 {
                     try
                     {
-                        Regex r = new Regex(item);
+                        Regex r = new(item);
                         if (r.Match(arg.DisplayName).Success)
                         {
                             //auto kick when detected bad words in name and created less that 7 day
@@ -368,8 +365,8 @@ namespace MyaDiscordBot.Commands
                     }
 
                 }
-                var customBlacklist = new string[] { "diueveryone" };
-                foreach (var item in customBlacklist)
+                string[] customBlacklist = new string[] { "diueveryone" };
+                foreach (string item in customBlacklist)
                 {
                     if (arg.DisplayName == item)
                     {

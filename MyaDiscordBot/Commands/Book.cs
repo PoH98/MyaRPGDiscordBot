@@ -1,11 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {
@@ -24,14 +20,14 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
-            EmbedBuilder eb = new EmbedBuilder() { Color = Color.Orange };
-            eb.WithTitle(player.Name);
-            eb.WithDescription("你家中的書本碎片：");
-            foreach(var book in player.Books)
+            EmbedBuilder eb = new() { Color = Color.Orange };
+            _ = eb.WithTitle(player.Name);
+            _ = eb.WithDescription("你家中的書本碎片：");
+            foreach (Models.Books.Book book in player.Books)
             {
-                eb.AddField(book.Name, book.Amount);
+                _ = eb.AddField(book.Name, book.Amount);
             }
             return command.RespondAsync(embed: eb.Build(), ephemeral: true);
         }

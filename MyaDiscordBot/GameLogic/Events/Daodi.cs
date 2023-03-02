@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 player.CurrentHP = 1;
                 return command.RespondAsync("米亞訓著的時候講夢話，似乎係咩道地Game System Protection系統啟動，你唔明白係咩意思，但突然見到一個導彈從天而降，你被炸成殘血！", ephemeral: true);

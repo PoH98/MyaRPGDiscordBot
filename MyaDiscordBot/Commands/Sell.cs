@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -20,17 +21,17 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
-            var dump = new List<ItemEquip>();
+            List<ItemEquip> dump = new();
             switch ((double)command.Data.Options.First().Value)
             {
                 case 1:
                     //check if have any equiped
                     if (player.Bag.Where(x => x.IsEquiped).Count() > 0)
                     {
-                        var maxRank = player.Bag.Where(x => x.IsEquiped).Min(x => x.Rank);
-                        foreach (var i in player.Bag)
+                        int maxRank = player.Bag.Where(x => x.IsEquiped).Min(x => x.Rank);
+                        foreach (ItemEquip i in player.Bag)
                         {
                             //not equip and rank is lower than current rank, except golden AK
                             if (!i.IsEquiped && i.Rank < maxRank && i.Id != Guid.Empty && i.UseTimes == -1 && i.Ability == Ability.None)
@@ -43,8 +44,8 @@ namespace MyaDiscordBot.Commands
                     else if (player.Bag.Count > 0)
                     {
                         //retain max lv and lower 1 lv items
-                        var maxRank = player.Bag.Max(x => x.Rank) - 1;
-                        foreach (var i in player.Bag)
+                        int maxRank = player.Bag.Max(x => x.Rank) - 1;
+                        foreach (ItemEquip i in player.Bag)
                         {
                             //not equip and rank is lower than current rank, except golden AK
                             if (!i.IsEquiped && i.Rank < maxRank && i.Id != Guid.Empty && i.UseTimes == -1 && i.Ability == Ability.None)
@@ -56,7 +57,7 @@ namespace MyaDiscordBot.Commands
                     //else nothing to sell, since player bag is empty
                     break;
                 case 2:
-                    foreach (var i in player.Bag)
+                    foreach (ItemEquip i in player.Bag)
                     {
                         //not equip and rank is lower than current rank, except golden AK
                         if (!i.IsEquiped && i.Id != Guid.Empty && i.UseTimes == -1 && i.Ability == Ability.None)
@@ -66,20 +67,20 @@ namespace MyaDiscordBot.Commands
                     }
                     break;
                 case 3:
-                    var builder = new ComponentBuilder();
-                    builder.WithButton("火", "sellType-fire");
-                    builder.WithButton("風", "sellType-wind");
-                    builder.WithButton("土", "sellType-earth");
-                    builder.WithButton("水", "sellType-water");
-                    builder.WithButton("光", "sellType-light");
-                    builder.WithButton("暗", "sellType-dark");
+                    ComponentBuilder builder = new();
+                    _ = builder.WithButton("火", "sellType-fire");
+                    _ = builder.WithButton("風", "sellType-wind");
+                    _ = builder.WithButton("土", "sellType-earth");
+                    _ = builder.WithButton("水", "sellType-water");
+                    _ = builder.WithButton("光", "sellType-light");
+                    _ = builder.WithButton("暗", "sellType-dark");
                     await command.RespondAsync("甘米唔耐煩咁等你從背包拿出想賣的道具！", components: builder.Build(), ephemeral: true);
                     return;
             }
-            var earned = 0;
-            foreach (var d in dump)
+            int earned = 0;
+            foreach (ItemEquip d in dump)
             {
-                player.Bag.Remove(d);
+                _ = player.Bag.Remove(d);
                 player.Coin += 3;
                 earned++;
             }

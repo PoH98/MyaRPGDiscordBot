@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.Models;
 
-namespace MyaDiscordBot.GameLogic.Events
+namespace MyaDiscordBot.GameLogic.Events.Base
 {
     public interface IRandomEvent
     {

@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 player.Coin -= 6;
                 player.NextCommand = DateTime.Now.AddMinutes(20);

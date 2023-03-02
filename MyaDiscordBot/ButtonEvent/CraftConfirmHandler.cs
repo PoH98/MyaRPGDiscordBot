@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.ButtonEvent
@@ -19,7 +20,7 @@ namespace MyaDiscordBot.ButtonEvent
 
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             if (message.Data.CustomId == "craftSkillConfirm")
             {
                 itemService.CraftSkill(player);
@@ -27,7 +28,7 @@ namespace MyaDiscordBot.ButtonEvent
             }
             else
             {
-                var item = itemService.CraftItem(player, message.Data.CustomId.Replace("craftConfirm-", ""));
+                Models.Item item = itemService.CraftItem(player, message.Data.CustomId.Replace("craftConfirm-", ""));
                 if (item == null)
                 {
                     return message.RespondAsync("你已經存在依個道具！", ephemeral: true);

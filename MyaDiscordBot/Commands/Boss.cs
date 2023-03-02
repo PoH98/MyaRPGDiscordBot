@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -22,42 +23,25 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var enemies = bossService.GetEnemy((command.Channel as SocketGuildChannel).Guild.Id);
+            IEnumerable<BossSpawned> enemies = bossService.GetEnemy((command.Channel as SocketGuildChannel).Guild.Id);
             if (enemies.Count() > 0)
             {
-                var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-                ComponentBuilder cb = new ComponentBuilder();
-                foreach (var x in enemies.Where(x => x.Enemy.Stage >= ((player.Lv / 10) - 1)))
+                Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+                ComponentBuilder cb = new();
+                foreach (BossSpawned x in enemies.Where(x => x.Enemy.Stage >= ((player.Lv / 10) - 1)))
                 {
-                    string el;
-                    switch (x.Enemy.Element)
+                    string el = x.Enemy.Element switch
                     {
-                        case Element.Light:
-                            el = "光";
-                            break;
-                        case Element.Dark:
-                            el = "暗";
-                            break;
-                        case Element.God:
-                            el = "神";
-                            break;
-                        case Element.Fire:
-                            el = "火";
-                            break;
-                        case Element.Water:
-                            el = "水";
-                            break;
-                        case Element.Wind:
-                            el = "風";
-                            break;
-                        case Element.Earth:
-                            el = "土";
-                            break;
-                        default:
-                            el = "無";
-                            break;
-                    }
-                    cb.WithButton("[" + el + "] " + x.Enemy.Name + " - HP: " + x.Enemy.HP, "boss-" + x.Id);
+                        Element.Light => "光",
+                        Element.Dark => "暗",
+                        Element.God => "神",
+                        Element.Fire => "火",
+                        Element.Water => "水",
+                        Element.Wind => "風",
+                        Element.Earth => "土",
+                        _ => "無",
+                    };
+                    _ = cb.WithButton("[" + el + "] " + x.Enemy.Name + " - HP: " + x.Enemy.HP, "boss-" + x.Id);
                 }
                 await command.RespondAsync("當前所有Boss等待被擊殺: ", components: cb.Build(), ephemeral: true);
             }

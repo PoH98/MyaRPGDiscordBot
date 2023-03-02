@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events

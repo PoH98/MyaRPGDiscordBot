@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
@@ -19,7 +20,7 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
             if (DateTime.Compare(player.GamblingDelay, DateTime.Now) > 0)
             {
@@ -29,55 +30,55 @@ namespace MyaDiscordBot.Commands
             switch (Convert.ToInt32(command.Data.Options.First().Value))
             {
                 case 1:
-                    var cards = new List<int> { 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+                    List<int> cards = new() { 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
                     if (player.Coin < 300)
                     {
                         //no money to play this
                         await command.RespondAsync("你個死窮鬼，死走啦，賭咩賭！至少150蚊先搵米亞啦！", ephemeral: true);
                         return;
                     }
-                    Random rnd = new Random();
+                    Random rnd = new();
                     int pldrawCount = 0, medrawCount = 0;
-                    List<int> plCards = new List<int>();
-                    List<int> meCards = new List<int>();
+                    List<int> plCards = new();
+                    List<int> meCards = new();
                     do
                     {
-                        var index = rnd.Next(cards.Count);
-                        var card = cards[index];
+                        int index = rnd.Next(cards.Count);
+                        int card = cards[index];
                         if (plCards.Sum() <= 11 && card == 1)
                         {
                             card = 11;
                         }
                         if (plCards.Sum() > 21 && plCards.Any(x => x == 11))
                         {
-                            var iv = plCards.IndexOf(plCards.First(x => x == 11));
+                            int iv = plCards.IndexOf(plCards.First(x => x == 11));
                             plCards[iv] = 1;
                         }
                         plCards.Add(card);
-                        cards.Remove(index);
+                        _ = cards.Remove(index);
                         pldrawCount++;
                     }
                     while (plCards.Sum() < 17 && pldrawCount < 5);
                     do
                     {
-                        var index = rnd.Next(cards.Count);
-                        var card = cards[index];
+                        int index = rnd.Next(cards.Count);
+                        int card = cards[index];
                         if (meCards.Sum() <= 11 && card == 1)
                         {
                             card = 11;
                         }
                         if (meCards.Sum() > 21 && meCards.Any(x => x == 11))
                         {
-                            var iv = meCards.IndexOf(meCards.First(x => x == 11));
+                            int iv = meCards.IndexOf(meCards.First(x => x == 11));
                             meCards[iv] = 1;
                         }
                         meCards.Add(card);
-                        cards.Remove(index);
+                        _ = cards.Remove(index);
                         medrawCount++;
                     }
                     while (meCards.Sum() < 17 && medrawCount < 5);
-                    var pl = plCards.Sum();
-                    var me = meCards.Sum();
+                    int pl = plCards.Sum();
+                    int me = meCards.Sum();
                     if (pl == 21 || me == 21)
                     {
                         if (pl == me)

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.Commands
@@ -22,85 +23,68 @@ namespace MyaDiscordBot.Commands
 
         public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var itemName = command.Data.Options.First().Value.ToString();
-            var item = items.FirstOrDefault(x => x.Name.Contains(itemName));
+            string itemName = command.Data.Options.First().Value.ToString();
+            Item item = items.FirstOrDefault(x => x.Name.Contains(itemName));
             if (item == null)
             {
                 return command.RespondAsync("米亞dum左本字典卑你，講佢搵唔到你講咩野！", ephemeral: true);
             }
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.WithTitle("道具資料：");
-            eb.AddField("裝備名稱", item.Name);
-            string el;
-            switch (item.Element)
+            EmbedBuilder eb = new();
+            _ = eb.WithTitle("道具資料：");
+            _ = eb.AddField("裝備名稱", item.Name);
+            string el = item.Element switch
             {
-                case Element.Light:
-                    el = "光";
-                    break;
-                case Element.Dark:
-                    el = "暗";
-                    break;
-                case Element.God:
-                    el = "神";
-                    break;
-                case Element.Fire:
-                    el = "火";
-                    break;
-                case Element.Water:
-                    el = "水";
-                    break;
-                case Element.Wind:
-                    el = "風";
-                    break;
-                case Element.Earth:
-                    el = "土";
-                    break;
-                default:
-                    el = "無";
-                    break;
-            }
-            eb.AddField("屬性", el);
-            eb.AddField("部位", item.Type);
+                Element.Light => "光",
+                Element.Dark => "暗",
+                Element.God => "神",
+                Element.Fire => "火",
+                Element.Water => "水",
+                Element.Wind => "風",
+                Element.Earth => "土",
+                _ => "無",
+            };
+            _ = eb.AddField("屬性", el);
+            _ = eb.AddField("部位", item.Type);
             if (item.Atk > 0)
             {
-                eb.AddField("傷害", "+" + item.Atk);
+                _ = eb.AddField("傷害", "+" + item.Atk);
             }
             else if (item.Atk < 0)
             {
-                eb.AddField("傷害", item.Atk);
+                _ = eb.AddField("傷害", item.Atk);
             }
             if (item.Def > 0)
             {
-                eb.AddField("防禦", "+" + item.Def);
+                _ = eb.AddField("防禦", "+" + item.Def);
             }
             else if (item.Def < 0)
             {
-                eb.AddField("防禦", item.Def);
+                _ = eb.AddField("防禦", item.Def);
             }
             if (item.HP > 0)
             {
-                eb.AddField("血量", "+" + item.HP);
+                _ = eb.AddField("血量", "+" + item.HP);
             }
             else if (item.HP < 0)
             {
-                eb.AddField("血量", item.HP);
+                _ = eb.AddField("血量", item.HP);
             }
             if (item.Ability != Ability.None)
             {
                 switch (item.Ability)
                 {
                     case Ability.Critical:
-                        eb.AddField("技能", "暴擊: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
+                        _ = eb.AddField("技能", "暴擊: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
                         break;
                     case Ability.Heal:
-                        eb.AddField("技能", "吸血: 每次攻擊恢復" + (item.AbilityRate * 100).ToString("#0.00") + "% 攻擊的血量");
+                        _ = eb.AddField("技能", "吸血: 每次攻擊恢復" + (item.AbilityRate * 100).ToString("#0.00") + "% 攻擊的血量");
                         break;
                     case Ability.Immune:
-                        eb.AddField("技能", "無敵: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
+                        _ = eb.AddField("技能", "無敵: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
                         break;
                 }
             }
-            eb.WithColor(Color.Teal);
+            _ = eb.WithColor(Color.Teal);
             return command.RespondAsync("", embed: eb.Build(), ephemeral: true);
         }
     }

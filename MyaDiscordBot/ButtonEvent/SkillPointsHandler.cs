@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.ButtonEvent
@@ -12,16 +13,12 @@ namespace MyaDiscordBot.ButtonEvent
         }
         public bool CheckUsage(string command)
         {
-            if (command.StartsWith("skill-"))
-            {
-                return true;
-            }
-            return false;
+            return command.StartsWith("skill-");
         }
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             if (player.SkillPoint < 1)
             {
                 await message.RespondAsync("你無存在可以用的點數！請升級更多後先返來啦！（每5級會獲得一點數哦！）", ephemeral: true);

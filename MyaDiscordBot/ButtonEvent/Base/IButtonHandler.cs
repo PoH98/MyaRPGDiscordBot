@@ -1,6 +1,6 @@
 ﻿using Discord.WebSocket;
 
-namespace MyaDiscordBot.ButtonEvent
+namespace MyaDiscordBot.ButtonEvent.Base
 {
     public interface IButtonHandler
     {

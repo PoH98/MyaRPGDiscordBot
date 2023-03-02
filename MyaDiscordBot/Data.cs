@@ -13,10 +13,7 @@ namespace MyaDiscordBot
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = new Data();
-                }
+                _instance ??= new Data();
                 return _instance;
             }
         }
@@ -25,6 +22,7 @@ namespace MyaDiscordBot
         public ExpirableList<ulong> CacheDisableResponse { get; set; } = new ExpirableList<ulong>(5000);
         public int LastRnd { get; set; }
         public ExpirableList<AntiscamData> ScamList { get; set; } = new ExpirableList<AntiscamData>(3600000);
+        public ExpirableList<string> PornList { get; set; } = new ExpirableList<string>(3600000);
         public YTData Youtube { get; set; } = new YTData();
         public ExpirableList<string> BannedName { get; set; } = new ExpirableList<string>(3600000);
         public ExpirableList<string> BannedRegex { get; set; } = new ExpirableList<string>(3600000);
@@ -32,23 +30,17 @@ namespace MyaDiscordBot
 
     public class ExpirableList<T> : IList<T>
     {
-        private volatile List<Tuple<DateTime, T>> collection = new List<Tuple<DateTime, T>>();
+        private readonly List<Tuple<DateTime, T>> collection = new();
 
-        private Timer timer;
+        private readonly Timer timer;
 
         public double Interval
         {
-            get { return timer.Interval; }
-            set { timer.Interval = value; }
+            get => timer.Interval;
+            set => timer.Interval = value;
         }
 
-        private TimeSpan expiration;
-
-        public TimeSpan Expiration
-        {
-            get { return expiration; }
-            set { expiration = value; }
-        }
+        public TimeSpan Expiration { get; set; }
 
         /// <summary>
         /// Define a list that automaticly remove expired objects.
@@ -59,22 +51,24 @@ namespace MyaDiscordBot
         /// The TimeSpan an object stay valid inside the list.
         public ExpirableList(int _interval, TimeSpan? _expiration = null)
         {
-            timer = new Timer();
-            timer.Interval = _interval;
+            timer = new Timer
+            {
+                Interval = _interval
+            };
             timer.Elapsed += Tick;
             timer.Start();
             if (_expiration == null)
             {
                 _expiration = new TimeSpan(0, 5, 0);
             }
-            expiration = _expiration.Value;
+            Expiration = _expiration.Value;
         }
 
         private void Tick(object sender, EventArgs e)
         {
             for (int i = collection.Count - 1; i >= 0; i--)
             {
-                if ((DateTime.Now - collection[i].Item1) >= expiration)
+                if ((DateTime.Now - collection[i].Item1) >= Expiration)
                 {
                     collection.RemoveAt(i);
                 }
@@ -84,8 +78,8 @@ namespace MyaDiscordBot
         #region IList Implementation
         public T this[int index]
         {
-            get { return collection[index].Item2; }
-            set { collection[index] = new Tuple<DateTime, T>(DateTime.Now, value); }
+            get => collection[index].Item2;
+            set => collection[index] = new Tuple<DateTime, T>(DateTime.Now, value);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -102,25 +96,18 @@ namespace MyaDiscordBot
             collection.Add(new Tuple<DateTime, T>(DateTime.Now, item));
         }
 
-        public int Count
-        {
-            get { return collection.Count; }
-        }
+        public int Count => collection.Count;
 
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
+        public bool IsSynchronized => false;
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         public void CopyTo(T[] array, int index)
         {
             for (int i = 0; i < collection.Count; i++)
+            {
                 array[i + index] = collection[i].Item2;
+            }
         }
 
         public bool Remove(T item)
@@ -129,7 +116,9 @@ namespace MyaDiscordBot
             for (int i = collection.Count - 1; i >= 0; i--)
             {
                 if ((object)collection[i].Item2 == (object)item)
+                {
                     collection.RemoveAt(i);
+                }
             }
             return contained;
         }
@@ -154,7 +143,9 @@ namespace MyaDiscordBot
             for (int i = 0; i < collection.Count; i++)
             {
                 if ((object)collection[i].Item2 == (object)item)
+                {
                     return i;
+                }
             }
 
             return -1;

@@ -8,21 +8,21 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             if (!Directory.Exists("Backup"))
             {
-                Directory.CreateDirectory("Backup");
+                _ = Directory.CreateDirectory("Backup");
             }
             if (!Directory.Exists("Save"))
             {
-                Directory.CreateDirectory("Save");
+                _ = Directory.CreateDirectory("Save");
             }
-            foreach (var files in Directory.GetFiles("Backup"))
+            foreach (string files in Directory.GetFiles("Backup"))
             {
-                FileInfo fileInfo = new FileInfo(files);
+                FileInfo fileInfo = new(files);
                 if ((DateTime.Now - fileInfo.CreationTime).TotalHours > 6)
                 {
                     fileInfo.Delete();
                 }
             }
-            foreach (var files in Directory.GetFiles("Save"))
+            foreach (string files in Directory.GetFiles("Save"))
             {
                 File.Copy(files, files.Replace("Save", "Backup") + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".backup");
             }

@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -6,18 +7,14 @@ namespace MyaDiscordBot.ButtonEvent
 {
     public class GoldenAKHandler : IButtonHandler
     {
-        private IPlayerService playerService;
+        private readonly IPlayerService playerService;
         public GoldenAKHandler(IPlayerService playerService)
         {
             this.playerService = playerService;
         }
         public bool CheckUsage(string command)
         {
-            if (command.StartsWith("goldenAK"))
-            {
-                return true;
-            }
-            return false;
+            return command.StartsWith("goldenAK");
         }
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
@@ -27,7 +24,7 @@ namespace MyaDiscordBot.ButtonEvent
                 await message.RespondAsync("熊貓神已經消失！", ephemeral: true);
                 return;
             }
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             Data.Instance.CacheDisableResponse.Add(message.Message.Id);
             if (playerService.AddItem(player, new Item
             {

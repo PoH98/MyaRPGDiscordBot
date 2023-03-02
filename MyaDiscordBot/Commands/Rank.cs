@@ -1,12 +1,13 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
 {
     public class Rank : ICommand
     {
-        private IPlayerService playerService;
+        private readonly IPlayerService playerService;
         public Rank(IPlayerService playerService)
         {
             this.playerService = playerService;
@@ -19,21 +20,21 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
-            var players = playerService.GetPlayers((command.Channel as SocketGuildChannel).Guild.Id).Where(x => GetRank(x.Lv) == GetRank(player.Lv) && x.DiscordId != 0);
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.WithTitle("同你差唔多戰力的玩家富豪排行");
-            embedBuilder.WithColor(Color.Green);
-            var guild = client.GetGuild((command.Channel as SocketGuildChannel).Guild.Id);
-            var currentIndex = 0;
-            foreach (var p in players.OrderByDescending(x => x.Coin))
+            Models.Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            IEnumerable<Models.Player> players = playerService.GetPlayers((command.Channel as SocketGuildChannel).Guild.Id).Where(x => GetRank(x.Lv) == GetRank(player.Lv) && x.DiscordId != 0);
+            EmbedBuilder embedBuilder = new();
+            _ = embedBuilder.WithTitle("同你差唔多戰力的玩家富豪排行");
+            _ = embedBuilder.WithColor(Color.Green);
+            SocketGuild guild = client.GetGuild((command.Channel as SocketGuildChannel).Guild.Id);
+            int currentIndex = 0;
+            foreach (Models.Player p in players.OrderByDescending(x => x.Coin))
             {
                 if (p.DiscordId == client.CurrentUser.Id)
                 {
                     continue;
                 }
-                var name = "";
-                var user = guild.GetUser(p.DiscordId);
+                string name = "";
+                SocketGuildUser user = guild.GetUser(p.DiscordId);
                 if (user == null)
                 {
                     if (string.IsNullOrEmpty(p.Name))
@@ -50,7 +51,7 @@ namespace MyaDiscordBot.Commands
                 {
                     continue;
                 }
-                embedBuilder.AddField(name, "當前擁有" + p.Coin + "$");
+                _ = embedBuilder.AddField(name, "當前擁有" + p.Coin + "$");
                 currentIndex++;
                 if (currentIndex >= 20)
                 {
@@ -62,7 +63,7 @@ namespace MyaDiscordBot.Commands
 
         private int GetRank(int lv)
         {
-            var r = lv / 10;
+            int r = lv / 10;
             return r;
         }
     }

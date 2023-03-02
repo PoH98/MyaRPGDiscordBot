@@ -20,44 +20,34 @@ namespace MyaDiscordBot.GameLogic.Services
         }
         public bool CorrectChannel(SocketCommandBase interaction, out ulong correctChannel)
         {
-            using (var db = new LiteDatabase("Filename=save\\" + (interaction.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
+            using LiteDatabase db = new("Filename=save\\" + (interaction.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared");
+            ILiteCollection<ServerSettings> guild = db.GetCollection<ServerSettings>("settings");
+            if (!guild.Exists(x => x.GuildId == (interaction.Channel as SocketGuildChannel).Guild.Id))
             {
-                var guild = db.GetCollection<ServerSettings>("settings");
-                if (!guild.Exists(x => x.GuildId == (interaction.Channel as SocketGuildChannel).Guild.Id))
-                {
-                    //not set
-                    correctChannel = (interaction.Channel as SocketGuildChannel).Guild.DefaultChannel.Id;
-                    return true;
-                }
-                else
-                {
-                    var setting = guild.FindOne(x => x.GuildId == (interaction.Channel as SocketGuildChannel).Guild.Id);
-                    correctChannel = setting.ChannelId;
-                    if ((interaction.Channel as SocketGuildChannel).Id == setting.ChannelId)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
+                //not set
+                correctChannel = (interaction.Channel as SocketGuildChannel).Guild.DefaultChannel.Id;
+                return true;
+            }
+            else
+            {
+                ServerSettings setting = guild.FindOne(x => x.GuildId == (interaction.Channel as SocketGuildChannel).Guild.Id);
+                correctChannel = setting.ChannelId;
+                return (interaction.Channel as SocketGuildChannel).Id == setting.ChannelId;
             }
         }
 
         public ServerSettings GetSettings(ulong serverId)
         {
-            using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
-            {
-                var guild = db.GetCollection<ServerSettings>("settings");
-                return guild.FindOne(x => x.GuildId == serverId);
-            }
+            using LiteDatabase db = new("Filename=save\\" + serverId + ".db;connection=shared");
+            ILiteCollection<ServerSettings> guild = db.GetCollection<ServerSettings>("settings");
+            return guild.FindOne(x => x.GuildId == serverId);
         }
 
         public void SaveSettings(ulong serverId, ServerSettings settings)
         {
-            using (var db = new LiteDatabase("Filename=save\\" + serverId + ".db;connection=shared"))
-            {
-                var guild = db.GetCollection<ServerSettings>("settings");
-                guild.Update(settings);
-            }
+            using LiteDatabase db = new("Filename=save\\" + serverId + ".db;connection=shared");
+            ILiteCollection<ServerSettings> guild = db.GetCollection<ServerSettings>("settings");
+            _ = guild.Update(settings);
         }
 
         public void SetChannel(SocketSlashCommand command)
@@ -66,23 +56,21 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 throw new ArgumentException("Invalid permission");
             }
-            using (var db = new LiteDatabase("Filename=save\\" + (command.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
+            using LiteDatabase db = new("Filename=save\\" + (command.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared");
+            ILiteCollection<ServerSettings> guild = db.GetCollection<ServerSettings>("settings");
+            if (!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
             {
-                var guild = db.GetCollection<ServerSettings>("settings");
-                if (!guild.Exists(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id))
+                _ = guild.Insert(new ServerSettings
                 {
-                    guild.Insert(new ServerSettings
-                    {
-                        ChannelId = (command.Channel as SocketGuildChannel).Id,
-                        GuildId = (command.Channel as SocketGuildChannel).Guild.Id
-                    });
-                }
-                else
-                {
-                    var set = guild.FindOne(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id);
-                    set.ChannelId = (command.Channel as SocketGuildChannel).Id;
-                    guild.Update(set);
-                }
+                    ChannelId = (command.Channel as SocketGuildChannel).Id,
+                    GuildId = (command.Channel as SocketGuildChannel).Guild.Id
+                });
+            }
+            else
+            {
+                ServerSettings set = guild.FindOne(x => x.GuildId == (command.Channel as SocketGuildChannel).Guild.Id);
+                set.ChannelId = (command.Channel as SocketGuildChannel).Id;
+                _ = guild.Update(set);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 
@@ -31,17 +32,17 @@ namespace MyaDiscordBot.Commands
 
         private SlashCommandOptionBuilder GetOption()
         {
-            var op = new SlashCommandOptionBuilder().WithName("field").WithDescription("The place you want to go").WithRequired(true).WithType(ApplicationCommandOptionType.Integer);
-            foreach (var e in Enum.GetValues(typeof(Element)).Cast<Element>().Except(new List<Element>() { Element.Dark, Element.God, Element.Light }))
+            SlashCommandOptionBuilder op = new SlashCommandOptionBuilder().WithName("field").WithDescription("The place you want to go").WithRequired(true).WithType(ApplicationCommandOptionType.Integer);
+            foreach (Element e in Enum.GetValues(typeof(Element)).Cast<Element>().Except(new List<Element>() { Element.Dark, Element.God, Element.Light }))
             {
-                op.AddChoice(e.ToString(), (int)e);
+                _ = op.AddChoice(e.ToString(), (int)e);
             }
             return op;
         }
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Player player = _playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             player.Name = (command.User as SocketGuildUser).DisplayName;
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
@@ -53,7 +54,7 @@ namespace MyaDiscordBot.Commands
                 await command.RespondAsync("你已經身受重傷，無法行動，米亞建議建設米亞妙妙屋激情對話恢復生命值哦！", ephemeral: true);
                 return;
             }
-            var enemy = _playerService.Walk(player, (Element)Convert.ToInt32(command.Data.Options.First().Value), BattleType.Default);
+            Enemy enemy = _playerService.Walk(player, (Element)Convert.ToInt32(command.Data.Options.First().Value), BattleType.Default);
             if (enemy != null)
             {
                 if (enemy.IsBoss)
@@ -62,13 +63,13 @@ namespace MyaDiscordBot.Commands
                     await command.RespondAsync("野外Boss已經出現！請各位玩家準備消滅" + enemy.Name + "！！");
                     return;
                 }
-                var br = _battleService.Battle(enemy, player);
+                BattleResult br = _battleService.Battle(enemy, player);
                 if (br.IsVictory)
                 {
-                    var gain = Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
+                    int gain = Convert.ToInt32(Math.Round(1 + (1 + (player.Lv / 10f))));
                     player.Coin += gain;
                     _playerService.AddExp(player, 1);
-                    var item = _itemService.GetReward(enemy, player);
+                    Item item = _itemService.GetReward(enemy, player);
                     if (item == null)
                     {
                         await command.RespondAsync("你遇見隻" + enemy.Name + "而且發生戰鬥，成功獲勝並且得到" + gain + "$！", ephemeral: true);
@@ -94,7 +95,7 @@ namespace MyaDiscordBot.Commands
             }
             else
             {
-                var @event = _eventService.GetRandomEvent();
+                GameLogic.Events.Base.IRandomEvent @event = _eventService.GetRandomEvent();
                 await @event.Response(command, player);
             }
             _playerService.SavePlayer(player);

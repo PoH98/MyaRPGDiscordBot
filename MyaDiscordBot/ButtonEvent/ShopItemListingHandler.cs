@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using System.Text;
 
@@ -16,93 +17,61 @@ namespace MyaDiscordBot.ButtonEvent
         }
         public bool CheckUsage(string command)
         {
-            if (command.StartsWith("shopType-"))
-            {
-                return true;
-            }
-            return false;
+            return command.StartsWith("shopType-");
         }
 
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            var parts = message.Data.CustomId.Split("-").Skip(1).ToArray();
-            var items = itemService.GetShopItem(player);
+            Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            string[] parts = message.Data.CustomId.Split("-").Skip(1).ToArray();
+            IEnumerable<Models.Item> items = itemService.GetShopItem(player);
             //element
-            switch (parts[0])
+            items = parts[0] switch
             {
-                case "fire":
-                    items = items.Where(x => x.Element == Models.Element.Fire);
-                    break;
-                case "water":
-                    items = items.Where(x => x.Element == Models.Element.Water);
-                    break;
-                case "wind":
-                    items = items.Where(x => x.Element == Models.Element.Wind);
-                    break;
-                case "earth":
-                    items = items.Where(x => x.Element == Models.Element.Earth);
-                    break;
-                case "dark":
-                    items = items.Where(x => x.Element == Models.Element.Dark);
-                    break;
-                case "light":
-                    items = items.Where(x => x.Element == Models.Element.Light);
-                    break;
-                default:
-                    items = items.Where(x => x.Element == Models.Element.God);
-                    break;
-            }
-            switch (parts[1])
+                "fire" => items.Where(x => x.Element == Models.Element.Fire),
+                "water" => items.Where(x => x.Element == Models.Element.Water),
+                "wind" => items.Where(x => x.Element == Models.Element.Wind),
+                "earth" => items.Where(x => x.Element == Models.Element.Earth),
+                "dark" => items.Where(x => x.Element == Models.Element.Dark),
+                "light" => items.Where(x => x.Element == Models.Element.Light),
+                _ => items.Where(x => x.Element == Models.Element.God),
+            };
+            items = parts[1] switch
             {
-                case "weapon":
-                    items = items.Where(x => x.Type == Models.ItemType.武器);
-                    break;
-                case "amor":
-                    items = items.Where(x => x.Type == Models.ItemType.護甲);
-                    break;
-                case "ring":
-                    items = items.Where(x => x.Type == Models.ItemType.指環);
-                    break;
-                case "necklece":
-                    items = items.Where(x => x.Type == Models.ItemType.頸鏈);
-                    break;
-                case "shoes":
-                    items = items.Where(x => x.Type == Models.ItemType.鞋);
-                    break;
-                case "shield":
-                    items = items.Where(x => x.Type == Models.ItemType.盾);
-                    break;
-                default:
-                    items = items.Where(x => x.Type == Models.ItemType.道具);
-                    break;
-            }
+                "weapon" => items.Where(x => x.Type == Models.ItemType.武器),
+                "amor" => items.Where(x => x.Type == Models.ItemType.護甲),
+                "ring" => items.Where(x => x.Type == Models.ItemType.指環),
+                "necklece" => items.Where(x => x.Type == Models.ItemType.頸鏈),
+                "shoes" => items.Where(x => x.Type == Models.ItemType.鞋),
+                "shield" => items.Where(x => x.Type == Models.ItemType.盾),
+                _ => items.Where(x => x.Type == Models.ItemType.道具),
+            };
             if (items.Count() < 1)
             {
                 return message.RespondAsync("Ermmm小貓搵唔到你想要的野哦！QAQ", ephemeral: true);
             }
-            var builder = new ComponentBuilder();
-            foreach (var i in items)
+            ComponentBuilder builder = new();
+            foreach (Models.Item i in items)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(i.Name);
+                StringBuilder sb = new();
+                _ = sb.Append(i.Name);
                 if (i.Type == Models.ItemType.道具)
                 {
-                    sb.Append(" * " + i.UseTimes + " 恢復" + i.HP + "血量");
+                    _ = sb.Append(" * " + i.UseTimes + " 恢復" + i.HP + "血量");
                 }
                 else
                 {
                     if (i.Atk > 0)
                     {
-                        sb.Append(" 提升" + i.Atk + "傷害");
+                        _ = sb.Append(" 提升" + i.Atk + "傷害");
                     }
                     if (i.Def > 0)
                     {
-                        sb.Append(" 提升" + i.Def + "護甲");
+                        _ = sb.Append(" 提升" + i.Def + "護甲");
                     }
                     if (i.HP > 0)
                     {
-                        sb.Append(" 提升" + i.HP + "血量");
+                        _ = sb.Append(" 提升" + i.HP + "血量");
                     }
                 }
 
@@ -113,7 +82,7 @@ namespace MyaDiscordBot.ButtonEvent
 
                     }
                 }
-                builder.WithButton(sb.ToString() + " - " + i.Price + "$ ", "shop-" + i.Id.ToString());
+                _ = builder.WithButton(sb.ToString() + " - " + i.Price + "$ ", "shop-" + i.Id.ToString());
             }
             return message.RespondAsync("咁以下就係你想要的商品選單啦~喵！≧◉ᴥ◉≦全部都係精心選返來的貨物！", components: builder.Build(), ephemeral: true);
         }

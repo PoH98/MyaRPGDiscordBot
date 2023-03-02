@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 return command.RespondAsync("你背著訓著的米亞，突然跌左個信出來。發現原來係米亞寫卑你的表白信？！你當無睇到就咁留底封信係地下走佬左！", ephemeral: true);
             }

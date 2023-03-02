@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 player.NextCommand = DateTime.Now.AddMinutes(20);
                 return command.RespondAsync("你路上見到貓耳女仔係到燒烤緊，似乎準備係到過左依個夜晚，佢睇你孭著訓著的米亞就約你一起來休息下，期間佢幫訓著的米亞畫左一副畫後送左卑你！", ephemeral: true);

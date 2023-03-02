@@ -13,34 +13,116 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         bool IsSpam(SocketUserMessage message);
         Task<bool> IsScam(SocketUserMessage message);
+        Task<bool> IsRude(string message);
     }
     public class AntiSpamService : IAntiSpamService
     {
+        public async Task<bool> IsRude(string message)
+        {
+            Match match = Regex.Match(message, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
+            if (match.Success)
+            {
+                if (match.Groups.TryGetValue("invite", out Group inviteurl))
+                {
+                    HttpClient client = new();
+                    HttpResponseMessage result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
+                    DiscordInvite di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
+                    result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
+                    PhishGG pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
+                    return pg.Match;
+                }
+            }
+            if (Data.Instance.ScamList.Count < 1)
+            {
+                //fetch scamlist
+                HttpClient client = new();
+                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
+                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+                result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
+                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+            }
+            if (Data.Instance.PornList.Count < 1)
+            {
+                //fetch scamlist
+                HttpClient client = new();
+                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
+                var list = await result.Content.ReadAsStringAsync();
+                foreach(var item in list.Split("\n"))
+                {
+                    if(item.Trim().Length > 0)
+                    {
+                        Data.Instance.PornList.Add(item.Trim());
+                    }
+                }
+            }
+            if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Contains(y))))
+            {
+                if (message.Contains("https://cdn.discordapp.com/") || message.Contains("https://discord.com/"))
+                {
+                    //cdn, not scam lol
+                    return false;
+                }
+                return true;
+            }
+            var urls = Data.Instance.PornList.Where(x => message.Contains(x));
+            if (urls.Count() > 0)
+            {
+                foreach (var url in urls)
+                {
+                    var result = Regex.Match(message, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
+                    if (result.Success)
+                    {
+                        return true;
+                    };
+                }
+            }
+            match = Regex.Match(message, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
+            if(match.Success)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> IsScam(SocketUserMessage message)
         {
             try
             {
-                var match = Regex.Match(message.Content, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
+                Match match = Regex.Match(message.Content, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
                 if (match.Success)
                 {
                     if (match.Groups.TryGetValue("invite", out Group inviteurl))
                     {
-                        HttpClient client = new HttpClient();
-                        var result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
-                        var di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
+                        HttpClient client = new();
+                        HttpResponseMessage result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
+                        DiscordInvite di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
                         result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
-                        var pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
+                        PhishGG pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
                         return pg.Match;
                     }
                 }
                 if (Data.Instance.ScamList.Count < 1)
                 {
                     //fetch scamlist
-                    HttpClient client = new HttpClient();
-                    var result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
+                    HttpClient client = new();
+                    HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
                     Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
                     result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
                     Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+                }
+                if (Data.Instance.PornList.Count < 1)
+                {
+                    //fetch scamlist
+                    HttpClient client = new();
+                    HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
+                    var list = await result.Content.ReadAsStringAsync();
+                    foreach (var item in list.Split("\n"))
+                    {
+                        if (item.Trim().Length > 0)
+                        {
+                            Data.Instance.PornList.Add(item.Trim());
+                        }
+                    }
                 }
                 if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
                 {
@@ -51,10 +133,22 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                     return true;
                 }
+                var urls = Data.Instance.PornList.Where(x => message.Content.Contains(x));
+                if (urls.Count() > 0)
+                {
+                    foreach (var url in urls)
+                    {
+                        var result = Regex.Match(message.Content, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
+                        if (result.Success)
+                        {
+                            return true;
+                        };
+                    }
+                }
                 match = Regex.Match(message.Content, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
                 return match.Success;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][Exception]: " + ex.ToString() + "\n", Encoding.UTF8);
                 return await IsScam(message);
@@ -64,39 +158,37 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public bool IsSpam(SocketUserMessage message)
         {
-            using (var db = new LiteDatabase("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
+            using LiteDatabase db = new("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared");
+            ILiteCollection<Message> col = db.GetCollection<Message>("spam");
+            Message data = col.FindOne(x => x.Id == message.Author.Id);
+            if (data == null)
             {
-                var col = db.GetCollection<Message>("spam");
-                var data = col.FindOne(x => x.Id == message.Author.Id);
-                if (data == null)
+                _ = col.Insert(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
+            }
+            else
+            {
+                if (data.Content == message.Content)
                 {
-                    col.Insert(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
+                    data.SameTimes++;
                 }
                 else
                 {
-                    if (data.Content == message.Content)
-                    {
-                        data.SameTimes++;
-                    }
-                    else
-                    {
-                        col.Update(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
-                    }
-                    if (data.SameTimes >= 3)
-                    {
-                        return true;
-                    }
+                    _ = col.Update(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
                 }
-                var splits = message.Content.Split("\n");
-                if (splits.Count() > 10)
+                if (data.SameTimes >= 3)
                 {
-                    if (splits.GroupBy(s => s.ToLower()).Count() <= splits.Count() / 3)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                return false;
             }
+            string[] splits = message.Content.Split("\n");
+            if (splits.Count() > 10)
+            {
+                if (splits.GroupBy(s => s.ToLower()).Count() <= splits.Count() / 3)
+                {
+                    return true;
+                }
+            }
+            return false;
 
         }
     }

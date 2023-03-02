@@ -20,7 +20,7 @@ namespace MyaDiscordBot.Models
         public bool IsBoss { get; set; } = false;
         public object Clone()
         {
-            var deserializeSettings = new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace };
+            JsonSerializerSettings deserializeSettings = new() { ObjectCreationHandling = ObjectCreationHandling.Replace };
             return JsonConvert.DeserializeObject<Enemy>(JsonConvert.SerializeObject(this), deserializeSettings);
         }
     }

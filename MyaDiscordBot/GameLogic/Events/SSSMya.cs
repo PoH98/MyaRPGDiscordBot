@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 player.CurrentHP = 1;
                 return command.RespondAsync("你在路上見到一塊屎，佢突然開口同你講野，嚇到你唔小心將訓著的米亞dum左落街自己走佬左！米亞被dum醒後發動米亞之壓魔法瞬間傳送到你頭上你被壓扁！", ephemeral: true);

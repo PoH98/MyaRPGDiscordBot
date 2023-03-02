@@ -29,18 +29,15 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Item CraftItem(Player player, string id)
         {
-            var craftTable = craftTables.FirstOrDefault(x => x.Item.ToString() == id);
-            if (player.Bag == null)
-            {
-                player.Bag = new List<ItemEquip>();
-            }
+            CraftTable craftTable = craftTables.FirstOrDefault(x => x.Item.ToString() == id);
+            player.Bag ??= new List<ItemEquip>();
             if (player.Bag.Any(y => y.Id == craftTable.Item))
             {
                 return null;
             }
-            foreach (var c in craftTable.Resources)
+            foreach (RequiredResource c in craftTable.Resources)
             {
-                var i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
+                HoldedResource i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
                 if (i != null)
                 {
                     i.Amount -= c.Amount;
@@ -51,7 +48,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public void CraftSkill(Player player)
         {
-            var craftTable = new CraftTable
+            CraftTable craftTable = new()
             {
                 Resources = new List<RequiredResource>
                 {
@@ -66,9 +63,9 @@ namespace MyaDiscordBot.GameLogic.Services
                     { new RequiredResource{ Id = Guid.Parse("392d421f-44ec-461f-ac0a-0c6ae5d0571a"), Amount = 25 } }
                 }
             };
-            foreach (var c in craftTable.Resources)
+            foreach (RequiredResource c in craftTable.Resources)
             {
-                var i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
+                HoldedResource i = player.ResourceBag.FirstOrDefault(x => x.Id == c.Id);
                 if (i != null)
                 {
                     i.Amount -= c.Amount;
@@ -79,26 +76,14 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Book GetBook(Player player)
         {
-            Random rnd = new Random();
-            Book baseBook;
-            switch(rnd.Next(0, 10)) 
+            Random rnd = new();
+            Book baseBook = rnd.Next(0, 10) switch
             {
-                case 0:
-                case 1:
-                    baseBook = new Book() { BType = BookType.Atk, Name = "AV書碎片" };
-                    break;
-                case 2:
-                case 3:
-                    baseBook = new Book() { BType = BookType.Def, Name = "D Cup書碎片" };
-                    break;
-                case 4:
-                case 5:
-                    baseBook = new Book() { BType = BookType.HP, Name = "H漫畫碎片" };
-                    break;
-                default:
-                    baseBook = null;
-                    break;
-            }
+                0 or 1 => new Book() { BType = BookType.Atk, Name = "AV書碎片" },
+                2 or 3 => new Book() { BType = BookType.Def, Name = "D Cup書碎片" },
+                4 or 5 => new Book() { BType = BookType.HP, Name = "H漫畫碎片" },
+                _ => null,
+            };
             if (baseBook != null)
             {
                 if (player.Books.Any(x => x.BType == baseBook.BType))
@@ -121,11 +106,8 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public Resource GetResource(Player player)
         {
-            if (player.ResourceBag == null)
-            {
-                player.ResourceBag = new List<HoldedResource>();
-            }
-            Random rnd = new Random();
+            player.ResourceBag ??= new List<HoldedResource>();
+            Random rnd = new();
             double cumulSum = 0;
             int cnt = resources.Count();
             for (int slot = 0; slot < cnt; slot++)
@@ -145,13 +127,13 @@ namespace MyaDiscordBot.GameLogic.Services
             }
             else
             {
-                Random rnd = new Random();
+                Random rnd = new();
                 decimal i = (decimal)rnd.NextDouble();
                 if (i <= enemy.ItemDropRate)
                 {
                     if (!enemy.IsBoss)
                     {
-                        var rewards = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
+                        List<Item> rewards = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && enemy.Element == x.Element && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
                         if (rewards.Any())
                         {
                             double cumulSum = 0;
@@ -162,21 +144,21 @@ namespace MyaDiscordBot.GameLogic.Services
                                 rewards[slot].DropRate = cumulSum;
                             }
                             double divSpot = rnd.NextDouble() * cumulSum;
-                            var r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
+                            Item r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
                             if (r != null && enemy.Stage > 10)
                             {
                                 //infinite loop
                                 r.Atk *= enemy.Stage / 10;
                                 r.Def *= enemy.Stage / 10;
                                 r.HP *= enemy.Stage / 10;
-                                r.Name += " EX" + enemy.Stage / 10;
+                                r.Name += " EX" + (enemy.Stage / 10);
                             }
                             return r;
                         }
                     }
                     else
                     {
-                        var rewards = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && (x.Element == Element.Light || x.Element == Element.Dark) && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
+                        List<Item> rewards = items.Where(x => x.Price < 0 && enemy.DropRank.Any(y => y == x.Rank) && (x.Element == Element.Light || x.Element == Element.Dark) && !player.Bag.Any(y => y.Id == x.Id) && !x.Craft).ToList();
                         if (rewards.Any())
                         {
                             double cumulSum = 0;
@@ -187,14 +169,14 @@ namespace MyaDiscordBot.GameLogic.Services
                                 rewards[slot].DropRate = cumulSum;
                             }
                             double divSpot = rnd.NextDouble() * cumulSum;
-                            var r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
+                            Item r = rewards.FirstOrDefault(i => i.DropRate >= divSpot);
                             if (r != null && enemy.Stage > 10)
                             {
                                 //infinite loop
                                 r.Atk *= enemy.Stage / 10;
                                 r.Def *= enemy.Stage / 10;
                                 r.HP *= enemy.Stage / 10;
-                                r.Name += " EX" + enemy.Stage / 10;
+                                r.Name += " EX" + (enemy.Stage / 10);
                             }
                             return r;
                         }
@@ -207,7 +189,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public IEnumerable<Item> GetShopItem(Player player)
         {
-            var userRank = player.Lv / 10f;
+            float userRank = player.Lv / 10f;
             if (userRank < 1)
             {
                 userRank = 1;
@@ -217,7 +199,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public async Task SaveData()
         {
-            foreach (var t in items.GroupBy(x => x.Rank).ToDictionary(x => x.Key, x => x.ToList()))
+            foreach (KeyValuePair<int, List<Item>> t in items.GroupBy(x => x.Rank).ToDictionary(x => x.Key, x => x.ToList()))
             {
                 await File.WriteAllTextAsync("config\\Items\\T" + t.Key + ".json", JsonConvert.SerializeObject(t.Value, Formatting.Indented));
             }

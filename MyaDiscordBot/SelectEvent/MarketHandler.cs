@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyaDiscordBot.GameLogic.Services;
+using MyaDiscordBot.SelectEvent.Base;
 
 namespace MyaDiscordBot.SelectEvent
 {
@@ -19,10 +20,10 @@ namespace MyaDiscordBot.SelectEvent
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             try
             {
-                var resource = await marketService.Purchase(player, message.Data.Values.First().ToString(), client);
+                Models.Resource resource = await marketService.Purchase(player, message.Data.Values.First().ToString(), client);
                 if (resource != null)
                 {
                     await message.RespondAsync("購買成功！", ephemeral: true);

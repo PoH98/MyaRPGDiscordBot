@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
 using Newtonsoft.Json;
@@ -15,43 +16,30 @@ namespace MyaDiscordBot.ButtonEvent
         }
         public bool CheckUsage(string command)
         {
-            if (command.StartsWith("ban-"))
-            {
-                return true;
-            }
-            return false;
+            return command.StartsWith("ban-");
         }
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var parts = message.Data.CustomId.Split('-');
-            string reason;
-            switch (parts[2])
+            string[] parts = message.Data.CustomId.Split('-');
+            string reason = parts[2] switch
             {
-                case "1":
-                    reason = "[AUTO MOD] Posting Ads in Guild";
-                    break;
-                case "2":
-                    reason = "[AUTO MOD] Posting Scam links in Guild";
-                    break;
-                case "3":
-                    reason = "[AUTO MOD] Testing from Discord.NET HttpClient";
-                    break;
-                default:
-                    reason = "[AUTO MOD] Fast Spamming";
-                    break;
-            }
+                "1" => "[AUTO MOD] Posting Ads in Guild",
+                "2" => "[AUTO MOD] Posting Scam links in Guild",
+                "3" => "[AUTO MOD] Testing from Discord.NET HttpClient",
+                _ => "[AUTO MOD] Fast Spamming",
+            };
             if (message.User.Id == 294835963442757632)
             {
                 try
                 {
-                    var uid = Convert.ToUInt64(parts[1]);
-                    var u = (message.Channel as SocketGuildChannel).Guild.GetUser(uid);
+                    ulong uid = Convert.ToUInt64(parts[1]);
+                    SocketGuildUser u = (message.Channel as SocketGuildChannel).Guild.GetUser(uid);
                     //Author, just timeout
-                    var ids = new List<ulong>();
+                    List<ulong> ids = new();
                     if (u.Roles != null)
                     {
-                        foreach (var r in u.Roles)
+                        foreach (SocketRole r in u.Roles)
                         {
                             if (!r.IsEveryone)
                             {
@@ -70,36 +58,36 @@ namespace MyaDiscordBot.ButtonEvent
                 }
 
             }
-            HttpClient hc = new HttpClient();
-            hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
-            var inputJson = JsonConvert.SerializeObject(new ReportUser
+            HttpClient hc = new();
+            _ = hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
+            string inputJson = JsonConvert.SerializeObject(new ReportUser
             {
                 Reason = reason
             });
-            StringContent content = new StringContent(inputJson, Encoding.UTF8, "application/json");
+            StringContent content = new(inputJson, Encoding.UTF8, "application/json");
             await message.DeferLoadingAsync();
-            var response = await hc.PostAsync("https://api.blacklister.xyz/report/" + parts[1], content);
-            var result = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await hc.PostAsync("https://api.blacklister.xyz/report/" + parts[1], content);
+            string result = await response.Content.ReadAsStringAsync();
             bool blackListed = false;
             if (result.Contains("\"err\":false"))
             {
                 //success
                 blackListed = true;
             }
-            var userId = Convert.ToUInt64(parts[1]);
-            var user = (message.Channel as SocketGuildChannel).Guild.GetUser(userId);
+            ulong userId = Convert.ToUInt64(parts[1]);
+            SocketGuildUser user = (message.Channel as SocketGuildChannel).Guild.GetUser(userId);
             Console.WriteLine("Blacklisted Status: " + blackListed);
             if (blackListed)
             {
                 try
                 {
                     await user.KickAsync();
-                    await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！自動踢出用戶！");
+                    _ = await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！自動踢出用戶！");
                     Console.WriteLine("Kicked");
                 }
                 catch (Exception ex)
                 {
-                    await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
+                    _ = await message.ModifyOriginalResponseAsync(x => x.Content = "已經黑名單" + user.DisplayName + "！用戶踢出失敗！錯誤原因：" + ex.Message);
                     Console.WriteLine("Not Kicked");
                 }
             }
@@ -108,11 +96,11 @@ namespace MyaDiscordBot.ButtonEvent
                 try
                 {
                     await user.KickAsync();
-                    await message.ModifyOriginalResponseAsync(x => x.Content = "黑名單" + user.DisplayName + "失敗！自動踢出用戶！");
+                    _ = await message.ModifyOriginalResponseAsync(x => x.Content = "黑名單" + user.DisplayName + "失敗！自動踢出用戶！");
                 }
                 catch (Exception ex)
                 {
-                    await message.ModifyOriginalResponseAsync(x => x.Content = "黑名單" + user.DisplayName + "失敗！用戶踢出失敗！錯誤原因：" + ex.Message);
+                    _ = await message.ModifyOriginalResponseAsync(x => x.Content = "黑名單" + user.DisplayName + "失敗！用戶踢出失敗！錯誤原因：" + ex.Message);
                 }
             }
         }

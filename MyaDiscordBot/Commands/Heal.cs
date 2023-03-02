@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 
 namespace MyaDiscordBot.Commands
@@ -19,13 +20,13 @@ namespace MyaDiscordBot.Commands
 
         public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
-            var player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
+            Models.Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             if (DateTime.Compare(player.NextCommand, DateTime.Now) > 0)
             {
                 await command.RespondAsync("你已經正在休息！唔可以雙重休息哦！", ephemeral: true);
                 return;
             }
-            var heal = player.HP / 2;
+            int heal = player.HP / 2;
             player.CurrentHP += heal;
             int wait = heal * 2;
             if (player.CurrentHP > player.HP)

@@ -1,6 +1,6 @@
 ﻿using Discord.WebSocket;
 
-namespace MyaDiscordBot.SelectEvent
+namespace MyaDiscordBot.SelectEvent.Base
 {
     public interface ISelectHandler
     {

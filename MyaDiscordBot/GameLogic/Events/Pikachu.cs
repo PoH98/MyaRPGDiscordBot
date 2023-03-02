@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 player.NextCommand = DateTime.Now.AddMinutes(35);
                 return command.RespondAsync("夜深時分，你似乎有見到幻覺有個皮卡超出現係你面前，不過考慮到已經咁夜自己未訓，應該係幻覺來，點知剛剛經過就突然被電暈！", ephemeral: true);

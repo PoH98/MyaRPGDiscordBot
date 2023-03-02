@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.GameLogic.Events.Base;
 using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Events
@@ -7,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Events
     {
         public Task Response(SocketSlashCommand command, Player player)
         {
-            if (DateTime.Now.Hour < 6 && DateTime.Now.Hour > 0)
+            if (DateTime.Now.Hour is < 6 and > 0)
             {
                 player.CurrentHP = 1;
                 return command.RespondAsync("你突然見到空中似乎有火花同導彈飛來飛去，夜晚之中特別耀眼，似乎係倆個高達在戰鬥中！當你睇得入神的時候突然一個導彈向你飛來，你炸剩殘血！", ephemeral: true);

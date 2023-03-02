@@ -1,11 +1,7 @@
 ﻿using Discord.WebSocket;
+using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models.Books;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -23,9 +19,9 @@ namespace MyaDiscordBot.ButtonEvent
 
         public async Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
-            var parts = message.Data.CustomId.Split('-');
-            var player = _playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
-            var book = new Book()
+            string[] parts = message.Data.CustomId.Split('-');
+            Models.Player player = _playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
+            Book book = new()
             {
                 BType = (BookType)Convert.ToInt32(parts[1])
             };
@@ -44,21 +40,21 @@ namespace MyaDiscordBot.ButtonEvent
                         player.HP += 15;
                         break;
                 }
-                if(player.Atk >= 9999)
+                if (player.Atk >= 9999)
                 {
                     player.Atk = 9999;
                     _playerService.SavePlayer(player);
                     await message.RespondAsync("你睇完本書後，發現已經無法再增強自己！無敵的感覺真係爽快！", ephemeral: true);
                     return;
                 }
-                if(player.Def >= 999)
+                if (player.Def >= 999)
                 {
                     player.Def = 999;
                     _playerService.SavePlayer(player);
                     await message.RespondAsync("你睇完本書後，發現已經無法再增強自己！無敵的感覺真係爽快！", ephemeral: true);
                     return;
                 }
-                if(player.HP >= 9999)
+                if (player.HP >= 9999)
                 {
                     player.HP = 9999;
                     _playerService.SavePlayer(player);
