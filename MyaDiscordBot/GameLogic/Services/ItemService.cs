@@ -125,6 +125,32 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 return null;
             }
+            else if(enemy.Name == "墜落米亞-米亞的500蚊底線")
+            {
+                Random rnd = new();
+                decimal i = (decimal)rnd.NextDouble();
+                if(i <= (decimal)0.01)
+                {
+                    return new Item
+                    {
+                        Id = Guid.Parse("18ca6596-e685-4e88-8a40-a8292e88e624"),
+                        Name = "Hospital Friend Friend",
+                        Rank = 10,
+                        UseTimes = -1,
+                        Element = Element.God,
+                        Type = ItemType.指環,
+                        AbilityRate = 1,
+                        Atk = -5,
+                        Def = -5,
+                        HP = 0,
+                        Ability = Ability.CopyCat,
+                        Craft = false,
+                        DropRate = 0,
+                        Price = 0
+                    };
+                }
+                return null;
+            }
             else
             {
                 Random rnd = new();

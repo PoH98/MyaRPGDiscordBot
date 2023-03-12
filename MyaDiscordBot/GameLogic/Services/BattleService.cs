@@ -1,4 +1,5 @@
-﻿using MyaDiscordBot.Models;
+﻿using Discord;
+using MyaDiscordBot.Models;
 
 namespace MyaDiscordBot.GameLogic.Services
 {
@@ -25,6 +26,22 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 player.Def = 50;
             }
+            bool useSkill = player.Bag.Count > 0;
+            ItemEquip debuffer = null, critical = null, heal = null, immune = null, reflect = null;
+            if (useSkill)
+            {
+                debuffer = player.Bag.FirstOrDefault(x => x.Type == ItemType.指環 && x.Ability == Ability.DebuffStates && x.IsEquiped);
+                critical = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                heal = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                immune = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                reflect = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Reflect);
+            }
+            bool lockSkill = player.Bag.Any(x => x.Type == ItemType.指環 && x.Ability == Ability.DebuffSkill && x.IsEquiped);
+            if(debuffer != null)
+            {
+                enemy.Atk -= (int)Math.Round(enemy.Atk * debuffer.AbilityRate);
+                enemy.Def -= (int)Math.Round(enemy.Def * debuffer.AbilityRate);
+            }
             do
             {
                 int atk = player.Atk;
@@ -41,31 +58,23 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk / 1.5);
                 }
-                if (player.Bag.Count > 0)
+                if (critical != null)
                 {
-                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
-                    if (item != null)
+                    double rate = rnd.NextDouble();
+                    if (critical.AbilityRate >= rate)
                     {
-                        double rate = rnd.NextDouble();
-                        if (item.AbilityRate >= rate)
-                        {
-                            //critical!
-                            atk = (int)Math.Round(atk * 1.5);
-                        }
+                        //critical!
+                        atk = (int)Math.Round(atk * 1.5);
                     }
                 }
                 atk -= enemy.Def;
-                if (atk < 0)
+                if (atk < 1)
                 {
-                    atk = 0;
+                    atk = 1;
                 }
-                if (player.Bag.Count > 0)
+                if (heal != null)
                 {
-                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
-                    if (item != null)
-                    {
-                        player.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
-                    }
+                    player.CurrentHP += (int)Math.Round(atk * heal.AbilityRate);
                 }
                 enemy.HP -= atk;
                 result.DamageDealt += atk;
@@ -81,21 +90,27 @@ namespace MyaDiscordBot.GameLogic.Services
                         atk = (int)Math.Round(atk / 1.2);
                     }
                     atk -= player.Def;
-                    if (atk < 0)
+                    if (atk < 1)
                     {
-                        atk = 0;
+                        atk = 1;
                     }
-                    if (player.Bag.Count > 0)
+                    if (immune != null)
                     {
-                        ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
-                        if (item != null)
+                        double rate = rnd.NextDouble();
+                        if (immune.AbilityRate >= rate)
                         {
-                            double rate = rnd.NextDouble();
-                            if (item.AbilityRate >= rate)
-                            {
-                                //immune
-                                atk = 0;
-                            }
+                            //immune
+                            atk = 0;
+                        }
+                    }
+                    if (reflect != null)
+                    {
+                        double rate = rnd.NextDouble();
+                        if (reflect.AbilityRate >= rate)
+                        {
+                            //reflect
+                            enemy.HP -= atk + player.Def;
+                            atk = 0;
                         }
                     }
                     player.CurrentHP -= atk;
@@ -162,6 +177,30 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             BattleResult result = new();
             int battleLoop = 0;
+            bool playerUseSkill = player.Bag.Count > 0;
+            ItemEquip playerDebuffer = null, playerCritical = null, playerHeal = null, playerImmune = null, playerReflect = null, playerCopyCat = null;
+            if (playerUseSkill)
+            {
+                playerDebuffer = player.Bag.FirstOrDefault(x => x.Type == ItemType.指環 && x.Ability == Ability.DebuffStates && x.IsEquiped);
+                playerCritical = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                playerHeal = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                playerImmune = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                playerReflect = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Reflect);
+                playerCopyCat = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.CopyCat);
+            }
+            bool playerLockSkill = player.Bag.Any(x => x.Type == ItemType.指環 && x.Ability == Ability.DebuffSkill && x.IsEquiped);
+            bool enemyUseSkill = enemy.Bag.Count > 0;
+            ItemEquip enemyDebuffer = null, enemyCritical = null, enemyHeal = null, enemyImmune = null, enemyReflect = null, enemyCopyCat = null;
+            if (enemyUseSkill)
+            {
+                enemyDebuffer = enemy.Bag.FirstOrDefault(x => x.Type == ItemType.指環 && x.Ability == Ability.DebuffStates && x.IsEquiped);
+                enemyCritical = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
+                enemyHeal = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
+                enemyImmune = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
+                enemyReflect = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Reflect);
+                enemyCopyCat = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.CopyCat);
+            }
+            bool enemyLockSkill = enemy.Bag.Any(x => x.Type == ItemType.指環 && x.Ability == Ability.DebuffSkill && x.IsEquiped);
             do
             {
                 int atk = player.Atk;
@@ -178,41 +217,103 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk * 0.5);
                 }
-                if (player.Bag.Count > 0)
+                if ((playerCritical != null && !enemyLockSkill) || (playerCopyCat != null && enemyCritical != null))
                 {
-                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
-                    if (item != null)
+                    double rate = rnd.NextDouble();
+                    if(playerCopyCat != null)
                     {
-                        double rate = rnd.NextDouble();
-                        if (item.AbilityRate >= rate)
+                        if (enemyCritical.AbilityRate >= rate)
+                        {
+                            //critical!
+                            atk = (int)Math.Round(atk * 1.5);
+                        }
+                    }
+                    else
+                    {
+                        if (playerCritical.AbilityRate >= rate)
                         {
                             //critical!
                             atk = (int)Math.Round(atk * 1.5);
                         }
                     }
                 }
-                atk -= enemy.Def;
-                if (atk < 0)
+                var def = enemy.Def;
+                if ((enemyDebuffer != null && !playerLockSkill) || (enemyCopyCat != null && playerDebuffer != null))
                 {
-                    atk = 0;
-                }
-                if (player.Bag.Count > 0)
-                {
-                    ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
-                    if (item != null)
+                    if(enemyCopyCat != null)
                     {
-                        player.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
+                        atk -= (int)Math.Round(atk * playerDebuffer.AbilityRate);
+                    }
+                    else
+                    {
+                        atk -= (int)Math.Round(atk * enemyDebuffer.AbilityRate);
                     }
                 }
-                if (enemy.Bag.Count > 0)
+                if ((playerDebuffer != null && !enemyLockSkill) || (playerCopyCat != null && enemyDebuffer != null))
                 {
-                    ItemEquip item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
-                    if (item != null)
+                    if (playerCopyCat != null)
                     {
-                        double rate = rnd.NextDouble();
-                        if (item.AbilityRate >= rate)
+                        def -= (int)Math.Round(def * enemyDebuffer.AbilityRate);
+                    }
+                    else
+                    {
+                        def -= (int)Math.Round(def * playerDebuffer.AbilityRate);
+                    }
+                }
+                atk -= def;
+                if (atk < 1)
+                {
+                    atk = 1;
+                }
+                if ((playerHeal != null && !enemyLockSkill) || (playerCopyCat != null && enemyHeal != null))
+                {
+                    if(playerCopyCat != null)
+                    {
+                        player.CurrentHP += (int)Math.Round(atk * enemyHeal.AbilityRate);
+                    }
+                    else
+                    {
+                        player.CurrentHP += (int)Math.Round(atk * playerHeal.AbilityRate);
+                    }
+                }
+                if((enemyImmune != null && !playerLockSkill) || (enemyCopyCat != null && playerImmune != null))
+                {
+                    double rate = rnd.NextDouble();
+                    if(enemyCopyCat != null)
+                    {
+                        if (playerImmune.AbilityRate >= rate)
                         {
                             //immune
+                            atk = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (enemyImmune.AbilityRate >= rate)
+                        {
+                            //immune
+                            atk = 0;
+                        }
+                    }
+                }
+                if((enemyReflect!= null && !playerLockSkill) || (enemyCopyCat != null && playerReflect != null))
+                {
+                    double rate = rnd.NextDouble();
+                    if(enemyCopyCat != null)
+                    {
+                        if (playerReflect.AbilityRate >= rate)
+                        {
+                            //reflect
+                            player.HP -= atk + def;
+                            atk = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (enemyReflect.AbilityRate >= rate)
+                        {
+                            //reflect
+                            player.HP -= atk;
                             atk = 0;
                         }
                     }
@@ -229,41 +330,103 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         atk = (int)Math.Round(atk * 0.5);
                     }
-                    if (enemy.Bag.Count > 0)
+                    if ((enemyCritical != null && !playerLockSkill) || (enemyCopyCat != null && playerCritical != null))
                     {
-                        ItemEquip item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Critical);
-                        if (item != null)
+                        double rate = rnd.NextDouble();
+                        if(enemyCopyCat != null)
                         {
-                            double rate = rnd.NextDouble();
-                            if (item.AbilityRate >= rate)
+                            if (playerCritical.AbilityRate >= rate)
+                            {
+                                //critical!
+                                atk = (int)Math.Round(atk * 1.5);
+                            }
+                        }
+                        else
+                        {
+                            if (enemyCritical.AbilityRate >= rate)
                             {
                                 //critical!
                                 atk = (int)Math.Round(atk * 1.5);
                             }
                         }
                     }
-                    atk -= player.Def;
+                    def = player.Def;
+                    if ((playerDebuffer != null && !enemyLockSkill) || (playerCopyCat != null && enemyDebuffer != null))
+                    {
+                        if(playerCopyCat != null)
+                        {
+                            atk -= (int)Math.Round(atk * enemyDebuffer.AbilityRate);
+                        }
+                        else
+                        {
+                            atk -= (int)Math.Round(atk * playerDebuffer.AbilityRate);
+                        }
+                    }
+                    if((enemyDebuffer != null && !playerLockSkill) || (enemyCopyCat != null && playerDebuffer != null))
+                    {
+                        if(enemyCopyCat != null)
+                        {
+                            def -= (int)Math.Round(def * playerDebuffer.AbilityRate);
+                        }
+                        else
+                        {
+                            def -= (int)Math.Round(def * enemyDebuffer.AbilityRate);
+                        }
+                    }
+                    atk -= def;
                     if (atk < 0)
                     {
                         atk = 0;
                     }
-                    if (enemy.Bag.Count > 0)
+                    if ((enemyHeal != null && !playerLockSkill) || (enemyCopyCat != null && playerHeal != null))
                     {
-                        ItemEquip item = enemy.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Heal);
-                        if (item != null)
+                        if(enemyCopyCat != null)
                         {
-                            enemy.CurrentHP += (int)Math.Round(atk * item.AbilityRate);
+                            enemy.CurrentHP += (int)Math.Round(atk * playerHeal.AbilityRate);
+                        }
+                        else
+                        {
+                            enemy.CurrentHP += (int)Math.Round(atk * enemyHeal.AbilityRate);
                         }
                     }
-                    if (player.Bag.Count > 0)
+                    if((playerImmune != null && !enemyLockSkill) || (playerCopyCat != null && enemyImmune != null))
                     {
-                        ItemEquip item = player.Bag.FirstOrDefault(x => x.IsEquiped && x.Type == ItemType.指環 && x.Ability == Ability.Immune);
-                        if (item != null)
+                        double rate = rnd.NextDouble();
+                        if(playerCopyCat != null)
                         {
-                            double rate = rnd.NextDouble();
-                            if (item.AbilityRate >= rate)
+                            if (enemyImmune.AbilityRate >= rate)
                             {
                                 //immune
+                                atk = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (playerImmune.AbilityRate >= rate)
+                            {
+                                //immune
+                                atk = 0;
+                            }
+                        }
+                    }
+                    if((playerReflect != null && !enemyLockSkill) || (playerCopyCat != null && enemyReflect != null))
+                    {
+                        double rate = rnd.NextDouble();
+                        if(playerCopyCat != null)
+                        {
+                            if (enemyReflect.AbilityRate >= rate)
+                            {
+                                //reflect
+                                enemy.HP -= atk + def;
+                                atk = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (playerReflect.AbilityRate >= rate)
+                            {
+                                //reflect
+                                enemy.HP -= atk + def;
                                 atk = 0;
                             }
                         }

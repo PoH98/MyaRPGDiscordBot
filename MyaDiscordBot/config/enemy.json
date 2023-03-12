@@ -1308,5 +1308,115 @@
     "stage": 8,
     "dropRank": [ 9 ],
     "isBoss": true
+  },
+  {
+    "name": "鹹濕的小ming哥",
+    "hp": 200,
+    "atk": 52,
+    "def": 16,
+    "element": 2,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "海底的seablue",
+    "hp": 300,
+    "atk": 46,
+    "def": 16,
+    "element": 5,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "彈跳的月夜",
+    "hp": 200,
+    "atk": 42,
+    "def": 20,
+    "element": 4,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "強大的Yuzaki",
+    "hp": 250,
+    "atk": 44,
+    "def": 18,
+    "element": 3,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "Fantastic的FantasyXFate",
+    "hp": 250,
+    "atk": 56,
+    "def": 18,
+    "element": 2,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "八岐大鱔小小的路人",
+    "hp": 350,
+    "atk": 48,
+    "def": 20,
+    "element": 5,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "消失的boing boing",
+    "hp": 200,
+    "atk": 44,
+    "def": 24,
+    "element": 4,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "萌萌的耀星",
+    "hp": 250,
+    "atk": 48,
+    "def": 20,
+    "element": 3,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "萌萌的耀星",
+    "hp": 250,
+    "atk": 48,
+    "def": 20,
+    "element": 3,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": false
+  },
+  {
+    "name": "墜落米亞-米亞的500蚊底線",
+    "hp": 8000,
+    "atk": 500,
+    "def": 500,
+    "element": 6,
+    "itemDropRate": 0,
+    "stage": 9,
+    "dropRank": [],
+    "isBoss": true
   }
 ]

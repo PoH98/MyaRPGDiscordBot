@@ -103,6 +103,7 @@ namespace MyaDiscordBot.Models
         Immune = 3, //概率無敵
         Reflect = 4, //概率反射受到的傷害
         DebuffStates = 5, //降低對方數值
-        DebuffSkill = 6 //封鎖對方技能
+        DebuffSkill = 6, //封鎖對方技能
+        CopyCat = 7 //複製對方技能
     }
 }

@@ -79,6 +79,14 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public void SavePlayer(Player player)
         {
+            if (player.Exp >= 100000)
+            {
+                player.Exp = 100000;
+            }
+            if(player.Lv >= 100)
+            {
+                player.Lv = 100;
+            }
             using LiteDatabase db = new("Filename=save\\" + player.ServerId + ".db;connection=shared");
             ILiteCollection<Player> col = db.GetCollection<Player>("player");
             _ = col.Update(player);

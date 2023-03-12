@@ -23,6 +23,7 @@ namespace MyaDiscordBot.Commands.Base
         private readonly HttpClient hc = new();
         private DateTime lastEntered = DateTime.MinValue;
         private int raidAlert = 0;
+        private SocketGuildUser Admin;
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
@@ -93,26 +94,20 @@ namespace MyaDiscordBot.Commands.Base
                     if (settings.ChannelId != 0)
                     {
                         IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，嘗試自動踢出");
-                    }
-                    try
-                    {
-                        await arg.KickAsync(result.Reason + " in other server on " + result.Date);
-                    }
-                    catch (Exception)
-                    {
-                        if (settings.ChannelId != 0)
-                        {
-                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Nickname + "，踢出失敗！");
-                        }
+                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "。");
                     }
                 }
                 if (await KickInvalidName(arg))
                 {
-                    _ = await arg.SendMessageAsync("請改善你的名字後先再加入我哋哦！");
-                    await arg.KickAsync();
-                    return;
+                    using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+                    ISettingService setting = scope.Resolve<ISettingService>();
+                    ServerSettings settings = setting.GetSettings(arg.Guild.Id);
+                    if (settings.ChannelId != 0)
+                    {
+                        IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。");
+                    }
+
                 }
                 if ((DateTime.Now - lastEntered).TotalMinutes < 1 && (DateTime.Now - arg.CreatedAt).TotalDays < 1)
                 {
@@ -182,6 +177,13 @@ namespace MyaDiscordBot.Commands.Base
                     {
                         GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                         _ = await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
+                        await message.DeleteAsync();
+                        return;
+                    }
+                    if(await antiSpam.IsPorn(message.Content))
+                    {
+                        GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                        _ = await message.ReplyAsync("請唔好發鹹網鏈接！" + message.Author.Mention + angry.ToString());
                         await message.DeleteAsync();
                         return;
                     }

@@ -128,6 +128,10 @@ namespace MyaDiscordBot.GameLogic.Services
                             player.Coin += coinGet;
                             player.Exp += (int)Math.Round(coinGet * 0.2);
                             player.LastCommand = DateTime.Now;
+                            if(player.Exp >= 100000)
+                            {
+                                player.Exp = 100000;
+                            }
                             playerService.SavePlayer(player);
                         }
                         catch (Exception ex)

@@ -14,9 +14,49 @@ namespace MyaDiscordBot.GameLogic.Services
         bool IsSpam(SocketUserMessage message);
         Task<bool> IsScam(SocketUserMessage message);
         Task<bool> IsRude(string message);
+        Task<bool> IsPorn(string message);
     }
     public class AntiSpamService : IAntiSpamService
     {
+        public async Task<bool> IsPorn(string message)
+        {
+            try
+            {
+                if (Data.Instance.PornList.Count < 1)
+                {
+                    //fetch scamlist
+                    HttpClient client = new();
+                    HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
+                    var list = await result.Content.ReadAsStringAsync();
+                    foreach (var item in list.Split("\n"))
+                    {
+                        if (item.Trim().Length > 0)
+                        {
+                            Data.Instance.PornList.Add(item.Trim());
+                        }
+                    }
+                }
+                var urls = Data.Instance.PornList.Where(x => message.Contains(x));
+                if (urls.Count() > 0)
+                {
+                    foreach (var url in urls)
+                    {
+                        var result = Regex.Match(message, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
+                        if (result.Success)
+                        {
+                            return true;
+                        };
+                    }
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Exception]: " + ex.ToString() + "\n", Encoding.UTF8);
+                return await IsPorn(message);
+            }
+        }
+
         public async Task<bool> IsRude(string message)
         {
             Match match = Regex.Match(message, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
@@ -110,20 +150,6 @@ namespace MyaDiscordBot.GameLogic.Services
                     result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
                     Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
                 }
-                if (Data.Instance.PornList.Count < 1)
-                {
-                    //fetch scamlist
-                    HttpClient client = new();
-                    HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
-                    var list = await result.Content.ReadAsStringAsync();
-                    foreach (var item in list.Split("\n"))
-                    {
-                        if (item.Trim().Length > 0)
-                        {
-                            Data.Instance.PornList.Add(item.Trim());
-                        }
-                    }
-                }
                 if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
                 {
                     if (message.Content.Contains("https://cdn.discordapp.com/") || message.Content.Contains("https://discord.com/"))
@@ -132,18 +158,6 @@ namespace MyaDiscordBot.GameLogic.Services
                         return false;
                     }
                     return true;
-                }
-                var urls = Data.Instance.PornList.Where(x => message.Content.Contains(x));
-                if (urls.Count() > 0)
-                {
-                    foreach (var url in urls)
-                    {
-                        var result = Regex.Match(message.Content, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
-                        if (result.Success)
-                        {
-                            return true;
-                        };
-                    }
                 }
                 match = Regex.Match(message.Content, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
                 return match.Success;
@@ -155,6 +169,7 @@ namespace MyaDiscordBot.GameLogic.Services
             }
 
         }
+
 
         public bool IsSpam(SocketUserMessage message)
         {
