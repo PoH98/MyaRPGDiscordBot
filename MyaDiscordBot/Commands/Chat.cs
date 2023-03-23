@@ -66,6 +66,7 @@ namespace MyaDiscordBot.Commands
                     {
                         x.Content = command.User.Mention + ":" +  message + "\n" + client.CurrentUser.Mention + ":" + response;
                     });
+                    return;
                 }
                 else
                 {
@@ -73,6 +74,7 @@ namespace MyaDiscordBot.Commands
                     {
                         x.Content = response;
                     });
+                    return;
                 }
             }
             catch (Exception)

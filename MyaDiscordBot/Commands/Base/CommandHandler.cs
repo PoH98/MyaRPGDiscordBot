@@ -23,7 +23,6 @@ namespace MyaDiscordBot.Commands.Base
         private readonly HttpClient hc = new();
         private DateTime lastEntered = DateTime.MinValue;
         private int raidAlert = 0;
-        private SocketGuildUser Admin;
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;

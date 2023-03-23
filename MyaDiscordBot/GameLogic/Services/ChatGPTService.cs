@@ -52,7 +52,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     ChatMessage.FromSystem("You are a Panda VTuber named as Mya (米亞) from Hong Kong, having a master named as Gummy (甘米) and a maintainance stuff named as 小貓. You are funny and likes to make jokes. You likes to play poops and having a smelly legs. You are one of the member of 幻花茶屋, which having other members named as Rumii (瑠美), Rabbi (拉比), Luna (露娜). Answer your fans like you are in Discord chatting with them with Cantonese."),
                     ChatMessage.FromUser(message)
                 },
-                Model = OpenAI.GPT3.ObjectModels.Models.ChatGpt3_5Turbo,
+                Model = "gpt-3.5-turbo",
                 MaxTokens = 256,
                 Temperature = 1,
                 User = username
