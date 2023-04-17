@@ -150,7 +150,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
                     Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
                 }
-                if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y))))
+                if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y + '/'))))
                 {
                     if (message.Content.Contains("https://cdn.discordapp.com/") || message.Content.Contains("https://discord.com/"))
                     {

@@ -79,77 +79,56 @@ namespace MyaDiscordBot.Commands.Base
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
             Console.WriteLine(arg.Id + " had joined the server.");
-            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " had joined the server.\n", Encoding.UTF8);
+            //admin had removed the ability to do adminstrator functions. Sigh...
+            /*await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " had joined the server.\n", Encoding.UTF8);
             if (!arg.IsBot)
             {
                 HttpResponseMessage response = await hc.GetAsync(arg.Id.ToString());
                 CheckUserResponse result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
                 if (result.Blacklisted)
                 {
-                    using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+                    /*using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
                     Console.WriteLine(arg.Id + " is evil!! Kick him!!");
                     ISettingService setting = scope.Resolve<ISettingService>();
                     ServerSettings settings = setting.GetSettings(arg.Guild.Id);
                     if (settings.ChannelId != 0)
                     {
-                        IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "。");
+                        try
+                        {
+                            await arg.KickAsync("Blacklister blacklisted user: " + result.Reason);
+                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "，已經自動踢出！ \n黑名單原因：" + result.Reason);
+                        }
+                        catch
+                        {
+                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "。請管理員決定處理方式！ \n黑名單原因：" + result.Reason);
+                        }
                     }
                 }
                 if (await KickInvalidName(arg))
                 {
+                    
                     using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
                     ISettingService setting = scope.Resolve<ISettingService>();
                     ServerSettings settings = setting.GetSettings(arg.Guild.Id);
                     if (settings.ChannelId != 0)
                     {
-                        IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。");
-                    }
-
-                }
-                if ((DateTime.Now - lastEntered).TotalMinutes < 1 && (DateTime.Now - arg.CreatedAt).TotalDays < 1)
-                {
-                    raidAlert++;
-                }
-                else
-                {
-                    raidAlert = 0;
-                }
-                lastEntered = DateTime.Now;
-                if (raidAlert >= 5)
-                {
-                    using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
-                    ISettingService setting = scope.Resolve<ISettingService>();
-                    ServerSettings settings = setting.GetSettings(arg.Guild.Id);
-                    if (Data.Instance.Youtube.Videos.Count >= 0)
-                    {
-                        if (Data.Instance.Youtube.Videos.Any(x => DateTime.Now.Date == x.ScheduledStartTime.ToLocalTime().Date && DateTime.Now >= x.ScheduledStartTime.ToLocalTime() && x.ScheduledStartTime.TimeOfDay <= new TimeSpan(23, 0, 0)))
+                        try
                         {
-                            //in Live, ignore server raid now
-                            return;
+                            await arg.SetTimeOutAsync(new TimeSpan(7,0,0,0));
+                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。自動禁言7日！");
                         }
-                    }
-                    if (settings.RaidKiller)
-                    {
-                        if (settings.ChannelId != 0)
+                        catch
                         {
                             IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                            SocketGuild guild = _client.GetGuild(arg.Guild.Id);
-                            try
-                            {
-                                _ = await ((IMessageChannel)channel).SendMessageAsync("清理系統正在嘗試禁言" + arg.Mention);
-                                await arg.SetTimeOutAsync(new TimeSpan(1, 0, 0));
-                                _ = await arg.SendMessageAsync("你的行動疑似Server Raid, 已經被自動禁言！一小時後會自動解禁！");
-                            }
-                            catch (Exception)
-                            {
-                                _ = await ((IMessageChannel)channel).SendMessageAsync("清理系統無法踢出" + arg.Mention + "! 請確保有足夠權限！");
-                            }
+                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。");
                         }
                     }
+                    
                 }
-            }
+            }*/
         }
 
         private async Task _client_MessageReceived(SocketMessage arg)
