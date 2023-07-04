@@ -30,7 +30,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     var list = await result.Content.ReadAsStringAsync();
                     foreach (var item in list.Split("\n"))
                     {
-                        if (item.Trim().Length > 0)
+                        if (item.Trim().Length > 0 && !item.Contains("pixiv"))
                         {
                             Data.Instance.PornList.Add(item.Trim());
                         }

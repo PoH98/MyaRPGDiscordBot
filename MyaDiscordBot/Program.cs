@@ -60,6 +60,18 @@ trigger = TriggerBuilder.Create()
     .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
+job = JobBuilder.Create<OfflineRewards>()
+    .Build();
+trigger = TriggerBuilder.Create()
+    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+    .Build();
+await scheduler.ScheduleJob(job, trigger);
+job = JobBuilder.Create<MarriedEventService>()
+    .Build();
+trigger = TriggerBuilder.Create()
+    .StartNow().WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0,0))
+    .Build();
+await scheduler.ScheduleJob(job, trigger);
 //==============================================================================//
 //Register DI//
 ContainerBuilder builder = new();

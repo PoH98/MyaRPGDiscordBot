@@ -158,12 +158,15 @@ namespace MyaDiscordBot.Commands.Base
                         await message.DeleteAsync();
                         return;
                     }
-                    if(await antiSpam.IsPorn(message.Content))
+                    if(message.Channel.Id != 1085185974725779596 && message.Author.Id != 1060259407730069584)
                     {
-                        GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
-                        _ = await message.ReplyAsync("請唔好發鹹網鏈接！" + message.Author.Mention + angry.ToString());
-                        await message.DeleteAsync();
-                        return;
+                        if (await antiSpam.IsPorn(message.Content))
+                        {
+                            GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                            _ = await message.ReplyAsync("請唔好發鹹網鏈接！" + message.Author.Mention + angry.ToString());
+                            await message.DeleteAsync();
+                            return;
+                        }
                     }
                 }
                 if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))

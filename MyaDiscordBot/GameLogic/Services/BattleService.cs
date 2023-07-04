@@ -217,6 +217,10 @@ namespace MyaDiscordBot.GameLogic.Services
                 {
                     atk = (int)Math.Round(atk * 0.5);
                 }
+                if(player.MarriedUser != 0)
+                {
+                    atk = (int)Math.Round(atk * 1.1);
+                }
                 if ((playerCritical != null && !enemyLockSkill) || (playerCopyCat != null && enemyCritical != null))
                 {
                     double rate = rnd.NextDouble();

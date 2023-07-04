@@ -17,7 +17,7 @@ namespace MyaDiscordBot.GameLogic.Services
             foreach (string files in Directory.GetFiles("Backup"))
             {
                 FileInfo fileInfo = new(files);
-                if ((DateTime.Now - fileInfo.CreationTime).TotalHours > 6)
+                if ((DateTime.Now - fileInfo.CreationTime).TotalHours > 48)
                 {
                     fileInfo.Delete();
                 }

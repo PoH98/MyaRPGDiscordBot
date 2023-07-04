@@ -22,7 +22,7 @@ namespace MyaDiscordBot.Commands
 
         public IEnumerable<SlashCommandOptionBuilder> Option => new SlashCommandOptionBuilder[0];
 
-        public Task Handler(SocketSlashCommand command, DiscordSocketClient client)
+        public async Task Handler(SocketSlashCommand command, DiscordSocketClient client)
         {
             Player player = playerService.LoadPlayer(command.User.Id, (command.Channel as SocketGuildChannel).Guild.Id);
             EmbedBuilder eb = new() { Color = Color.Blue };
@@ -33,6 +33,11 @@ namespace MyaDiscordBot.Commands
             _ = eb.AddField("院友卡餘額", player.Coin + "$");
             _ = eb.AddField("經驗值", player.Exp + "/" + configuration.LV[player.Lv.ToString()]);
             _ = eb.AddField("等級", player.Lv);
+            if (player.MarriedUser > 0)
+            {
+                _ = eb.AddField("結婚對象", (await client.GetUserAsync(player.MarriedUser)).Mention);
+                _ = eb.AddField("結婚時長", player.MarriedTime);
+            }
             EmbedBuilder bag = new() { Color = Color.Green };
             EmbedBuilder bag2 = new() { Color = Color.Red };
             EmbedBuilder resourceBag = new() { Color = Color.Teal };
@@ -80,7 +85,7 @@ namespace MyaDiscordBot.Commands
             {
                 desc = "**下次可探險時間：<t:" + ((DateTimeOffset)player.NextCommand.ToUniversalTime()).ToUnixTimeSeconds() + ":R>**";
             }
-            return command.RespondAsync(desc, embeds: new Embed[] { eb.Build(), bag.Build(), bag2.Build(), resourceBag.Build() }, ephemeral: true);
+            await command.RespondAsync(desc, embeds: new Embed[] { eb.Build(), bag.Build(), bag2.Build(), resourceBag.Build() }, ephemeral: true);
         }
     }
 }

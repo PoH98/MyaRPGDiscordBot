@@ -100,6 +100,14 @@ namespace MyaDiscordBot.Models
         /// Books
         /// </summary>
         public List<Book> Books { get; set; }
+        /// <summary>
+        /// Married user, pretty useless
+        /// </summary>
+        public ulong MarriedUser { get; set; } = 0;
+        /// <summary>
+        /// The time that two players married
+        /// </summary>
+        public DateTime MarriedTime { get; set; }
     }
 
     public enum BattleType
