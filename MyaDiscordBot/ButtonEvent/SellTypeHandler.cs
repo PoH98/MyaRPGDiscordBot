@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
+using System.Text;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -21,6 +22,8 @@ namespace MyaDiscordBot.ButtonEvent
         public Task Handle(SocketMessageComponent message, DiscordSocketClient client)
         {
             ComponentBuilder cb = new();
+            StringBuilder sb = new();
+            sb.Append("你打開左背包發現有...");
             Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             IEnumerable<ItemEquip> items = message.Data.CustomId.Replace("sellType-", "") switch
             {
@@ -34,9 +37,21 @@ namespace MyaDiscordBot.ButtonEvent
             };
             foreach (ItemEquip i in items.Where(x => !x.IsEquiped && x.Id != Guid.Empty))
             {
-                _ = cb.WithButton(i.Name, "sell-" + i.Id.ToString());
+                try
+                {
+                    _ = cb.WithButton(i.Name, "sell-" + i.Id.ToString());
+                }
+                catch (ArgumentException ex)
+                {
+                    //less than 5
+                    if (ex.Message.Contains('5'))
+                    {
+                        sb.Append("（裝備數量太多，無法顯示所有裝備！）");
+                        break;
+                    }
+                }
             }
-            return message.RespondAsync("你打開左背包發現有...", components: cb.Build(), ephemeral: true);
+            return message.RespondAsync(sb.ToString(), components: cb.Build(), ephemeral: true);
         }
     }
 }

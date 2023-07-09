@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
+using System.Text;
 
 namespace MyaDiscordBot.ButtonEvent
 {
@@ -26,6 +27,8 @@ namespace MyaDiscordBot.ButtonEvent
             string component = message.Data.CustomId.Replace("equipType-", "");
             Player player = playerService.LoadPlayer(message.User.Id, (message.Channel as SocketGuildChannel).Guild.Id);
             ComponentBuilder builder = new();
+            StringBuilder sb = new();
+            sb.Append("你背包內相關的道具：");
             IEnumerable<ItemEquip> items = component switch
             {
                 "fire" => player.Bag.Where(x => x.Type != ItemType.道具 && x.Element == Element.Fire),
@@ -43,9 +46,21 @@ namespace MyaDiscordBot.ButtonEvent
             }
             foreach (ItemEquip i in items.Where(x => !x.IsEquiped))
             {
-                _ = builder.WithButton("(" + i.Element + ")" + i.Name, "equip-" + i.Name.ToLower(), ButtonStyle.Success);
+                try
+                {
+                    _ = builder.WithButton("(" + i.Element + ")" + i.Name, "equip-" + i.Name.ToLower(), ButtonStyle.Success);
+                }
+                catch(ArgumentException ex)
+                {
+                    //less than 5
+                    if (ex.Message.Contains('5'))
+                    {
+                        sb.Append("（裝備數量太多，無法顯示所有裝備！）");
+                        break;
+                    }
+                }
             }
-            return message.RespondAsync("你背包內相關的道具：", components: builder.Build(), ephemeral: true);
+            return message.RespondAsync(sb.ToString(), components: builder.Build(), ephemeral: true);
         }
     }
 }

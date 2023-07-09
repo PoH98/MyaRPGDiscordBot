@@ -207,6 +207,11 @@ namespace MyaDiscordBot.Commands.Base
                 {
                     _ = await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
                 }
+                else if(message.Content == "$del" && message.Author.Id == 294835963442757632)
+                {
+                    await message.ReferencedMessage.DeleteAsync();
+                    await message.DeleteAsync();
+                }
             }
             catch (Exception ex)
             {
