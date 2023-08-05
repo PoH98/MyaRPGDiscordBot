@@ -74,14 +74,6 @@ namespace MyaDiscordBot.ButtonEvent
                         _ = sb.Append(" 提升" + i.HP + "血量");
                     }
                 }
-
-                if (i.Ability != Models.Ability.None)
-                {
-                    switch (i.Ability)
-                    {
-
-                    }
-                }
                 _ = builder.WithButton(sb.ToString() + " - " + i.Price + "$ ", "shop-" + i.Id.ToString());
             }
             return message.RespondAsync("咁以下就係你想要的商品選單啦~喵！≧◉ᴥ◉≦全部都係精心選返來的貨物！", components: builder.Build(), ephemeral: true);

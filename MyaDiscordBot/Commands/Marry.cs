@@ -1,15 +1,8 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using Microsoft.AspNetCore.Http.HttpResults;
 using MyaDiscordBot.Commands.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyaDiscordBot.Commands
 {

@@ -155,7 +155,9 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         data.SameTimes = 0;
                     }
-                    _ = col.Update(new Message() { UserId = message.Author.Id, SameTimes = data.SameTimes, Content = message.Content, LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() });
+                    data.LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                    data.Content = message.Content;
+                    _ = col.Update(data);
                     if (data.SameTimes >= 3)
                     {
                         return true;
