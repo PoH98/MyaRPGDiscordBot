@@ -23,11 +23,27 @@ namespace MyaDiscordBot.Commands.Base
         private readonly HttpClient hc = new();
         private DateTime lastEntered = DateTime.MinValue;
         private int raidAlert = 0;
+        private List<ulong> banIds = new List<ulong>();
         public CommandHandler(DiscordSocketClient client, IConfiguration configuration)
         {
             _client = client;
             hc.BaseAddress = new Uri("https://api.blacklister.xyz");
             _ = hc.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", configuration.BlackLister);
+            if (File.Exists("banlist.txt"))
+            {
+                banIds = File.ReadAllLines("banlist.txt").Select((x) =>
+                {
+                    try
+                    {
+                        return ulong.Parse(x);
+                    }
+                    catch
+                    {
+                        return (ulong)0;
+                    }
+                }).Where(x => x != 0).ToList();
+            }
+
         }
 
         public void InstallCommands()
@@ -141,6 +157,24 @@ namespace MyaDiscordBot.Commands.Base
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
                 Console.WriteLine("[" + message.Channel.Name + "]" + message.Author.Id + ":" + message.Content);
+                if (message.Author.IsBot)
+                {
+                    return;
+                }
+                if (banIds.Contains(arg.Author.Id))
+                {
+                    _ = message.DeleteAsync();
+                    try
+                    {
+                        var dm = await message.Author.CreateDMChannelAsync();
+                        _ = dm.SendMessageAsync("Ban detected, message \""+message.CleanContent + "\" will not be sent");
+                    }
+                    catch
+                    {
+
+                    }
+                    return;
+                }
                 using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())
                 {
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
@@ -211,6 +245,18 @@ namespace MyaDiscordBot.Commands.Base
                 {
                     await message.ReferencedMessage.DeleteAsync();
                     await message.DeleteAsync();
+                }
+                else if(message.Content == "$ban" && message.Author.Id == 294835963442757632)
+                {
+                    banIds.Add(message.ReferencedMessage.Author.Id);
+                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                    await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
+                }
+                else if(message.Content == "$unban" && message.Author.Id == 294835963442757632)
+                {
+                    banIds.Remove(message.ReferencedMessage.Author.Id);
+                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                    await message.ReplyAsync("用戶已經解封！");
                 }
             }
             catch (Exception ex)

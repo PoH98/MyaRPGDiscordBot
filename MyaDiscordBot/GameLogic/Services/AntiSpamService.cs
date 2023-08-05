@@ -173,37 +173,48 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public bool IsSpam(SocketUserMessage message)
         {
-            using LiteDatabase db = new("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared");
-            ILiteCollection<Message> col = db.GetCollection<Message>("spam");
-            Message data = col.FindOne(x => x.Id == message.Author.Id);
-            if (data == null)
+            using (LiteDatabase db = new("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
             {
-                _ = col.Insert(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
-            }
-            else
-            {
-                if (data.Content == message.Content)
+                ILiteCollection<Message> col = db.GetCollection<Message>("spam");
+                Message data = col.FindOne(x => x.UserId == message.Author.Id);
+                bool mon = false;
+                if (data == null)
                 {
-                    data.SameTimes++;
+                    _ = col.Insert(new Message() { UserId = message.Author.Id, SameTimes = 0, Content = message.Content, LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() });
                 }
                 else
                 {
-                    _ = col.Update(new Message() { Id = message.Author.Id, SameTimes = 0, Content = message.Content });
+                    if ((((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() - data.LastMessageTime) <= 2)
+                    {
+                        data.SameTimes++;
+                        mon = true;
+                    }
+                    if (data.Content == message.Content)
+                    {
+                        data.SameTimes++;
+                        mon = true;
+                    }
+                    if (!mon)
+                    {
+                        data.SameTimes = 0;
+                    }
+                    _ = col.Update(new Message() { UserId = message.Author.Id, SameTimes = data.SameTimes, Content = message.Content, LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() });
+                    if (data.SameTimes >= 3)
+                    {
+                        return true;
+                    }
                 }
-                if (data.SameTimes >= 3)
+                string[] splits = message.Content.Split("\n");
+                if (splits.Count() > 10)
                 {
-                    return true;
+                    if (splits.GroupBy(s => s.ToLower()).Count() <= splits.Count() / 3)
+                    {
+                        return true;
+                    }
                 }
+                return false;
             }
-            string[] splits = message.Content.Split("\n");
-            if (splits.Count() > 10)
-            {
-                if (splits.GroupBy(s => s.ToLower()).Count() <= splits.Count() / 3)
-                {
-                    return true;
-                }
-            }
-            return false;
+               
 
         }
     }
