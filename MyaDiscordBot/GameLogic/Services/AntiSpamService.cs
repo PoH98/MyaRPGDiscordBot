@@ -22,20 +22,7 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             try
             {
-                if (Data.Instance.PornList.Count < 1)
-                {
-                    //fetch scamlist
-                    HttpClient client = new();
-                    HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
-                    var list = await result.Content.ReadAsStringAsync();
-                    foreach (var item in list.Split("\n"))
-                    {
-                        if (item.Trim().Length > 0 && !item.Contains("pixiv"))
-                        {
-                            Data.Instance.PornList.Add(item.Trim());
-                        }
-                    }
-                }
+                await FetchAPIData();
                 var urls = Data.Instance.PornList.Where(x => message.Contains(x));
                 if (urls.Count() > 0)
                 {
@@ -72,29 +59,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     return pg.Match;
                 }
             }
-            if (Data.Instance.ScamList.Count < 1)
-            {
-                //fetch scamlist
-                HttpClient client = new();
-                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
-                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
-                result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
-                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
-            }
-            if (Data.Instance.PornList.Count < 1)
-            {
-                //fetch scamlist
-                HttpClient client = new();
-                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
-                var list = await result.Content.ReadAsStringAsync();
-                foreach(var item in list.Split("\n"))
-                {
-                    if(item.Trim().Length > 0)
-                    {
-                        Data.Instance.PornList.Add(item.Trim());
-                    }
-                }
-            }
+             await FetchAPIData();
             if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Contains(y))))
             {
                 if (message.Contains("https://cdn.discordapp.com/") || message.Contains("https://discord.com/"))
@@ -141,15 +106,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         return pg.Match;
                     }
                 }
-                if (Data.Instance.ScamList.Count < 1)
-                {
-                    //fetch scamlist
-                    HttpClient client = new();
-                    HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
-                    Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
-                    result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
-                    Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
-                }
+                await FetchAPIData();
                 if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y + '/'))))
                 {
                     if (message.Content.Contains("https://cdn.discordapp.com/") || message.Content.Contains("https://discord.com/"))
@@ -216,6 +173,34 @@ namespace MyaDiscordBot.GameLogic.Services
             }
                
 
+        }
+
+        private async Task FetchAPIData()
+        {
+            if (Data.Instance.ScamList.Count < 1)
+            {
+                //fetch scamlist
+                HttpClient client = new();
+                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
+                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+                result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/suspicious-list.json");
+                Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
+            }
+
+            if (Data.Instance.PornList.Count < 1)
+            {
+                //fetch pornlist
+                HttpClient client = new();
+                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
+                var list = await result.Content.ReadAsStringAsync();
+                foreach (var item in list.Split("\n"))
+                {
+                    if (item.Trim().Length > 0 && !item.Contains("pixiv"))
+                    {
+                        Data.Instance.PornList.Add(item.Trim());
+                    }
+                }
+            }
         }
     }
 }
