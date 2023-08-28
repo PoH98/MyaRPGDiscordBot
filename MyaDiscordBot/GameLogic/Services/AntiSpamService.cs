@@ -146,7 +146,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         data.SameTimes++;
                         mon = true;
                     }
-                    if (data.Content == message.Content)
+                    if (data.Content == message.Content && (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() - data.LastMessageTime) <= 60)
                     {
                         data.SameTimes++;
                         mon = true;

@@ -133,7 +133,11 @@ namespace MyaDiscordBot.GameLogic.Services
                             {
                                 player.HP += item.HP / 5;
                             }
-                            else if (player.HP < 200 && player.Lv < 60)
+                            else if (player.HP < 100 && player.Lv < 60)
+                            {
+                                player.HP += item.HP / 10;
+                            }
+                            else if(player.HP < 200)
                             {
                                 player.HP += item.HP / 10;
                             }

@@ -1,9 +1,8 @@
 ﻿using MyaDiscordBot.Models.ChatGPT;
 using Newtonsoft.Json;
-using OpenAI.GPT3;
-using OpenAI.GPT3.Managers;
-using OpenAI.GPT3.ObjectModels;
-using OpenAI.GPT3.ObjectModels.RequestModels;
+using OpenAI;
+using OpenAI.Managers;
+using OpenAI.ObjectModels.RequestModels;
 using System.Text;
 
 namespace MyaDiscordBot.GameLogic.Services
