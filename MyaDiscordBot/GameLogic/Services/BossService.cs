@@ -13,32 +13,69 @@ namespace MyaDiscordBot.GameLogic.Services
         public async Task Execute(IJobExecutionContext context)
         {
             Console.WriteLine("Boss scheduller running");
-            using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
-            IBossService bossService = scope.Resolve<IBossService>();
-            DiscordSocketClient client = scope.Resolve<DiscordSocketClient>();
-            ISettingService settingService = scope.Resolve<ISettingService>();
-            foreach (string file in Directory.GetFiles("save", "*.db"))
+            using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())
             {
-                //get joined servers
-                try
+                IBossService bossService = scope.Resolve<IBossService>();
+                DiscordSocketClient client = scope.Resolve<DiscordSocketClient>();
+                ISettingService settingService = scope.Resolve<ISettingService>();
+                foreach (string file in Directory.GetFiles("save", "*.db"))
                 {
-                    SocketGuild guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
-                    bossService.RemoveExpired(guild.Id);
+                    //get joined servers
                     try
                     {
-                        if (DateTime.Now.Day == 1 && DateTime.Now.Month == 1 && DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+                        SocketGuild guild = client.GetGuild(Convert.ToUInt64(file.Remove(0, file.LastIndexOf("\\") + 1).Replace(".db", "")));
+                        bossService.RemoveExpired(guild.Id);
+                        try
                         {
+                            if (DateTime.Now.Day == 1 && DateTime.Now.Month == 1 && DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+                            {
+                                ServerSettings setting = settingService.GetSettings(guild.Id);
+                                Discord.GuildEmote yeah = client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("yeah")).Last();
+                                if (setting != null)
+                                {
+                                    _ = await guild.GetTextChannel(setting.ChannelId).SendMessageAsync(DateTime.Now.Year + "新年快樂啊大家！" + yeah.ToString());
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        _ = await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync(DateTime.Now.Year + "新年快樂啊大家！" + yeah.ToString());
+                                    }
+                                    catch
+                                    {
+                                        //any error will ignored
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+                        if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                        {
+
+                            bossService.AddBoss(guild.Id, new Enemy
+                            {
+                                Name = "米講粗口亞",
+                                Atk = 999,
+                                Def = 0,
+                                HP = 99999,
+                                Element = Element.God,
+                                IsBoss = true,
+                                Stage = 999
+                            });
                             ServerSettings setting = settingService.GetSettings(guild.Id);
-                            Discord.GuildEmote yeah = client.Guilds.SelectMany(x => x.Emotes).Where(x => x.Name.Contains("yeah")).Last();
                             if (setting != null)
                             {
-                                _ = await guild.GetTextChannel(setting.ChannelId).SendMessageAsync(DateTime.Now.Year + "新年快樂啊大家！" + yeah.ToString());
+                                _ = await guild.GetTextChannel(setting.ChannelId).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
                             }
                             else
                             {
                                 try
                                 {
-                                    _ = await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync(DateTime.Now.Year + "新年快樂啊大家！" + yeah.ToString());
+                                    _ = await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
                                 }
                                 catch
                                 {
@@ -47,47 +84,11 @@ namespace MyaDiscordBot.GameLogic.Services
                             }
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-
-                    }
-
-                    if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0 && DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-                    {
-
-                        bossService.AddBoss(guild.Id, new Enemy
-                        {
-                            Name = "米講粗口亞",
-                            Atk = 999,
-                            Def = 0,
-                            HP = 99999,
-                            Element = Element.God,
-                            IsBoss = true,
-                            Stage = 999
-                        });
-                        ServerSettings setting = settingService.GetSettings(guild.Id);
-                        if (setting != null)
-                        {
-                            _ = await guild.GetTextChannel(setting.ChannelId).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                _ = await guild.GetTextChannel(guild.DefaultChannel.Id).SendMessageAsync("米講粗口亞再次出現啦！請玩家們記得討伐獲得獎勵！");
-                            }
-                            catch
-                            {
-                                //any error will ignored
-                            }
-                        }
+                        Console.WriteLine(ex.ToString());
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
-
             }
         }
     }
@@ -117,7 +118,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 : col.Insert(new BossSpawned
                 {
                     Enemy = enemy,
-                    ExpiredTime = DateTime.Now.AddDays(5),
+                    ExpiredTime = DateTime.Now.AddDays(6),
                     GuildId = serverId
                 });
         }
@@ -144,6 +145,7 @@ namespace MyaDiscordBot.GameLogic.Services
             IEnumerable<BossSpawned> data = col.Find(x => x.GuildId == serverId);
             if (data == null)
             {
+                db.Dispose();
                 return;
             }
             foreach (BossSpawned i in data.Where(x => DateTime.Compare(x.ExpiredTime, DateTime.Now) < 0))

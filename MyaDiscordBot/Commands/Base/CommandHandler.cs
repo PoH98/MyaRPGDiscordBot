@@ -149,7 +149,8 @@ namespace MyaDiscordBot.Commands.Base
 
         private async Task _client_MessageReceived(SocketMessage arg)
         {
-            if (arg is not SocketUserMessage message || string.IsNullOrEmpty(message.Content))
+            SocketUserMessage message = (SocketUserMessage)arg;
+            if (string.IsNullOrEmpty(message.Content))
             {
                 return;
             }

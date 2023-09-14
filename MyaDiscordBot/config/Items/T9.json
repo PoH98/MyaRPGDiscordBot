@@ -5,7 +5,7 @@
     "Rank": 9,
     "Price": 100000,
     "Atk": 40,
-    "Def": 5,
+    "Def": 10,
     "UseTimes": -1,
     "Element": 6,
     "Type": 1,
@@ -283,7 +283,7 @@
     "Type": 3,
     "HP": 0,
     "Ability": 6,
-    "AbilityRate": 1,
+    "AbilityRate": 1.0,
     "DropRate": 0.0,
     "Craft": false
   },
