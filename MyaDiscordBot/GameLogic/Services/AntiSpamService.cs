@@ -1,9 +1,13 @@
-﻿using Discord.WebSocket;
+﻿using Autofac;
+using Discord;
+using Discord.WebSocket;
 using LiteDB;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Antiscam;
 using MyaDiscordBot.Models.SpamDetection;
 using Newtonsoft.Json;
+using Quartz;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -15,9 +19,17 @@ namespace MyaDiscordBot.GameLogic.Services
         Task<bool> IsScam(SocketUserMessage message);
         Task<bool> IsRude(string message);
         Task<bool> IsPorn(string message);
+        ConcurrentQueue<SocketUserMessage> GetSpamCheckQueues();
     }
     public class AntiSpamService : IAntiSpamService
     {
+        private ConcurrentQueue<SocketUserMessage> toCheck = new ConcurrentQueue<SocketUserMessage>();
+
+        public ConcurrentQueue<SocketUserMessage> GetSpamCheckQueues()
+        {
+            return toCheck;
+        }
+
         public async Task<bool> IsPorn(string message)
         {
             try
@@ -81,11 +93,6 @@ namespace MyaDiscordBot.GameLogic.Services
                     };
                 }
             }
-            match = Regex.Match(message, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
-            if(match.Success)
-            {
-                return true;
-            }
             return false;
         }
 
@@ -100,8 +107,10 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         HttpClient client = new();
                         HttpResponseMessage result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
+                        result.EnsureSuccessStatusCode();
                         DiscordInvite di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
                         result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
+                        result.EnsureSuccessStatusCode();
                         PhishGG pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
                         return pg.Match;
                     }
@@ -122,7 +131,8 @@ namespace MyaDiscordBot.GameLogic.Services
             catch (Exception ex)
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][Exception]: " + ex.ToString() + "\n", Encoding.UTF8);
-                return await IsScam(message);
+                toCheck.Append(message);
+                return false;
             }
 
         }
@@ -201,6 +211,31 @@ namespace MyaDiscordBot.GameLogic.Services
                     {
                         Data.Instance.PornList.Add(item.Trim());
                     }
+                }
+            }
+        }
+    }
+
+    public class AntiSpamJob : IJob
+    {
+        public async Task Execute(IJobExecutionContext context)
+        {
+            using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+            DiscordSocketClient client = scope.Resolve<DiscordSocketClient>();
+            IAntiSpamService antiSpamService = scope.Resolve<IAntiSpamService>();
+            var queue = antiSpamService.GetSpamCheckQueues();
+            while(!queue.IsEmpty)
+            {
+                if(queue.TryDequeue(out var checkQueue))
+                {
+                    if(await antiSpamService.IsScam(checkQueue))
+                    {
+                        GuildEmote angry = client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                        _ = await checkQueue.ReplyAsync("請唔好Spam！" + checkQueue.Author.Mention + angry.ToString());
+                        await checkQueue.DeleteAsync();
+                        return;
+                    }
+                    break;
                 }
             }
         }

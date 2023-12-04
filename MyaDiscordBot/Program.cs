@@ -72,6 +72,12 @@ trigger = TriggerBuilder.Create()
     .StartNow().WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0,0))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
+job = JobBuilder.Create<AntiSpamJob>()
+    .Build();
+trigger = TriggerBuilder.Create()
+    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInSeconds(1))
+    .Build();
+await scheduler.ScheduleJob(job, trigger);
 //==============================================================================//
 //Register DI//
 ContainerBuilder builder = new();
