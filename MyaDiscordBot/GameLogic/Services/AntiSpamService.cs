@@ -118,7 +118,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 await FetchAPIData();
                 if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Content.Contains(y + '/'))))
                 {
-                    if (message.Content.Contains("https://cdn.discordapp.com/") || message.Content.Contains("https://discord.com/"))
+                    if (message.Content.Contains("https://cdn.discordapp.com/") || message.Content.Contains("https://discord.com/") || message.Content.Contains("https://discord.gift/"))
                     {
                         //cdn, not scam lol
                         return false;
