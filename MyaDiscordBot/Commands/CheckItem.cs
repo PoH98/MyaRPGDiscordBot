@@ -82,6 +82,18 @@ namespace MyaDiscordBot.Commands
                     case Ability.Immune:
                         _ = eb.AddField("技能", "無敵: 發動幾率" + (item.AbilityRate * 100).ToString("#0.00") + "%");
                         break;
+                    case Ability.CopyCat:
+                        _ = eb.AddField("技能", "複製: 完全複製對手戒指的技能");
+                        break;
+                    case Ability.DebuffStates:
+                        _ = eb.AddField("技能", "緩衝: 降低對手數值（攻擊，防禦）" + (item.AbilityRate * 100).ToString("#0.00") + "%");
+                        break;
+                    case Ability.Reflect:
+                        _ = eb.AddField("技能", "反擊: 有" + (item.AbilityRate * 100).ToString("#0.00") + "%幾率完全反擊受到的傷害並且抵消自身受到的傷害");
+                        break;
+                    case Ability.DebuffSkill:
+                        _ = eb.AddField("技能", "封印: 對方不能發動任何戒指效果");
+                        break;
                 }
             }
             _ = eb.WithColor(Color.Teal);

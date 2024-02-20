@@ -106,7 +106,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     if (match.Groups.TryGetValue("invite", out Group inviteurl))
                     {
                         HttpClient client = new();
-                        HttpResponseMessage result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
+                        HttpResponseMessage result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value.Split(" ").First());
                         result.EnsureSuccessStatusCode();
                         DiscordInvite di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
                         result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
