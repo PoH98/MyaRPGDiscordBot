@@ -181,13 +181,27 @@ namespace MyaDiscordBot.Commands.Base
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
                     if(message.Author.Id != _client.CurrentUser.Id)
                     {
-                        if (antiSpam.IsSpam(message))
+                        try
                         {
-                            GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
-                            _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
-                            await message.DeleteAsync();
-                            return;
+                            if (antiSpam.IsSpam(message))
+                            {
+                                GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                                _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
+                                await message.DeleteAsync();
+                                return;
+                            }
                         }
+                        catch(ArgumentException ex)
+                        {
+                            if(ex.Message == "Ban")
+                            {
+                                banIds.Add(message.Author.Id);
+                                File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                                await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
+                                await message.DeleteAsync();
+                            }
+                        }
+
                     }
 
                     if (await antiSpam.IsScam(message))

@@ -168,6 +168,11 @@ namespace MyaDiscordBot.GameLogic.Services
                     data.LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
                     data.Content = message.Content;
                     _ = col.Update(data);
+                    if(data.SameTimes >= 9)
+                    {
+                        //block directly
+                        throw new ArgumentException("Ban");
+                    }
                     if (data.SameTimes >= 3)
                     {
                         return true;
