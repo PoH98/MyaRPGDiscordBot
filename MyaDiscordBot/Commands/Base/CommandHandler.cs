@@ -150,6 +150,7 @@ namespace MyaDiscordBot.Commands.Base
         private async Task _client_MessageReceived(SocketMessage arg)
         {
             SocketUserMessage message = (SocketUserMessage)arg;
+            if (message == null) return;
             if (string.IsNullOrEmpty(message.Content))
             {
                 return;
@@ -181,27 +182,59 @@ namespace MyaDiscordBot.Commands.Base
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
                     if(message.Author.Id != _client.CurrentUser.Id)
                     {
-                        try
+                        if(message.Author.Id == 294835963442757632 && message.Content.StartsWith("$"))
                         {
-                            if (antiSpam.IsSpam(message))
+                            switch (message.Content)
                             {
-                                GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
-                                _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
-                                await message.DeleteAsync();
-                                return;
+                                case "$refreshCommand":
+                                    _ = await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
+                                    _ = Task.Run(async () =>
+                                    {
+                                        await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
+                                        _ = await message.ReplyAsync("Job Done");
+                                        return;
+                                    });
+                                    return;
+                                case "$del":
+                                    await message.ReferencedMessage.DeleteAsync();
+                                    await message.DeleteAsync();
+                                    return;
+                                case "$ban":
+                                    banIds.Add(message.ReferencedMessage.Author.Id);
+                                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                                    await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
+                                    return;
+                                case "$unban":
+                                    banIds.Remove(message.ReferencedMessage.Author.Id);
+                                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                                    await message.ReplyAsync("用戶已經解封！");
+                                    return;
                             }
                         }
-                        catch(ArgumentException ex)
+                        else
                         {
-                            if(ex.Message == "Ban")
+                            try
                             {
-                                banIds.Add(message.Author.Id);
-                                File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
-                                await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
-                                await message.DeleteAsync();
+                                if (antiSpam.IsSpam(message))
+                                {
+                                    GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                                    _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
+                                    await message.DeleteAsync();
+                                    return;
+                                }
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message == "Ban")
+                                {
+                                    banIds.Add(message.Author.Id);
+                                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                                    await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
+                                    await message.DeleteAsync();
+                                    return;
+                                }
                             }
                         }
-
                     }
 
                     if (await antiSpam.IsScam(message))
@@ -247,35 +280,9 @@ namespace MyaDiscordBot.Commands.Base
                         await message.AddReactionAsync(what);
                     }
                 }
-                else if (message.Content.StartsWith("$refreshCommand") && message.Author.Id == 294835963442757632)
-                {
-                    _ = await message.ReplyAsync("Job Executing... Please do not use any commands before job done!");
-                    _ = Task.Run(async () =>
-                    {
-                        await UpdateCommands((message.Channel as SocketGuildChannel).Guild);
-                        _ = await message.ReplyAsync("Job Done");
-                    });
-                }
                 else if (message.Content.StartsWith("$ping"))
                 {
                     _ = await message.ReplyAsync("Bot Status: " + _client.ConnectionState + "\nBot Delay: " + _client.Latency + "ms");
-                }
-                else if(message.Content == "$del" && message.Author.Id == 294835963442757632)
-                {
-                    await message.ReferencedMessage.DeleteAsync();
-                    await message.DeleteAsync();
-                }
-                else if(message.Content == "$ban" && message.Author.Id == 294835963442757632)
-                {
-                    banIds.Add(message.ReferencedMessage.Author.Id);
-                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
-                    await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
-                }
-                else if(message.Content == "$unban" && message.Author.Id == 294835963442757632)
-                {
-                    banIds.Remove(message.ReferencedMessage.Author.Id);
-                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
-                    await message.ReplyAsync("用戶已經解封！");
                 }
             }
             catch (Exception ex)
@@ -362,6 +369,13 @@ namespace MyaDiscordBot.Commands.Base
 
         private async Task client_SlashCommandExecuted(SocketSlashCommand arg)
         {
+            //==============================================================================//
+            //Check game disabled
+            if (File.Exists("disableGame.txt"))
+            {
+                await arg.RespondAsync("機器人遊戲已經被暫時取消，請等待管理員解鎖！", ephemeral: true);
+                return;
+            }
             Console.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + arg.CommandId + " triggered");
             if (arg.CommandName != "setting")
             {

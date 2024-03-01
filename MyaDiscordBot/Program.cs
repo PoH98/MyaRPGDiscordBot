@@ -36,43 +36,39 @@ _client.Log += Log;
 LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
 StdSchedulerFactory factory = new();
 IScheduler scheduler = await factory.GetScheduler();
-IJobDetail job = JobBuilder.Create<BossJob>()
+if (!File.Exists("disableGame.txt"))
+{
+    var gamejob = JobBuilder.Create<BossJob>().WithIdentity("Boss Job").Build();
+    var gametrigger = TriggerBuilder.Create()
+        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+        .Build();
+    await scheduler.ScheduleJob(gamejob, gametrigger);
+    gamejob = JobBuilder.Create<MYASiteJob>().WithIdentity("Mya Site Job")
     .Build();
-ITrigger trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+    gametrigger = TriggerBuilder.Create()
+        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+        .Build();
+    await scheduler.ScheduleJob(gamejob, gametrigger);
+    gamejob = JobBuilder.Create<OfflineRewards>().WithIdentity("Offline Job")
+        .Build();
+    gametrigger = TriggerBuilder.Create()
+        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+        .Build();
+    await scheduler.ScheduleJob(gamejob, gametrigger);
+    gamejob = JobBuilder.Create<MarriedEventService>().WithIdentity("Marry Job")
+        .Build();
+    gametrigger = TriggerBuilder.Create()
+        .StartNow().WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0))
+        .Build();
+    await scheduler.ScheduleJob(gamejob, gametrigger);
+}
+var job = JobBuilder.Create<BackupJob>().WithIdentity("Backup Job")
     .Build();
-await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<KeepAliveJob>()
-    .Build();
-trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInSeconds(5))
-    .Build();
-await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<BackupJob>()
-    .Build();
-trigger = TriggerBuilder.Create()
+var trigger = TriggerBuilder.Create()
     .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInMinutes(20))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<MYASiteJob>()
-    .Build();
-trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
-    .Build();
-await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<OfflineRewards>()
-    .Build();
-trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
-    .Build();
-await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<MarriedEventService>()
-    .Build();
-trigger = TriggerBuilder.Create()
-    .StartNow().WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0,0))
-    .Build();
-await scheduler.ScheduleJob(job, trigger);
-job = JobBuilder.Create<AntiSpamJob>()
+job = JobBuilder.Create<AntiSpamJob>().WithIdentity("Anti Spam Job")
     .Build();
 trigger = TriggerBuilder.Create()
     .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInSeconds(1))
@@ -84,7 +80,7 @@ ContainerBuilder builder = new();
 //Load all commands
 builder.RegisterInterfaces();
 //Register Socket Client
-builder.RegisterInstance<DiscordSocketClient>(_client);
+builder.RegisterInstance(_client);
 //Load all configs
 builder.RegisterSettingsConfig(_client);
 //Load all Services
