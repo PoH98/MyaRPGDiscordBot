@@ -25,7 +25,6 @@ namespace MyaDiscordBot.Extension
             _ = builder.RegisterType<BossService>().As<IBossService>();
             _ = builder.RegisterType<AntiSpamService>().As<IAntiSpamService>();
             _ = builder.RegisterType<MarketService>().As<IMarketService>();
-            _ = builder.RegisterType<ChatGPTService>().As<IChatGPTService>().SingleInstance();
             return builder;
         }
 
