@@ -182,7 +182,7 @@ namespace MyaDiscordBot.Commands.Base
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
                     if(message.Author.Id != _client.CurrentUser.Id)
                     {
-                        if(message.Author.Id == 294835963442757632 && message.Content.StartsWith("$"))
+                        if((message.Author.Id == 294835963442757632 || message.Author.Id == 894153610265518102) && message.Content.StartsWith("$"))
                         {
                             switch (message.Content)
                             {
