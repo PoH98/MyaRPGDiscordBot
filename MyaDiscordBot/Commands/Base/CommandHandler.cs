@@ -180,6 +180,7 @@ namespace MyaDiscordBot.Commands.Base
                 using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())
                 {
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
+                    var pureContent = await antiSpam.UnparseShortenUrl(message.CleanContent);
                     if(message.Author.Id != _client.CurrentUser.Id)
                     {
                         if((message.Author.Id == 294835963442757632 || message.Author.Id == 894153610265518102) && message.Content.StartsWith("$"))
@@ -215,7 +216,7 @@ namespace MyaDiscordBot.Commands.Base
                         {
                             try
                             {
-                                if (antiSpam.IsSpam(message))
+                                if (antiSpam.IsSpam(message, pureContent))
                                 {
                                     GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                                     _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
@@ -237,7 +238,7 @@ namespace MyaDiscordBot.Commands.Base
                         }
                     }
 
-                    if (await antiSpam.IsScam(message))
+                    if (await antiSpam.IsScam(message, pureContent))
                     {
                         GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                         _ = await message.ReplyAsync("請唔好發送病毒連接/詐騙鏈接！" + message.Author.Mention + angry.ToString());
@@ -246,7 +247,7 @@ namespace MyaDiscordBot.Commands.Base
                     }
                     if(message.Channel.Id != 1085185974725779596 && message.Author.Id != 1060259407730069584)
                     {
-                        if (await antiSpam.IsPorn(message.Content))
+                        if (await antiSpam.IsPorn(pureContent))
                         {
                             GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                             _ = await message.ReplyAsync("請唔好發鹹網鏈接！" + message.Author.Mention + angry.ToString());
@@ -254,6 +255,7 @@ namespace MyaDiscordBot.Commands.Base
                             return;
                         }
                     }
+
                 }
                 if (message.MentionedUsers.Any(x => x.Id == _client.CurrentUser.Id))
                 {
