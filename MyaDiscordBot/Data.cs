@@ -27,6 +27,7 @@ namespace MyaDiscordBot
         public ExpirableList<string> BannedName { get; set; } = new ExpirableList<string>(3600000);
         public ExpirableList<string> BannedRegex { get; set; } = new ExpirableList<string>(3600000);
         public ExpirableList<string> ShortenUrl { get; set; } = new ExpirableList<string>(3600000);
+        public ExpirableList<ulong> SelfBots { get; set; } = new ExpirableList<ulong>(3600000);
     }
 
     public class ExpirableList<T> : IList<T>

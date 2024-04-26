@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Channels;
 
 namespace MyaDiscordBot.Commands.Base
 {
@@ -96,55 +97,49 @@ namespace MyaDiscordBot.Commands.Base
         {
             Console.WriteLine(arg.Id + " had joined the server.");
             //admin had removed the ability to do adminstrator functions. Sigh...
-            /*await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " had joined the server.\n", Encoding.UTF8);
+            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " had joined the server.\n", Encoding.UTF8);
+            using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+            var antispam = scope.Resolve<IAntiSpamService>();
+            if(await antispam.IsSelfBot(arg.Id))
+            {
+                ISettingService setting = scope.Resolve<ISettingService>();
+                ServerSettings settings = setting.GetSettings(arg.Guild.Id);
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " is evil. Spy.Pet bot\n", Encoding.UTF8);
+                if (settings.ChannelId != 0)
+                {
+                    IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                    _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "。請管理員決定處理方式！ \n黑名單原因：Spy.Pet bot");
+                }
+            }
             if (!arg.IsBot)
             {
                 HttpResponseMessage response = await hc.GetAsync(arg.Id.ToString());
                 CheckUserResponse result = JsonConvert.DeserializeObject<CheckUserResponse>(await response.Content.ReadAsStringAsync());
                 if (result.Blacklisted)
                 {
-                    /*using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
-                    Console.WriteLine(arg.Id + " is evil!! Kick him!!");
+                    await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " is evil. "+ result.Reason + "\n", Encoding.UTF8);
                     ISettingService setting = scope.Resolve<ISettingService>();
                     ServerSettings settings = setting.GetSettings(arg.Guild.Id);
                     if (settings.ChannelId != 0)
                     {
-                        try
-                        {
-                            await arg.KickAsync("Blacklister blacklisted user: " + result.Reason);
-                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "，已經自動踢出！ \n黑名單原因：" + result.Reason);
-                        }
-                        catch
-                        {
-                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "。請管理員決定處理方式！ \n黑名單原因：" + result.Reason);
-                        }
+                        IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + arg.Mention + "。請管理員決定處理方式！ \n黑名單原因：" + result.Reason);
                     }
                 }
                 if (await KickInvalidName(arg))
                 {
-                    
-                    using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
+                    await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", arg.Id + " is evil. Invalid Name!\n", Encoding.UTF8);
                     ISettingService setting = scope.Resolve<ISettingService>();
                     ServerSettings settings = setting.GetSettings(arg.Guild.Id);
                     if (settings.ChannelId != 0)
                     {
-                        try
-                        {
-                            await arg.SetTimeOutAsync(new TimeSpan(7,0,0,0));
-                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。自動禁言7日！");
-                        }
-                        catch
-                        {
-                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
-                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。");
-                        }
+                        IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                        banIds.Add(arg.Id);
+                        File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                        _ = await ((IMessageChannel)channel).SendMessageAsync("發現不合適名稱用戶：" + arg.Mention + "。自動禁言！");
                     }
-                    
                 }
-            }*/
+            }
         }
 
         private async Task _client_MessageReceived(SocketMessage arg)
@@ -209,6 +204,41 @@ namespace MyaDiscordBot.Commands.Base
                                     banIds.Remove(message.ReferencedMessage.Author.Id);
                                     File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
                                     await message.ReplyAsync("用戶已經解封！");
+                                    return;
+                                case "$scan":
+                                    await message.ReplyAsync("開始掃描全server成員！可能需要長時間等待！");
+                                    var t = new Thread(async () =>
+                                    {
+                                        try
+                                        {
+                                            using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())
+                                            {
+                                                var antispam = scope.Resolve<IAntiSpamService>();
+                                                ISettingService setting = scope.Resolve<ISettingService>();
+                                                ServerSettings settings = setting.GetSettings(783913792668041216);
+                                                await _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).DownloadUsersAsync();
+                                                foreach (var user in _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Users)
+                                                {
+                                                    if (await antispam.IsSelfBot(arg.Id))
+                                                    {
+                                                        if (settings.ChannelId != 0)
+                                                        {
+                                                            IChannel channel = await _client.GetChannelAsync(settings.ChannelId);
+                                                            _ = await ((IMessageChannel)channel).SendMessageAsync("發現其他ser已經Blacklist的用戶：" + user.Mention + "。請管理員決定處理方式！ \n黑名單原因：Spy.Pet bot");
+                                                        }
+                                                    }
+                                                }
+                                                await message.ReplyAsync("掃描完畢，所有有問題賬號已經被Send出來！");
+                                            }
+                                        }
+                                        catch(Exception ex)
+                                        {
+                                            await message.ReplyAsync(ex.Message);
+                                        }
+
+                                    });
+                                    t.IsBackground = true;
+                                    t.Start();
                                     return;
                             }
                         }
@@ -412,7 +442,10 @@ namespace MyaDiscordBot.Commands.Base
                     HttpResponseMessage response = await hc.GetAsync("https://raw.githubusercontent.com/mogade/badwords/master/en.txt");
                     foreach (string i in (await response.Content.ReadAsStringAsync()).Split("\n"))
                     {
-                        Data.Instance.BannedRegex.Add(i);
+                        if(i.Length > 0)
+                        {
+                            Data.Instance.BannedRegex.Add(i);
+                        }
                     }
                 }
                 foreach (string item in Data.Instance.BannedRegex)
@@ -420,7 +453,7 @@ namespace MyaDiscordBot.Commands.Base
                     try
                     {
                         Regex r = new(item);
-                        if (r.Match(arg.DisplayName).Success)
+                        if (r.IsMatch(arg.DisplayName))
                         {
                             //auto kick when detected bad words in name and created less that 7 day
                             return true;

@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\ChatGPT\**" />
+    <EmbeddedResource Remove="Models\ChatGPT\**" />
+    <None Remove="Models\ChatGPT\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="Discord.Net" Version="3.4.1" />
     <PackageReference Include="LiteDB" Version="5.0.19" />

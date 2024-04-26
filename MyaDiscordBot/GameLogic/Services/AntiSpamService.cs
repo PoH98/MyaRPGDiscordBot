@@ -19,14 +19,14 @@ namespace MyaDiscordBot.GameLogic.Services
         bool IsSpam(SocketUserMessage message, string pureMessage);
         Task<string> UnparseShortenUrl(string message);
         Task<bool> IsScam(SocketUserMessage message, string pureMessage);
-        Task<bool> IsRude(string message);
         Task<bool> IsPorn(string message);
+        Task<bool> IsSelfBot(ulong id);
         ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> GetSpamCheckQueues();
     }
     public class AntiSpamService : IAntiSpamService
     {
         private ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> toCheck = new ConcurrentQueue<KeyValuePair<SocketUserMessage, string>>();
-
+        private ConcurrentQueue<Task> UpdatingDB = new ConcurrentQueue<Task>(); 
         public ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> GetSpamCheckQueues()
         {
             return toCheck;
@@ -77,6 +77,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         var result = Regex.Match(message, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
                         if (result.Success)
                         {
+                            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Match]: " + url + "\n", Encoding.UTF8);
                             return true;
                         };
                     }
@@ -89,46 +90,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 return false;
             }
         }
-
-        public async Task<bool> IsRude(string message)
-        {
-            Match match = Regex.Match(message, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
-            if (match.Success)
-            {
-                if (match.Groups.TryGetValue("invite", out Group inviteurl))
-                {
-                    HttpClient client = new();
-                    HttpResponseMessage result = await client.GetAsync("https://discord.com/api/v9/invites/" + inviteurl.Value);
-                    DiscordInvite di = JsonConvert.DeserializeObject<DiscordInvite>(await result.Content.ReadAsStringAsync());
-                    result = await client.GetAsync("https://api.phish.gg/server?id=" + di.Guild.Id);
-                    PhishGG pg = JsonConvert.DeserializeObject<PhishGG>(await result.Content.ReadAsStringAsync());
-                    return pg.Match;
-                }
-            }
-             await FetchAPIData();
-            if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => message.Contains(y))))
-            {
-                if (message.Contains("https://cdn.discordapp.com/") || message.Contains("https://discord.com/"))
-                {
-                    //cdn, not scam lol
-                    return false;
-                }
-                return true;
-            }
-            var urls = Data.Instance.PornList.Where(x => message.Contains(x));
-            if (urls.Count() > 0)
-            {
-                foreach (var url in urls)
-                {
-                    var result = Regex.Match(message, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
-                    if (result.Success)
-                    {
-                        return true;
-                    };
-                }
-            }
-            return false;
-        }
+       
 
         public async Task<bool> IsScam(SocketUserMessage message, string pureMessage)
         {
@@ -230,6 +192,7 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             if (Data.Instance.ScamList.Count < 1)
             {
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Security]: Updating ScamList DB\n", Encoding.UTF8);
                 //fetch scamlist
                 HttpClient client = new();
                 HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/nikolaischunk/discord-phishing-links/main/domain-list.json");
@@ -240,6 +203,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
             if (Data.Instance.PornList.Count < 1)
             {
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Security]: Updating PornList DB\n", Encoding.UTF8);
                 //fetch pornlist
                 HttpClient client = new();
                 HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
@@ -255,6 +219,7 @@ namespace MyaDiscordBot.GameLogic.Services
 
             if(Data.Instance.ShortenUrl.Count < 1)
             {
+                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Security]: Updating ShortenUrl DB\n", Encoding.UTF8);
                 HttpClient client = new();
                 HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/MISP/misp-warninglists/main/lists/url-shortener/list.json");
                 var json = await result.Content.ReadAsStringAsync();
@@ -264,6 +229,22 @@ namespace MyaDiscordBot.GameLogic.Services
                     Data.Instance.ShortenUrl.Add(item);
                 }
             }
+        }
+
+        public async Task<bool> IsSelfBot(ulong id)
+        {
+            if (Data.Instance.SelfBots.Count < 1)
+            {
+                HttpClient client = new();
+                HttpResponseMessage result = await client.GetAsync("https://gist.githubusercontent.com/Dziurwa14/05db50c66e4dcc67d129838e1b9d739a/raw/212a162cc9c1141a6ec60cf35788e9e1b9fbe779/spy.pet%20accounts");
+                var json = await result.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<List<ulong>>(json);
+                foreach (var item in list)
+                {
+                    Data.Instance.SelfBots.Add(item);
+                }
+            }
+            return Data.Instance.SelfBots.Contains(id);
         }
     }
 
