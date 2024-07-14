@@ -8,7 +8,7 @@ using MyaDiscordBot.Models.SpamDetection;
 using Newtonsoft.Json;
 using Quartz;
 using System.Collections.Concurrent;
-using System.Security.Policy;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -16,7 +16,8 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     public interface IAntiSpamService
     {
-        bool IsSpam(SocketUserMessage message, string pureMessage);
+        bool IsTextSpam(SocketUserMessage message, string pureMessage);
+        Task<bool> IsImageSpam(SocketUserMessage message, string proxyUrl);
         Task<string> UnparseShortenUrl(string message);
         Task<bool> IsScam(SocketUserMessage message, string pureMessage);
         Task<bool> IsPorn(string message);
@@ -26,7 +27,6 @@ namespace MyaDiscordBot.GameLogic.Services
     public class AntiSpamService : IAntiSpamService
     {
         private ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> toCheck = new ConcurrentQueue<KeyValuePair<SocketUserMessage, string>>();
-        private ConcurrentQueue<Task> UpdatingDB = new ConcurrentQueue<Task>(); 
         public ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> GetSpamCheckQueues()
         {
             return toCheck;
@@ -134,7 +134,7 @@ namespace MyaDiscordBot.GameLogic.Services
         }
 
 
-        public bool IsSpam(SocketUserMessage message, string pureMessage)
+        public bool IsTextSpam(SocketUserMessage message, string pureMessage)
         {
             using (LiteDatabase db = new("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
             {
@@ -245,6 +245,71 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
             }
             return Data.Instance.SelfBots.Contains(id);
+        }
+
+        public async Task<bool> IsImageSpam(SocketUserMessage message, string url)
+        {
+            using (LiteDatabase db = new("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
+            {
+                string md5;
+                try
+                {
+                    using (HttpClient client = new())
+                    {
+                        var response = await client.GetAsync(url);
+                        response.EnsureSuccessStatusCode();
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            using (var md5hasher = MD5.Create())
+                            {
+                                var hash = md5hasher.ComputeHash(stream);
+                                md5 = Convert.ToBase64String(hash);
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+                ILiteCollection<Message> col = db.GetCollection<Message>("img");
+                Message data = col.FindOne(x => x.UserId == message.Author.Id);
+                bool mon = false;
+                if (data == null)
+                {
+                    _ = col.Insert(new Message() { UserId = message.Author.Id, SameTimes = 0, Content = md5, LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() });
+                }
+                else
+                {
+                    if ((((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() - data.LastMessageTime) <= 2)
+                    {
+                        data.SameTimes++;
+                        mon = true;
+                    }
+                    if (data.Content == md5 && (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() - data.LastMessageTime) <= 60)
+                    {
+                        data.SameTimes++;
+                        mon = true;
+                    }
+                    if (!mon)
+                    {
+                        data.SameTimes = 0;
+                    }
+                    data.LastMessageTime = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds();
+                    data.Content = md5;
+                    _ = col.Update(data);
+                    if (data.SameTimes >= 9)
+                    {
+                        //block directly
+                        throw new ArgumentException("Ban");
+                    }
+                    if (data.SameTimes >= 3)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
     }
 

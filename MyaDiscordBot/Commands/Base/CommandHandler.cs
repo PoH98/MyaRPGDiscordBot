@@ -175,10 +175,11 @@ namespace MyaDiscordBot.Commands.Base
                 using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())
                 {
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
-                    var pureContent = await antiSpam.UnparseShortenUrl(message.CleanContent);
+                    var pureContent = await antiSpam.UnparseShortenUrl(message.Content);
                     if(message.Author.Id != _client.CurrentUser.Id)
                     {
-                        if((message.Author.Id == 294835963442757632 || message.Author.Id == 894153610265518102) && message.Content.StartsWith("$"))
+                        ulong[] whiteListIds = new ulong[] { 294835963442757632, 357183940752310273, 894153610265518102, 1134746453219225630 };
+                        if(whiteListIds.Contains(message.Author.Id) && message.Content.StartsWith("$"))
                         {
                             switch (message.Content)
                             {
@@ -242,16 +243,44 @@ namespace MyaDiscordBot.Commands.Base
                                     return;
                             }
                         }
-                        else
+                        //do not scan whitelist ids on spamming
+                        else if(whiteListIds.Contains(message.Author.Id))
                         {
                             try
                             {
-                                if (antiSpam.IsSpam(message, pureContent))
+                                if (antiSpam.IsTextSpam(message, pureContent))
                                 {
                                     GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                                     _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
                                     await message.DeleteAsync();
                                     return;
+                                }
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message == "Ban")
+                                {
+                                    banIds.Add(message.Author.Id);
+                                    File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                                    await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
+                                    await message.DeleteAsync();
+                                    return;
+                                }
+                            }
+                            try
+                            {
+                                if (message.Attachments.Count > 0)
+                                {
+                                    foreach (var attachment in message.Attachments)
+                                    {
+                                        if (await antiSpam.IsImageSpam(message, attachment.Url))
+                                        {
+                                            GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                                            _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
+                                            await message.DeleteAsync();
+                                            return;
+                                        }
+                                    }
                                 }
                             }
                             catch (ArgumentException ex)
