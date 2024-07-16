@@ -244,7 +244,7 @@ namespace MyaDiscordBot.Commands.Base
                             }
                         }
                         //do not scan whitelist ids on spamming
-                        else if(whiteListIds.Contains(message.Author.Id))
+                        else if(!whiteListIds.Contains(message.Author.Id))
                         {
                             try
                             {
