@@ -312,7 +312,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         if (playerReflect.AbilityRate >= rate)
                         {
                             //reflect
-                            player.HP -= atk + def;
+                            player.CurrentHP -= atk + def;
                             atk = 0;
                         }
                     }
@@ -321,13 +321,13 @@ namespace MyaDiscordBot.GameLogic.Services
                         if (enemyReflect.AbilityRate >= rate)
                         {
                             //reflect
-                            player.HP -= atk;
+                            player.CurrentHP -= atk;
                             atk = 0;
                         }
                     }
                 }
                 enemy.CurrentHP -= atk;
-                if (enemy.HP > 0)
+                if (enemy.CurrentHP > 0)
                 {
                     atk = enemy.Atk;
                     if (elementWin is (-1) or (-2))
@@ -425,7 +425,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             if (enemyReflect.AbilityRate >= rate)
                             {
                                 //reflect
-                                enemy.HP -= atk + def;
+                                enemy.CurrentHP -= atk + def;
                                 atk = 0;
                             }
                         }
@@ -434,7 +434,7 @@ namespace MyaDiscordBot.GameLogic.Services
                             if (playerReflect.AbilityRate >= rate)
                             {
                                 //reflect
-                                enemy.HP -= atk + def;
+                                enemy.CurrentHP -= atk + def;
                                 atk = 0;
                             }
                         }
