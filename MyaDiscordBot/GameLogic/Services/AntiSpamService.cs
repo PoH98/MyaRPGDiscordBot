@@ -281,11 +281,6 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
                 else
                 {
-                    if ((((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() - data.LastMessageTime) <= 2)
-                    {
-                        data.SameTimes++;
-                        mon = true;
-                    }
                     if (data.Content == md5 && (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() - data.LastMessageTime) <= 60)
                     {
                         data.SameTimes++;
