@@ -154,7 +154,7 @@ namespace MyaDiscordBot.Commands.Base
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
                 Console.WriteLine("[" + message.Channel.Name + "]" + message.Author.Id + ":" + message.Content);
-                if (message.Author.IsBot)
+                if (message.Author.IsBot && !File.Exists("ScanBot.txt"))
                 {
                     return;
                 }
@@ -205,6 +205,21 @@ namespace MyaDiscordBot.Commands.Base
                                     banIds.Remove(message.ReferencedMessage.Author.Id);
                                     File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
                                     await message.ReplyAsync("用戶已經解封！");
+                                    return;
+                                case "$delAll":
+                                    SocketTextChannel channel = (await _client.GetChannelAsync(message.ReferencedMessage.Channel.Id) as SocketTextChannel);
+                                    await message.ReplyAsync("開始刪除該用戶所有發言！可能需要長時間等待！");
+                                    var messages = channel.GetMessagesAsync();
+                                    await foreach(var msg in messages)
+                                    {
+                                        foreach(var m in msg)
+                                        {
+                                            if(m.Author.Id == message.ReferencedMessage.Author.Id)
+                                            {
+                                                await m.DeleteAsync();
+                                            }
+                                        }
+                                    }
                                     return;
                                 case "$scan":
                                     await message.ReplyAsync("開始掃描全server成員！可能需要長時間等待！");
