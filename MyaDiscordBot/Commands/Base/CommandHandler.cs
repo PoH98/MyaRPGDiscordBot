@@ -5,13 +5,11 @@ using MyaDiscordBot.ButtonEvent.Base;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using MyaDiscordBot.Models.Blacklister;
-using MyaDiscordBot.Models.SpamDetection;
 using MyaDiscordBot.SelectEvent.Base;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Channels;
 
 namespace MyaDiscordBot.Commands.Base
 {
@@ -192,10 +190,6 @@ namespace MyaDiscordBot.Commands.Base
                                         return;
                                     });
                                     return;
-                                case "$del":
-                                    await message.ReferencedMessage.DeleteAsync();
-                                    await message.DeleteAsync();
-                                    return;
                                 case "$ban":
                                     banIds.Add(message.ReferencedMessage.Author.Id);
                                     File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
@@ -255,6 +249,32 @@ namespace MyaDiscordBot.Commands.Base
                                     });
                                     t.IsBackground = true;
                                     t.Start();
+                                    return;
+                                default:
+                                    if (message.Content.StartsWith("$del"))
+                                    {
+                                        if (message.ReferencedMessage != null)
+                                        {
+                                            await message.ReferencedMessage.DeleteAsync();
+                                        }
+                                        else
+                                        {
+                                            Regex regex = new Regex("https:\\/\\/discord\\.com\\/channels\\/([0-9]+)\\/([0-9]+)\\/([0-9]+)");
+                                            Match match = regex.Match(pureContent);
+                                            if (!string.IsNullOrEmpty(match.Value))
+                                            {
+                                                Console.WriteLine("Deleting message...");
+                                                if (ulong.TryParse(match.Groups[1].Value, out ulong groupId) &&
+                                                ulong.TryParse(match.Groups[2].Value, out ulong channelId) &&
+                                                ulong.TryParse(match.Groups[3].Value, out ulong messageId))
+                                                {
+                                                    var channelData = await _client.GetChannelAsync(channelId);
+                                                    await (channelData as SocketTextChannel).DeleteMessageAsync(messageId);
+                                                }
+                                            }
+                                        }
+                                        await message.DeleteAsync();
+                                    }
                                     return;
                             }
                         }
