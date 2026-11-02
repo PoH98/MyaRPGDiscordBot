@@ -4,7 +4,7 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     public class BackupJob : IJob
     {
-        public Task Execute(IJobExecutionContext context)
+        public ValueTask Execute(IJobExecutionContext context, CancellationToken cancellation)
         {
             if (!Directory.Exists("Backup"))
             {
@@ -26,7 +26,7 @@ namespace MyaDiscordBot.GameLogic.Services
             {
                 File.Copy(files, files.Replace("Save", "Backup") + DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss") + ".backup");
             }
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 }

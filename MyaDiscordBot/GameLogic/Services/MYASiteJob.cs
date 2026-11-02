@@ -14,7 +14,7 @@ namespace MyaDiscordBot.GameLogic.Services
                 BaseAddress = new Uri("https://www.mya-hkvtuber.com/api/mya/")
             };
         }
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellation)
         {
             Console.WriteLine("[" + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "]: Updating MYA video list...");
             HttpResponseMessage r = await _httpClient.GetAsync("getfuturevid");

@@ -8,7 +8,7 @@ namespace MyaDiscordBot.GameLogic.Services
 {
     internal class OfflineRewards : IJob
     {
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellation)
         {
             using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
             DiscordSocketClient client = scope.Resolve<DiscordSocketClient>();

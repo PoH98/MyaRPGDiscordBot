@@ -10,7 +10,7 @@ namespace MyaDiscordBot.GameLogic.Services
     //not handjob ok?
     public class BossJob : IJob
     {
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellation)
         {
             Console.WriteLine("Boss scheduller running");
             using (ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope())

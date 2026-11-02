@@ -17,7 +17,7 @@ namespace MyaDiscordBot.GameLogic.Services
     public interface IAntiSpamService
     {
         bool IsTextSpam(SocketUserMessage message, string pureMessage);
-        Task<bool> IsImageSpam(SocketUserMessage message, string proxyUrl);
+        Task<bool> IsImageSpam(SocketUserMessage message, string proxyUrl, bool uploadedFile = false);
         Task<string> UnparseShortenUrl(string message);
         Task<bool> IsScam(SocketUserMessage message, string pureMessage);
         Task<bool> IsPorn(string message);
@@ -26,6 +26,10 @@ namespace MyaDiscordBot.GameLogic.Services
     }
     public class AntiSpamService : IAntiSpamService
     {
+        private static readonly HttpClient HttpClient = new();
+        private static readonly Regex UrlRegex = new(@"(?<![\w@.-])(?:https?://|www\.)?(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(?::\d{1,5})?(?:[/?#][^\s<>]*)?", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
+        private static readonly Regex DiscordInviteRegex = new(@"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex TelegramRegex = new(@"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         private ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> toCheck = new ConcurrentQueue<KeyValuePair<SocketUserMessage, string>>();
         public ConcurrentQueue<KeyValuePair<SocketUserMessage, string>> GetSpamCheckQueues()
         {
@@ -34,48 +38,51 @@ namespace MyaDiscordBot.GameLogic.Services
 
         public async Task<string> UnparseShortenUrl(string message)
         {
-            string r = message;
+            var result = new StringBuilder(message);
             try
             {
-                await FetchAPIData();
-                var urls = Data.Instance.ShortenUrl.Where(message.Contains);
-                foreach (var url in urls)
+                var matches = UrlRegex.Matches(message);
+                for (int i = matches.Count - 1; i >= 0; i--)
                 {
-                    var regex = $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})\\/\\S*";
-                    var result = Regex.Match(message, regex);
-                    if (result.Success)
+                    var match = matches[i];
+                    var address = match.Value.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || match.Value.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+                        ? match.Value : "https://" + match.Value;
+                    if (!Uri.TryCreate(address, UriKind.Absolute, out var uri)) continue;
+                    try
                     {
-                        HttpClient hc = new HttpClient();
-                        var response = await hc.GetAsync(result.Value);
-                        var destination = response.Headers.Location?.ToString();
-                        if(string.IsNullOrEmpty(destination))
+                        using var response = await HttpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead);
+                        var destination = response.RequestMessage?.RequestUri;
+                        if (destination != null && destination != uri)
                         {
-                            destination = response.RequestMessage.RequestUri.ToString();
+                            result.Remove(match.Index, match.Length);
+                            result.Insert(match.Index, destination.ToString());
                         }
-                        r = message.Replace(result.Value, destination);
-                    };
-                    
+                    }
+                    catch (HttpRequestException) { }
+                    catch (TaskCanceledException) { }
                 }
             }
             catch
             {
 
             }
-            return r;
+            return result.ToString();
         }
 
         public async Task<bool> IsPorn(string message)
         {
             try
             {
-                await FetchAPIData();
+                if (!UrlRegex.IsMatch(message)) return false;
+                await FetchAPIData(porn: true);
                 var urls = Data.Instance.PornList.Where(message.Contains);
                 if (urls.Count() > 0)
                 {
                     foreach (var url in urls)
                     {
-                        var result = Regex.Match(message, $"(https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")}|https?:\\/\\/(?:www\\.|(?!www)){url.Replace(".", "\\.")}|www\\.{url.Replace(".", "\\.")})");
-                        if (result.Success)
+                        if (message.Contains("http://" + url) || message.Contains("https://" + url) ||
+                            message.Contains("http://www." + url) || message.Contains("https://www." + url) ||
+                            message.Contains("www." + url))
                         {
                             await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Match]: " + url + "\n", Encoding.UTF8);
                             return true;
@@ -96,7 +103,7 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             try
             {
-                Match match = Regex.Match(pureMessage, @"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)");
+                Match match = DiscordInviteRegex.Match(pureMessage);
                 if (match.Success)
                 {
                     if (match.Groups.TryGetValue("invite", out Group inviteurl))
@@ -111,7 +118,7 @@ namespace MyaDiscordBot.GameLogic.Services
                         return pg.Match;
                     }
                 }
-                await FetchAPIData();
+                await FetchAPIData(scam: true);
                 if (Data.Instance.ScamList.Any(x => x.Domains.Any(y => pureMessage.Contains(y + '/'))))
                 {
                     if (pureMessage.Contains("https://cdn.discordapp.com/") || pureMessage.Contains("https://discord.com/") || pureMessage.Contains("https://discord.gift/"))
@@ -121,7 +128,7 @@ namespace MyaDiscordBot.GameLogic.Services
                     }
                     return true;
                 }
-                match = Regex.Match(pureMessage, @"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$");
+                match = TelegramRegex.Match(pureMessage);
                 return match.Success;
             }
             catch (Exception ex)
@@ -188,9 +195,9 @@ namespace MyaDiscordBot.GameLogic.Services
 
         }
 
-        private async Task FetchAPIData()
+        private async Task FetchAPIData(bool scam = false, bool porn = false)
         {
-            if (Data.Instance.ScamList.Count < 1)
+            if (scam && Data.Instance.ScamList.Count < 1)
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Security]: Updating ScamList DB\n", Encoding.UTF8);
                 //fetch scamlist
@@ -201,12 +208,13 @@ namespace MyaDiscordBot.GameLogic.Services
                 Data.Instance.ScamList.Add(JsonConvert.DeserializeObject<AntiscamData>(await result.Content.ReadAsStringAsync()));
             }
 
-            if (Data.Instance.PornList.Count < 1)
+            if (porn && Data.Instance.PornList.Count < 1)
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Security]: Updating PornList DB\n", Encoding.UTF8);
                 //fetch pornlist
                 HttpClient client = new();
-                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/master/block.txt");
+                var link = await GetPornTxt(client);
+                HttpResponseMessage result = await client.GetAsync(link);
                 var list = await result.Content.ReadAsStringAsync();
                 foreach (var item in list.Split("\n"))
                 {
@@ -217,18 +225,14 @@ namespace MyaDiscordBot.GameLogic.Services
                 }
             }
 
-            if(Data.Instance.ShortenUrl.Count < 1)
-            {
-                await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Security]: Updating ShortenUrl DB\n", Encoding.UTF8);
-                HttpClient client = new();
-                HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/MISP/misp-warninglists/main/lists/url-shortener/list.json");
-                var json = await result.Content.ReadAsStringAsync();
-                var list = JsonConvert.DeserializeObject<ShortenUrl>(json);
-                foreach(var item in list.List)
-                {
-                    Data.Instance.ShortenUrl.Add(item);
-                }
-            }
+        }
+
+        private async Task<string> GetPornTxt(HttpClient client)
+        {
+            HttpResponseMessage result = await client.GetAsync("https://raw.githubusercontent.com/Bon-Appetit/porn-domains/refs/heads/main/meta.json");
+            var json = await result.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<PornMetaJson>(json);
+            return data.Blocklist.RawUrl;
         }
 
         public async Task<bool> IsSelfBot(ulong id)
@@ -247,31 +251,27 @@ namespace MyaDiscordBot.GameLogic.Services
             return Data.Instance.SelfBots.Contains(id);
         }
 
-        public async Task<bool> IsImageSpam(SocketUserMessage message, string url)
+        public async Task<bool> IsImageSpam(SocketUserMessage message, string url, bool uploadedFile = false)
         {
+            string md5;
+            try
+            {
+                using var response = await HttpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+                var host = response.RequestMessage?.RequestUri?.Host;
+                if (!uploadedFile && !string.Equals(host, "cdn.discordapp.com", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(host, "media.discordapp.net", StringComparison.OrdinalIgnoreCase) &&
+                    response.Content.Headers.ContentType?.MediaType?.StartsWith("image/", StringComparison.OrdinalIgnoreCase) != true) return false;
+                using var stream = await response.Content.ReadAsStreamAsync();
+                using var md5hasher = MD5.Create();
+                md5 = Convert.ToBase64String(await md5hasher.ComputeHashAsync(stream));
+            }
+            catch
+            {
+                return false;
+            }
             using (LiteDatabase db = new("Filename=save\\" + (message.Channel as SocketGuildChannel).Guild.Id + ".db;connection=shared"))
             {
-                string md5;
-                try
-                {
-                    using (HttpClient client = new())
-                    {
-                        var response = await client.GetAsync(url);
-                        response.EnsureSuccessStatusCode();
-                        using (var stream = await response.Content.ReadAsStreamAsync())
-                        {
-                            using (var md5hasher = MD5.Create())
-                            {
-                                var hash = md5hasher.ComputeHash(stream);
-                                md5 = Convert.ToBase64String(hash);
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
                 ILiteCollection<Message> col = db.GetCollection<Message>("img");
                 Message data = col.FindOne(x => x.UserId == message.Author.Id);
                 bool mon = false;
@@ -306,11 +306,19 @@ namespace MyaDiscordBot.GameLogic.Services
                 return false;
             }
         }
+
+
+        public static IEnumerable<string> GetUrls(string message)
+        {
+            foreach (Match match in UrlRegex.Matches(message))
+                yield return match.Value.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || match.Value.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+                    ? match.Value : "https://" + match.Value;
+        }
     }
 
     public class AntiSpamJob : IJob
     {
-        public async Task Execute(IJobExecutionContext context)
+        public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellation)
         {
             using ILifetimeScope scope = Data.Instance.Container.BeginLifetimeScope();
             DiscordSocketClient client = scope.Resolve<DiscordSocketClient>();

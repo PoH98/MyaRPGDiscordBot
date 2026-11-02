@@ -144,10 +144,6 @@ namespace MyaDiscordBot.Commands.Base
         {
             SocketUserMessage message = (SocketUserMessage)arg;
             if (message == null) return;
-            if (string.IsNullOrEmpty(message.Content))
-            {
-                return;
-            }
             try
             {
                 await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[" + message.Channel + "][" + arg.Author.Id + "]: " + message.Content + "\n", Encoding.UTF8);
@@ -304,17 +300,16 @@ namespace MyaDiscordBot.Commands.Base
                             }
                             try
                             {
-                                if (message.Attachments.Count > 0)
+                                foreach (var image in message.Attachments.Select(attachment => (Url: attachment.Url, Uploaded: true))
+                                    .Concat(AntiSpamService.GetUrls(pureContent).Select(url => (Url: url, Uploaded: false)))
+                                    .DistinctBy(image => image.Url, StringComparer.OrdinalIgnoreCase))
                                 {
-                                    foreach (var attachment in message.Attachments)
+                                    if (await antiSpam.IsImageSpam(message, image.Url, image.Uploaded))
                                     {
-                                        if (await antiSpam.IsImageSpam(message, attachment.Url))
-                                        {
-                                            GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
-                                            _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
-                                            await message.DeleteAsync();
-                                            return;
-                                        }
+                                        GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
+                                        _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
+                                        await message.DeleteAsync();
+                                        return;
                                     }
                                 }
                             }

@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using Autofac;
 using Discord;
 using Discord.WebSocket;
@@ -7,8 +7,6 @@ using MyaDiscordBot.Extension;
 using MyaDiscordBot.GameLogic.Services;
 using MyaDiscordBot.Models;
 using Quartz;
-using Quartz.Impl;
-using Quartz.Logging;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -33,50 +31,48 @@ DiscordSocketClient _client = new(new DiscordSocketConfig
 _client.Log += Log;
 //==============================================================================//
 //Scheduller Register//
-LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
-StdSchedulerFactory factory = new();
-IScheduler scheduler = await factory.GetScheduler();
+IScheduler scheduler = await QuartzSchedulerBuilder.Create().BuildScheduler();
 if (!File.Exists("disableGame.txt"))
 {
     var gamejob = JobBuilder.Create<BossJob>().WithIdentity("Boss Job").Build();
     var gametrigger = TriggerBuilder.Create()
-        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Hour))
         .Build();
     await scheduler.ScheduleJob(gamejob, gametrigger);
     gamejob = JobBuilder.Create<MYASiteJob>().WithIdentity("Mya Site Job")
     .Build();
     gametrigger = TriggerBuilder.Create()
-        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Hour))
         .Build();
     await scheduler.ScheduleJob(gamejob, gametrigger);
     gamejob = JobBuilder.Create<OfflineRewards>().WithIdentity("Offline Job")
         .Build();
     gametrigger = TriggerBuilder.Create()
-        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInHours(1))
+        .StartNow().WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Hour))
         .Build();
     await scheduler.ScheduleJob(gamejob, gametrigger);
     gamejob = JobBuilder.Create<MarriedEventService>().WithIdentity("Marry Job")
         .Build();
     gametrigger = TriggerBuilder.Create()
-        .StartNow().WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0, 0))
+        .StartNow().WithSchedule(CronScheduleBuilder.Create("0 0 0 * * ?"))
         .Build();
     await scheduler.ScheduleJob(gamejob, gametrigger);
 }
 var job = JobBuilder.Create<BackupJob>().WithIdentity("Backup Job")
     .Build();
 var trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInMinutes(20))
+    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithInterval(20, IntervalUnit.Minute))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
 job = JobBuilder.Create<AntiSpamJob>().WithIdentity("Anti Spam Job")
     .Build();
 trigger = TriggerBuilder.Create()
-    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithIntervalInSeconds(1))
+    .StartNow().WithDailyTimeIntervalSchedule(x => x.WithInterval(1, IntervalUnit.Second))
     .Build();
 await scheduler.ScheduleJob(job, trigger);
 //==============================================================================//
 //Register DI//
-ContainerBuilder builder = new();
+Autofac.ContainerBuilder builder = new();
 //Load all commands
 builder.RegisterInterfaces();
 //Register Socket Client
@@ -101,29 +97,4 @@ static Task Log(LogMessage msg)
 {
     Console.WriteLine(msg.ToString());
     return Task.CompletedTask;
-}
-
-internal class ConsoleLogProvider : ILogProvider
-{
-    public Logger GetLogger(string name)
-    {
-        return (level, func, exception, parameters) =>
-        {
-            if (level >= LogLevel.Info && func != null)
-            {
-                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss") + " " + level + " " + func(), parameters);
-            }
-            return true;
-        };
-    }
-
-    public IDisposable OpenNestedContext(string message)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IDisposable OpenMappedContext(string key, object value, bool destructure = false)
-    {
-        throw new NotImplementedException();
-    }
 }
