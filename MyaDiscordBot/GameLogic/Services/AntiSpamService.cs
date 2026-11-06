@@ -73,21 +73,19 @@ namespace MyaDiscordBot.GameLogic.Services
         {
             try
             {
-                if (!UrlRegex.IsMatch(message)) return false;
+                var hosts = GetUrls(message)
+                    .Select(url => Uri.TryCreate(url, UriKind.Absolute, out var uri) ? uri.Host : null)
+                    .Where(host => host != null)
+                    .ToArray();
+                if (hosts.Length == 0) return false;
                 await FetchAPIData(porn: true);
-                var urls = Data.Instance.PornList.Where(message.Contains);
-                if (urls.Count() > 0)
+                var url = Data.Instance.PornList.FirstOrDefault(domain => hosts.Any(host =>
+                    host.Equals(domain, StringComparison.OrdinalIgnoreCase) ||
+                    host.EndsWith("." + domain, StringComparison.OrdinalIgnoreCase)));
+                if (url != null)
                 {
-                    foreach (var url in urls)
-                    {
-                        if (message.Contains("http://" + url) || message.Contains("https://" + url) ||
-                            message.Contains("http://www." + url) || message.Contains("https://www." + url) ||
-                            message.Contains("www." + url))
-                        {
-                            await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Match]: " + url + "\n", Encoding.UTF8);
-                            return true;
-                        };
-                    }
+                    await File.AppendAllTextAsync("log_" + DateTime.Now.ToString("dd_MM_yyyy") + ".log", "[Match]: " + url + "\n", Encoding.UTF8);
+                    return true;
                 }
                 return false;
             }
