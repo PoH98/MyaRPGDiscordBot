@@ -26,7 +26,7 @@ if (instances.Length > 1)
 //Create DC Bot Client//
 DiscordSocketClient _client = new(new DiscordSocketConfig
 {
-    GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds | GatewayIntents.GuildIntegrations
+    GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.GuildMessages | GatewayIntents.Guilds | GatewayIntents.GuildIntegrations | GatewayIntents.MessageContent
 });
 _client.Log += Log;
 //==============================================================================//

@@ -140,6 +140,33 @@ namespace MyaDiscordBot.Commands.Base
             }
         }
 
+        private static async Task DeleteRecentMessagesAsync(SocketUserMessage message)
+        {
+            var cutoff = DateTimeOffset.UtcNow.AddMinutes(-10);
+            try { await message.DeleteAsync(); }
+            catch (Exception ex) { Console.WriteLine($"Failed to delete spam message {message.Id}: {ex.Message}"); }
+
+            if (message.Channel is not SocketGuildChannel guildChannel) return;
+            // shortcut: archived threads are not in the socket cache; fetch archived threads to cover them.
+            foreach (var channel in guildChannel.Guild.Channels.OfType<IMessageChannel>()
+                .Concat(guildChannel.Guild.ThreadChannels).DistinctBy(c => c.Id))
+            {
+                try
+                {
+                    await foreach (var page in channel.GetMessagesAsync(int.MaxValue))
+                    {
+                        foreach (var recent in page.Where(m => m.Timestamp >= cutoff && m.Author.Id == message.Author.Id && m.Id != message.Id))
+                        {
+                            try { await recent.DeleteAsync(); }
+                            catch (Exception ex) { Console.WriteLine($"Failed to delete message {recent.Id}: {ex.Message}"); }
+                        }
+                        if (page.Count == 0 || page.Any(m => m.Timestamp < cutoff)) break;
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine($"Failed to scan channel {channel.Id}: {ex.Message}"); }
+            }
+        }
+
         private async Task _client_MessageReceived(SocketMessage arg)
         {
             SocketUserMessage message = (SocketUserMessage)arg;
@@ -170,6 +197,14 @@ namespace MyaDiscordBot.Commands.Base
                 {
                     IAntiSpamService antiSpam = scope.Resolve<IAntiSpamService>();
                     var pureContent = await antiSpam.UnparseShortenUrl(message.Content);
+                    if (message.Author.Id != _client.CurrentUser.Id && await antiSpam.IsImageScam(message))
+                    {
+                        banIds.Add(message.Author.Id);
+                        File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
+                        await message.DeleteAsync();
+                        await message.Channel.SendMessageAsync("偵測到詐騙圖片，已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
+                        return;
+                    }
                     if(message.Author.Id != _client.CurrentUser.Id)
                     {
                         ulong[] whiteListIds = new ulong[] { 294835963442757632, 357183940752310273, 894153610265518102, 1134746453219225630 };
@@ -283,7 +318,7 @@ namespace MyaDiscordBot.Commands.Base
                                 {
                                     GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                                     _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
-                                    await message.DeleteAsync();
+                                    await DeleteRecentMessagesAsync(message);
                                     return;
                                 }
                             }
@@ -294,7 +329,7 @@ namespace MyaDiscordBot.Commands.Base
                                     banIds.Add(message.Author.Id);
                                     File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
                                     await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
-                                    await message.DeleteAsync();
+                                    await DeleteRecentMessagesAsync(message);
                                     return;
                                 }
                             }
@@ -308,7 +343,7 @@ namespace MyaDiscordBot.Commands.Base
                                     {
                                         GuildEmote angry = _client.Guilds.FirstOrDefault(x => x.Id == 783913792668041216).Emotes.Where(x => x.Name.Contains("angry")).Last();
                                         _ = await message.ReplyAsync("請唔好Spam！" + message.Author.Mention + angry.ToString());
-                                        await message.DeleteAsync();
+                                        await DeleteRecentMessagesAsync(message);
                                         return;
                                     }
                                 }
@@ -320,7 +355,7 @@ namespace MyaDiscordBot.Commands.Base
                                     banIds.Add(message.Author.Id);
                                     File.WriteAllLines("banlist.txt", banIds.Select(x => x.ToString()));
                                     await message.ReplyAsync("已經暫時自動刪除所有該用戶的發言！解除封鎖：使用$unban解封！");
-                                    await message.DeleteAsync();
+                                    await DeleteRecentMessagesAsync(message);
                                     return;
                                 }
                             }

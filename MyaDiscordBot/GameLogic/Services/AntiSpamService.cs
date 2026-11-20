@@ -8,6 +8,7 @@ using MyaDiscordBot.Models.SpamDetection;
 using Newtonsoft.Json;
 using Quartz;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,6 +19,7 @@ namespace MyaDiscordBot.GameLogic.Services
     {
         bool IsTextSpam(SocketUserMessage message, string pureMessage);
         Task<bool> IsImageSpam(SocketUserMessage message, string proxyUrl, bool uploadedFile = false);
+        Task<bool> IsImageScam(SocketUserMessage message);
         Task<string> UnparseShortenUrl(string message);
         Task<bool> IsScam(SocketUserMessage message, string pureMessage);
         Task<bool> IsPorn(string message);
@@ -27,6 +29,8 @@ namespace MyaDiscordBot.GameLogic.Services
     public class AntiSpamService : IAntiSpamService
     {
         private static readonly HttpClient HttpClient = new();
+        private static readonly SemaphoreSlim OcrGate = new(1, 1);
+        private static readonly Regex CryptoRegex = new(@"\b(?:crypto(?:currency|currencies)?|bitcoin|ethereum|tether|solana|binance|coinbase|blockchain|usdt|usdc|btc|eth|nft|airdrop|seed phrase)\b", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
         private static readonly Regex UrlRegex = new(@"(?<![\w@.-])(?:https?://|www\.)?(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(?::\d{1,5})?(?:[/?#][^\s<>]*)?", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
         private static readonly Regex DiscordInviteRegex = new(@"(https:\/\/)?(www\.)?(((discord(app)?)?\.com\/invite)|((discord(app)?)?\.gg))\/(?<invite>.+)", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
         private static readonly Regex TelegramRegex = new(@"(https?:\/\/)?(www[.])?(telegram|t)\.me\/([a-zA-Z0-9_-]*)\/?$", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
@@ -136,6 +140,52 @@ namespace MyaDiscordBot.GameLogic.Services
                 return false;
             }
 
+        }
+
+        public async Task<bool> IsImageScam(SocketUserMessage message)
+        {
+            foreach (var attachment in message.Attachments.Where(a => a.ContentType?.StartsWith("image/", StringComparison.OrdinalIgnoreCase) == true && a.Size <= 5 * 1024 * 1024))
+                if (await ImageContainsCrypto(attachment.Url)) return true;
+            return false;
+        }
+
+        private static async Task<bool> ImageContainsCrypto(string url)
+        {
+            await OcrGate.WaitAsync();
+            try
+            {
+                using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+                using var response = await HttpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, timeout.Token);
+                response.EnsureSuccessStatusCode();
+                using var process = new Process { StartInfo = new ProcessStartInfo("tesseract") { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true } };
+                process.StartInfo.ArgumentList.Add("stdin");
+                process.StartInfo.ArgumentList.Add("stdout");
+                process.StartInfo.Environment["OMP_THREAD_LIMIT"] = "1";
+                process.Start();
+                try
+                {
+                    var output = process.StandardOutput.ReadToEndAsync(timeout.Token);
+                    var errors = process.StandardError.ReadToEndAsync(timeout.Token);
+                    await using (var input = await response.Content.ReadAsStreamAsync(timeout.Token))
+                        await input.CopyToAsync(process.StandardInput.BaseStream, timeout.Token);
+                    process.StandardInput.Close();
+                    await process.WaitForExitAsync(timeout.Token);
+                    var text = await output;
+                    var error = await errors;
+                    if (process.ExitCode != 0) throw new InvalidOperationException(error);
+                    return CryptoRegex.IsMatch(text);
+                }
+                finally
+                {
+                    if (!process.HasExited) process.Kill(entireProcessTree: true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Image OCR failed: {ex.Message}");
+                return false;
+            }
+            finally { OcrGate.Release(); }
         }
 
 
